@@ -8,7 +8,7 @@ import { Text, View } from './Themed';
 
 export default function EditScreenInfo({ path }: { path: string }) {
   return (
-    <View>
+    <View style={styles.outerContainer}>
       <View style={styles.getStartedContainer}>
         <Text
           style={styles.getStartedText}
@@ -27,7 +27,8 @@ export default function EditScreenInfo({ path }: { path: string }) {
         <Text
           style={styles.getStartedText}
           lightColor="rgba(0,0,0,0.8)"
-          darkColor="rgba(255,255,255,0.8)">
+          darkColor="rgba(255,255,255,0.8)"
+        >
           Change any of the text, save the file, and your app will automatically update.
         </Text>
       </View>
@@ -46,9 +47,13 @@ export default function EditScreenInfo({ path }: { path: string }) {
 }
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    backgroundColor: "transparent",
+  },
   getStartedContainer: {
     alignItems: 'center',
     marginHorizontal: 50,
+    backgroundColor: "transparent",
   },
   homeScreenFilename: {
     marginVertical: 7,
@@ -66,6 +71,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginHorizontal: 20,
     alignItems: 'center',
+    backgroundColor: "transparent",
   },
   helpLink: {
     paddingVertical: 15,
