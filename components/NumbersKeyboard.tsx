@@ -37,13 +37,13 @@ const NumberKeyboard = ({ handlePress, handleCancel, handleConfirm }: { handlePr
                 </TouchableOpacity>
             </View>
             <View style={styles.row}>
-                <TouchableOpacity style={[styles.button, styles.cancelBtn]} onPress={() => handlePress(12)}>
+                <TouchableOpacity style={[styles.button, styles.cancelBtn]} onPress={handleCancel}>
                     <Text style={styles.buttonText}>Cancelar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.button]} onPress={() => handlePress(0)}>
                     <Text style={styles.buttonText}>0</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.confirmBtn]} onPress={() => handlePress(13)}>
+                <TouchableOpacity style={[styles.button, styles.confirmBtn]} onPress={handleConfirm}>
                     <Text style={styles.buttonText}>Confirmar</Text>
                 </TouchableOpacity>
             </View>
