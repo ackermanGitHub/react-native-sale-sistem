@@ -9,39 +9,37 @@ const ws = new WebSocket("wss://websocketscustomdomain.up.railway.app", 'ordersS
 
 // Connection opened
 ws.addEventListener("open", (event) => {
-  console.log('Connection opened', event);
-  ws.send("Hello Server!");
+  console.log('%c (ordersSender) Connection opened', 'background: orange; color: black;', event);
 });
 
 // Listen for messages
 ws.addEventListener("message", (event) => {
-  console.log("Message from server ", event.data);
+  console.log('%c (ordersSender) Message from server:', 'background: yellow; color: black;', event.data);
 });
 
 ws.addEventListener('close', (event) => {
-  console.log('Connection closed', event);
+  console.log('%c (ordersSender) Connection closed', 'background: orange; color: black;', event);
 });
 
 ws.addEventListener('error', (error) => {
-  console.error('WebSocket error:', error);
+  console.log('%c (ordersSender) WebSocket error', 'background: red; color: black;', error);
 });
 
 export default function TabOneScreen() {
   const [res, setRes] = React.useState<string>();
 
   React.useEffect(() => {
-    console.log('hello');
     fetch('https://websocketscustomdomain.up.railway.app/')
       .then((response) => {
-        console.log({ responseOk: response.ok, response });
         /* 
+        console.log({ responseOk: response.ok, response });
         response.json() expects the response from fetch to be in JSON format. which it will then automatically put in JSON.parse to convert it to a javascript object.
         */
         return response.text();
         //return response.json();
       })
       .then(data => {
-        console.log({ data: data });
+        // console.log({ data: data });
         setRes(data);
       })
       .catch(error => {
@@ -54,7 +52,7 @@ export default function TabOneScreen() {
     </Text>
       <Button
         onPress={() => {
-          console.log('hello');
+          // console.log('%c This is a custom message with a blue background color', 'background: blue; color: white;');
           ws.send("Hello Server!");
         }}
         title="Say Hello"
