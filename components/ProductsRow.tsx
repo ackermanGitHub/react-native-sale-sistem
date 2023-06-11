@@ -15,11 +15,11 @@ const ProductsRow = ({ handlePress }: { handlePress: (arg0: string) => void }) =
                 </TouchableOpacity>
             </View>
             <View style={styles.row}>
-                <TouchableOpacity style={[styles.button, styles.largeBtn]} onPress={() => handlePress("Pan/Jamon")}>
-                    <Text style={styles.buttonText}>Pan/Jamon</Text>
+                <TouchableOpacity style={[styles.button, styles.largeBtn]} onPress={() => handlePress("PJ")}>
+                    <Text style={styles.buttonText}>PJ</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.largeBtn]} onPress={() => handlePress("Pan/Jamon&Queso")}>
-                    <Text style={styles.buttonText}>Pan/Jamon&Queso</Text>
+                <TouchableOpacity style={[styles.button, styles.largeBtn]} onPress={() => handlePress("PJQ")}>
+                    <Text style={styles.buttonText}>PJQ</Text>
                 </TouchableOpacity>
             </View>
         </View>
