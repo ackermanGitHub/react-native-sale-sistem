@@ -1,12 +1,10 @@
-import { StyleSheet, Button } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
+import { View } from '../../components/Themed';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import NumberKeyboard from '../../components/NumbersKeyboard';
 import ProductsRow from '../../components/ProductsRow';
-import ConfirmBtn from '../../components/ConfirmBtn';
 import OrderScreen from '../../components/OrderScreen';
 
 const ws = new WebSocket("wss://websocketscustomdomain.up.railway.app", 'ordersSender');
@@ -30,62 +28,10 @@ ws.addEventListener('error', (error) => {
 });
 
 export default function TabOneScreen() {
-  /* const [res, setRes] = React.useState<string>();
 
-  React.useEffect(() => {
-    fetch('https://websocketscustomdomain.up.railway.app/')
-      .then((response) => { 
-        // console.log({ responseOk: response.ok, response });
-        // response.json() expects the response from fetch to be in JSON format. which it will then automatically put in JSON.parse to convert it to a javascript object.
-        return response.text();
-        // return response.json();
-      })
-      .then(data => {
-        // console.log({ data: data });
-        setRes(data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, []); */
 
   return (
     <View nativeID='Tab-One-Container' style={styles.container}>
-      {/* 
-      <Text>{res}</Text>
-      <Button
-        onPress={() => {
-          // console.log('%c This is a custom message with a blue background color', 'background: blue; color: white;');
-          ws.send("Hello Server!");
-        }}
-        title="Say Hello"
-        color="#222222"
-        accessibilityLabel="Learn more about this purple button"
-      />
-      <Text nativeID='Tab-One-Text' style={styles.title}>Tab One</Text>
-      <Button
-        onPress={() => {
-          console.log('Starting SSE connection');
-          fetch('https://websocketscustomdomain.up.railway.app/sse')
-            .then((response) => {
-              // console.log({ responseOk: response.ok, response });
-              // return response.text();
-              return response.json();
-            })
-            .then(data => {
-              // console.log({ data: data });
-              setRes(data);
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        }}
-        title="SSE connection"
-        color="#222222"
-        accessibilityLabel="Learn more about button"
-      /> 
-      <View nativeID='separator' style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      */}
 
       <View nativeID='cashierContainer' style={styles.container}>
 
@@ -101,8 +47,6 @@ export default function TabOneScreen() {
 
       </View>
 
-
-      {/* <EditScreenInfo path="app/(tabs)/index.tsx" /> */}
       <StatusBar style={'dark'} backgroundColor='#999999' />
     </View>
   );
