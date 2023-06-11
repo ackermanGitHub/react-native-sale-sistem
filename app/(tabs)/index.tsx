@@ -64,8 +64,20 @@ export default function TabOneScreen() {
       <Text nativeID='Tab-One-Text' style={styles.title}>Tab One</Text>
       <Button
         onPress={() => {
-          console.log('hello');
-          ws.send("Hello Server!");
+          console.log('Starting SSE connection');
+          fetch('https://websocketscustomdomain.up.railway.app/sse')
+            .then((response) => {
+              // console.log({ responseOk: response.ok, response });
+              // return response.text();
+              return response.json();
+            })
+            .then(data => {
+              // console.log({ data: data });
+              setRes(data);
+            })
+            .catch(error => {
+              console.error(error);
+            });
         }}
         title="SSE connection"
         color="#222222"
