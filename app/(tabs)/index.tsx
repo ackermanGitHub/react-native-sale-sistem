@@ -34,8 +34,7 @@ export default function TabOneScreen() {
   const handlePressNum = (newOrder: number) => {
     const lastValue = order[order.length - 1];
     if (typeof lastValue === 'number') {
-      const combinedNumber = Number(`${lastValue}${newOrder}`);
-      setOrder([...order.slice(0, -1), combinedNumber])
+      setOrder([...order.slice(0, -1), concatenateDigits(lastValue, newOrder)])
     } else {
       setOrder([...order, newOrder])
     }
@@ -58,14 +57,16 @@ export default function TabOneScreen() {
 
   const joinStringOrder = (array: (number | string)[]) => {
     const joinedArr: string[] = [];
-
     for (let i = 0; i < array.length - 1; i++) {
       if (typeof array[i] === 'number' && typeof array[i + 1] === 'string') {
         joinedArr.push(`${array[i]}${array[i + 1]}`);
       }
     }
-
     return joinedArr;
+  }
+
+  const concatenateDigits = (num1 = 0, num2 = 0) => {
+    return Number(`${num1}${num2}`);
   }
 
 
@@ -74,7 +75,7 @@ export default function TabOneScreen() {
 
       <View nativeID='cashierContainer' style={styles.container}>
 
-        <OrderScreen order={order.join('')} />
+        <OrderScreen order={joinStringOrder(order).join('+')} />
 
         <ProductsRow handlePress={handlePressProd} />
 
