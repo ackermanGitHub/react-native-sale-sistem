@@ -29,32 +29,56 @@ ws.addEventListener('error', (error) => {
 
 export default function TabOneScreen() {
 
-  const [order, setOrder] = React.useState<string>("Whats the Order")
+  const [order, setOrder] = React.useState<(number | string)[]>([])
 
-  const handlePress = (newOrder: string | number) => {
-    setOrder(order + newOrder)
+  const handlePressNum = (newOrder: number) => {
+    const lastValue = order[order.length - 1];
+    if (typeof lastValue === 'number') {
+      const combinedNumber = Number(`${lastValue}${newOrder}`);
+      setOrder([...order.slice(0, -1), combinedNumber])
+    } else {
+      setOrder([...order, newOrder])
+    }
+  }
+
+  const handlePressProd = (newOrder: string) => {
+    setOrder([...order, newOrder])
   }
 
   const handleCancel = () => {
-    setOrder('Whats the Order')
+    console.log(order)
+    setOrder([])
   }
 
   const handleConfirm = () => {
-    console.log('Order: ', order)
-    ws.send(order)
-    setOrder('Whats the Order')
+    console.log('Order: ', joinStringOrder(order).join('+'))
+    ws.send(joinStringOrder(order).join('+'))
+    setOrder([])
   }
+
+  const joinStringOrder = (array: (number | string)[]) => {
+    const joinedArr: string[] = [];
+
+    for (let i = 0; i < array.length - 1; i++) {
+      if (typeof array[i] === 'number' && typeof array[i + 1] === 'string') {
+        joinedArr.push(`${array[i]}${array[i + 1]}`);
+      }
+    }
+
+    return joinedArr;
+  }
+
 
   return (
     <View nativeID='Tab-One-Container' style={styles.container}>
 
       <View nativeID='cashierContainer' style={styles.container}>
 
-        <OrderScreen order={order} />
+        <OrderScreen order={order.join('')} />
 
-        <ProductsRow handlePress={handlePress} />
+        <ProductsRow handlePress={handlePressProd} />
 
-        <NumberKeyboard handlePress={handlePress} handleCancel={handleCancel} handleConfirm={handleConfirm} />
+        <NumberKeyboard handlePress={handlePressNum} handleCancel={handleCancel} handleConfirm={handleConfirm} />
 
       </View>
 
