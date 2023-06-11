@@ -45,7 +45,6 @@ export default function TabOneScreen() {
   }
 
   const handleCancel = () => {
-    console.log(order)
     setOrder([])
   }
 
@@ -57,9 +56,13 @@ export default function TabOneScreen() {
 
   const joinStringOrder = (array: (number | string)[]) => {
     const joinedArr: string[] = [];
-    for (let i = 0; i < array.length - 1; i++) {
-      if (typeof array[i] === 'number' && typeof array[i + 1] === 'string') {
-        joinedArr.push(`${array[i]}${array[i + 1]}`);
+    for (let i = 0; i < array.length; i++) {
+      if (typeof array[i] === 'number') {
+        if (typeof array[i + 1] === 'string') {
+          joinedArr.push(`${array[i]}${array[i + 1]}`);
+        } else {
+          joinedArr.push(`${array[i]}`);
+        }
       }
     }
     return joinedArr;
