@@ -29,21 +29,32 @@ ws.addEventListener('error', (error) => {
 
 export default function TabOneScreen() {
 
+  const [order, setOrder] = React.useState<string>("Whats the Order")
+
+  const handlePress = (newOrder: string | number) => {
+    setOrder(order + newOrder)
+  }
+
+  const handleCancel = () => {
+    setOrder('Whats the Order')
+  }
+
+  const handleConfirm = () => {
+    console.log('Order: ', order)
+    ws.send(order)
+    setOrder('Whats the Order')
+  }
 
   return (
     <View nativeID='Tab-One-Container' style={styles.container}>
 
       <View nativeID='cashierContainer' style={styles.container}>
 
-        <OrderScreen />
+        <OrderScreen order={order} />
 
-        <ProductsRow handlePress={(string) => {
-          console.log(string)
-        }} />
+        <ProductsRow handlePress={handlePress} />
 
-        <NumberKeyboard handlePress={(num) => {
-          console.log(num)
-        }} />
+        <NumberKeyboard handlePress={handlePress} handleCancel={handleCancel} handleConfirm={handleConfirm} />
 
       </View>
 

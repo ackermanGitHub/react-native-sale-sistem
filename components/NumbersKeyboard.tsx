@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-const NumberKeyboard = ({ handlePress }: { handlePress: (arg0: number) => void }) => {
+const NumberKeyboard = ({ handlePress, handleCancel, handleConfirm }: { handlePress: (arg0: number) => void, handleCancel: () => void, handleConfirm: () => void }) => {
     return (
         <View style={styles.container}>
             <View style={styles.row}>
