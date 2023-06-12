@@ -7,29 +7,40 @@ import NumberKeyboard from '../../components/NumbersKeyboard';
 import ProductsRow from '../../components/ProductsRow';
 import OrderScreen from '../../components/OrderScreen';
 
-const ws = new WebSocket("wss://websocketscustomdomain.up.railway.app", 'ordersSender');
-
-// Connection opened
-ws.addEventListener("open", (event) => {
-  console.log('%c (ordersSender) Connection opened', 'background: orange; color: black;', event);
-});
-
-// Listen for messages
-ws.addEventListener("message", (event) => {
-  console.log('%c (ordersSender) Message from server:', 'background: yellow; color: black;', event.data);
-});
-
-ws.addEventListener('close', (event) => {
-  console.log('%c (ordersSender) Connection closed', 'background: orange; color: black;', event);
-});
-
-ws.addEventListener('error', (error) => {
-  console.log('%c (ordersSender) WebSocket error', 'background: red; color: black;', error);
-});
-
 export default function TabOneScreen() {
 
   const [order, setOrder] = React.useState<(number | string)[]>([])
+  const [ws, setWs] = React.useState<WebSocket | null>(null);
+
+  const handleWebSocketMessage = (event: MessageEvent) => {
+    const message = event.data;
+    // do something with the message, e.g. update the order state
+    setOrder(currentOrder => [...currentOrder, message]);
+  };
+
+  React.useEffect(() => {
+    const ws = new WebSocket("wss://websocketscustomdomain.up.railway.app", 'ordersSender');
+    setWs(ws);
+
+    ws.addEventListener("open", (event) => {
+      console.log('%c (ordersSender) Connection opened', 'background: orange; color: black;', event);
+    });
+
+    ws.addEventListener("message", handleWebSocketMessage);
+
+    ws.addEventListener('close', (event) => {
+      console.log('%c (ordersSender) Connection closed', 'background: orange; color: black;', event);
+    });
+
+    ws.addEventListener('error', (error) => {
+      console.log('%c (ordersSender) WebSocket error', 'background: red; color: black;', error);
+    });
+
+    return () => {
+      ws.removeEventListener("message", handleWebSocketMessage);
+      ws.close();
+    };
+  }, []);
 
   const handlePressNum = (newOrder: number) => {
     const lastValue = order[order.length - 1];
@@ -45,14 +56,21 @@ export default function TabOneScreen() {
   }
 
   const handleCancel = () => {
+    console.log({
+      order: order,
+      joinStringOrder: joinStringOrder(order),
+      joinStringOrderJoin: joinStringOrder(order).join('+'),
+    })
     setOrder([])
   }
 
   const handleConfirm = () => {
     console.log('Order: ', joinStringOrder(order).join('+'))
-    ws.send(joinStringOrder(order).join('+'))
+    if (ws) {
+      ws.send(joinStringOrder(order).join('+'))
+    }
     setOrder([])
-  }
+  };
 
   const joinStringOrder = (array: (number | string)[]) => {
     const joinedArr: string[] = [];
