@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { View } from '../../components/Themed';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NumberKeyboard from '../../components/NumbersKeyboard';
 import ProductsRow from '../../components/ProductsRow';
 import OrderScreen from '../../components/OrderScreen';
