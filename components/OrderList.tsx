@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import tw from 'twrnc';
+
 const OrderList = () => {
     const [orders, setOrders] = useState<string[]>([]);
     const [ws, setWs] = useState<WebSocket | null>(null);
@@ -9,7 +11,7 @@ const OrderList = () => {
         setOrders((prevOrders) => [...prevOrders, event.data]);
     };
     useEffect(() => {
-        const ws = new WebSocket("ws://192.168.49.191:3333", 'ordersReciever');
+        const ws = new WebSocket("ws://192.168.1.103:3333", 'ordersReciever');
         setWs(ws);
 
         ws.addEventListener("open", (event) => {
@@ -32,48 +34,24 @@ const OrderList = () => {
         };
     }, []);
     const renderItem = ({ item = 'order' }) => (
-        <View style={styles.order}>
-            <Text style={styles.orderText}>{item}</Text>
+        <View style={tw`p-4 border-b-[1px] border-b-gray-400`}>
+            <Text style={tw`text-base`}>{item}</Text>
         </View>
     );
     return (
-        <View style={styles.container}>
+        <View style={tw`flex-1 bg-[#fff] items-center justify-center overflow-scroll`}>
             <FlatList
                 data={orders}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
             />
-            <TouchableOpacity style={styles.button} onPress={() => {
+            <TouchableOpacity style={tw`m-1 bg-[#ddd] rounded-md p-2 justify-center items-center`} onPress={() => {
                 console.log(orders)
             }}>
-                <Text style={styles.orderText}>1</Text>
+                <Text style={tw`text-lg`}>console.log(orders)</Text>
             </TouchableOpacity>
         </View>
     );
 };
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'scroll',
-    },
-    order: {
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-    },
-    orderText: {
-        fontSize: 16,
-    },
-    button: {
-        margin: 5,
-        width: '30%',
-        backgroundColor: '#ddd',
-        borderRadius: 5,
-        textAlign: 'center',
-        justifyContent: 'center',
-    },
-});
+
 export default OrderList;
