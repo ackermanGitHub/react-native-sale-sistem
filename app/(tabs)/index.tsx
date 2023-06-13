@@ -9,8 +9,8 @@ import OrderScreen from '../../components/OrderScreen';
 
 export default function TabOneScreen() {
 
-  const [order, setOrder] = React.useState<(number | string)[]>([])
-  const [ws, setWs] = React.useState<WebSocket | null>(null);
+  const [order, setOrder] = useState<(number | string)[]>([])
+  const [ws, setWs] = useState<WebSocket | null>(null);
 
   const handleWebSocketMessage = (event: MessageEvent) => {
     const message = event.data;
