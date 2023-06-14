@@ -22,7 +22,7 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  NavigationBar.setBackgroundColorAsync("white");
+  NavigationBar.setBackgroundColorAsync("#E5E5CB");
   NavigationBar.setButtonStyleAsync("dark");
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.

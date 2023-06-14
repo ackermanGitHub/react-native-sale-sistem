@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import NumberKeyboard from '../../components/NumbersKeyboard';
 import ProductsRow from '../../components/ProductsRow';
 import OrderScreen from '../../components/OrderScreen';
-import * as NavigationBar from 'expo-navigation-bar';
 import tw from 'twrnc';
 
 export default function TabOneScreen() {
@@ -21,9 +20,6 @@ export default function TabOneScreen() {
   useEffect(() => {
     const ws = new WebSocket("ws://192.168.231.191:3333", 'ordersSender');
     setWs(ws);
-
-    NavigationBar.setBackgroundColorAsync("white");
-    NavigationBar.setButtonStyleAsync("dark");
 
     ws.addEventListener("open", (event) => {
       console.log('%c (ordersSender) Connection opened', 'background: orange; color: black;', event);
@@ -107,7 +103,7 @@ export default function TabOneScreen() {
 
       </View>
 
-      <StatusBar style={'dark'} backgroundColor='white' />
+      <StatusBar style={'dark'} backgroundColor='#E5E5CB' />
     </View>
   );
 }
