@@ -4,6 +4,7 @@ import { Pressable, useColorScheme } from 'react-native';
 import tw from 'twrnc';
 
 import Colors from '../../constants/Colors';
+import { View } from '../../components/Themed';
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -22,7 +23,13 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        tabBarActiveBackgroundColor: '',
+        tabBarActiveBackgroundColor: '#E5E5CB',
+        tabBarInactiveBackgroundColor: '#E5E5CB',
+        headerBackground: () => {
+          return (
+            <View style={tw`w-full h-full bg-[#E5E5CB]`}></View>
+          )
+        }
       }}
     >
       <Tabs.Screen
