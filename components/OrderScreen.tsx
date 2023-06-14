@@ -1,35 +1,15 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, Text } from 'react-native';
+import tw from 'twrnc';
+
 const OrderScreen = ({ order = 'Order' }) => {
     return (
-        <View style={styles.container}>
-            <View style={styles.screen}>
-                <Text style={styles.screenText}>{order}</Text>
+        <View style={tw`justify-center items-center w-full h-[15%]`}>
+            <View style={tw`flex-row justify-center items-center w-4/5 h-4/5 bg-[#fff] rounded-xl shadow-lg`}>
+                <Text style={tw`p-4 text-2xl font-normal text-left`}>{order}</Text>
             </View>
         </View>
     );
 };
-const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '15%',
-    },
-    screen: {
-        flexDirection: 'row',
-        alignContent: 'center',
-        height: '80%',
-        width: '80%',
-        backgroundColor: '#fff',
-        borderRadius: 10,
-    },
-    screenText: {
-        padding: 15,
-        fontSize: 30,
-        fontWeight: '400',
-        textAlign: 'left',
-        color: '#000',
-    },
-});
+
 export default OrderScreen;

@@ -1,31 +1,13 @@
-import { StyleSheet } from 'react-native';
-
-import { Text, View } from '../../components/Themed';
+import { View } from '../../components/Themed';
 import OrderList from '../../components/OrderList';
+import tw from 'twrnc';
 
 export default function TabTwoScreen() {
   return (
-    <View style={styles.container}>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+    <View style={tw`flex-1 items-center justify-center`}>
+      <View style={tw`my-7 h-[1px] w-[4/5]`} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <OrderList />
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={tw`my-7 h-[1px] w-[4/5]`} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});

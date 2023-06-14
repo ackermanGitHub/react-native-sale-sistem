@@ -1,84 +1,56 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import tw from 'twrnc';
+
 const NumberKeyboard = ({ handlePress, handleCancel, handleConfirm }: { handlePress: (arg0: number) => void, handleCancel: () => void, handleConfirm: () => void }) => {
     return (
-        <View style={styles.container}>
-            <View style={styles.row}>
-                <TouchableOpacity style={styles.button} onPress={() => handlePress(1)}>
-                    <Text style={styles.buttonText}>1</Text>
+        <View style={tw`justify-center items-center w-full h-[60%]`}>
+            <View style={tw`justify-center flex-row h-1/4 w-full`}>
+                <TouchableOpacity style={tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`} onPress={() => handlePress(1)}>
+                    <Text style={tw`text-xl font-bold`}>1</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => handlePress(2)}>
-                    <Text style={styles.buttonText}>2</Text>
+                <TouchableOpacity style={tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`} onPress={() => handlePress(2)}>
+                    <Text style={tw`text-xl font-bold`}>2</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => handlePress(3)}>
-                    <Text style={styles.buttonText}>3</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.row}>
-                <TouchableOpacity style={styles.button} onPress={() => handlePress(4)}>
-                    <Text style={styles.buttonText}>4</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => handlePress(5)}>
-                    <Text style={styles.buttonText}>5</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => handlePress(6)}>
-                    <Text style={styles.buttonText}>6</Text>
+                <TouchableOpacity style={tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`} onPress={() => handlePress(3)}>
+                    <Text style={tw`text-xl font-bold`}>3</Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.row}>
-                <TouchableOpacity style={styles.button} onPress={() => handlePress(7)}>
-                    <Text style={styles.buttonText}>7</Text>
+            <View style={tw`justify-center flex-row h-1/4 w-full`}>
+                <TouchableOpacity style={tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`} onPress={() => handlePress(4)}>
+                    <Text style={tw`text-xl font-bold`}>4</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => handlePress(8)}>
-                    <Text style={styles.buttonText}>8</Text>
+                <TouchableOpacity style={tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`} onPress={() => handlePress(5)}>
+                    <Text style={tw`text-xl font-bold`}>5</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => handlePress(9)}>
-                    <Text style={styles.buttonText}>9</Text>
+                <TouchableOpacity style={tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`} onPress={() => handlePress(6)}>
+                    <Text style={tw`text-xl font-bold`}>6</Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.row}>
-                <TouchableOpacity style={[styles.button, styles.cancelBtn]} onPress={handleCancel}>
-                    <Text style={styles.buttonText}>Cancelar</Text>
+            <View style={tw`justify-center flex-row h-1/4 w-full`}>
+                <TouchableOpacity style={tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`} onPress={() => handlePress(7)}>
+                    <Text style={tw`text-xl font-bold`}>7</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button]} onPress={() => handlePress(0)}>
-                    <Text style={styles.buttonText}>0</Text>
+                <TouchableOpacity style={tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`} onPress={() => handlePress(8)}>
+                    <Text style={tw`text-xl font-bold`}>8</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.confirmBtn]} onPress={handleConfirm}>
-                    <Text style={styles.buttonText}>Confirmar</Text>
+                <TouchableOpacity style={tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`} onPress={() => handlePress(9)}>
+                    <Text style={tw`text-xl font-bold`}>9</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={tw`justify-center flex-row h-1/4 w-full`}>
+                <TouchableOpacity style={[tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`]} onPress={handleCancel}>
+                    <Text style={tw`text-xl font-bold`}>Cancelar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`]} onPress={() => handlePress(0)}>
+                    <Text style={tw`text-xl font-bold`}>0</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[tw`m-1 w-[30%] bg-[#D5CEA3] border-[1px] border-neutral-500 rounded-md justify-center items-center`]} onPress={handleConfirm}>
+                    <Text style={tw`text-xl font-bold`}>Confirmar</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
 };
-const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '60%',
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        height: '25%',
-        width: '100%',
-    },
-    button: {
-        margin: 5,
-        width: '30%',
-        backgroundColor: '#D5CEA3',
-        borderRadius: 5,
-        textAlign: 'center',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    buttonText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    confirmBtn: {
-    },
-    cancelBtn: {
-    },
-});
+
 export default NumberKeyboard;

@@ -1,11 +1,11 @@
-import { StyleSheet } from 'react-native';
-
 import { View } from '../../components/Themed';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import NumberKeyboard from '../../components/NumbersKeyboard';
 import ProductsRow from '../../components/ProductsRow';
 import OrderScreen from '../../components/OrderScreen';
+import * as NavigationBar from 'expo-navigation-bar';
+import tw from 'twrnc';
 
 export default function TabOneScreen() {
 
@@ -21,6 +21,9 @@ export default function TabOneScreen() {
   useEffect(() => {
     const ws = new WebSocket("ws://192.168.231.191:3333", 'ordersSender');
     setWs(ws);
+
+    NavigationBar.setBackgroundColorAsync("white");
+    NavigationBar.setButtonStyleAsync("dark");
 
     ws.addEventListener("open", (event) => {
       console.log('%c (ordersSender) Connection opened', 'background: orange; color: black;', event);
@@ -92,9 +95,9 @@ export default function TabOneScreen() {
 
 
   return (
-    <View nativeID='Tab-One-Container' style={styles.container}>
+    <View nativeID='Tab-One-Container' style={tw`w-full h-full bg-[#E5E5CB] justify-center items-center`}>
 
-      <View nativeID='cashierContainer' style={styles.container}>
+      <View nativeID='cashierContainer' style={tw`w-full h-full bg-[#E5E5CB] justify-center items-center`}>
 
         <OrderScreen order={joinStringOrder(order).join('+')} />
 
@@ -104,31 +107,7 @@ export default function TabOneScreen() {
 
       </View>
 
-      <StatusBar style={'dark'} backgroundColor='#999999' />
+      <StatusBar style={'dark'} backgroundColor='white' />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    width: '100%',
-    backgroundColor: "#E5E5CB", /* #D5CEA3 */
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cashierContainer: {
-    height: '100%',
-    width: '100%',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-    backgroundColor: "black",
-  },
-});
