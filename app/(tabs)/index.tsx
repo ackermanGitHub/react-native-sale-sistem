@@ -18,8 +18,8 @@ export default function TabOneScreen() {
     setOrder(currentOrder => [...currentOrder, message]);
   };
 
-  React.useEffect(() => {
-    const ws = new WebSocket("wss://websocketscustomdomain.up.railway.app", 'ordersSender');
+  useEffect(() => {
+    const ws = new WebSocket("ws://192.168.231.191:3333", 'ordersSender');
     setWs(ws);
 
     ws.addEventListener("open", (event) => {
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     width: '100%',
-    backgroundColor: "#2B2A4C",
+    backgroundColor: "#E5E5CB", /* #D5CEA3 */
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -129,6 +129,6 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
-    backgroundColor: "#2B2A4C",
+    backgroundColor: "black",
   },
 });

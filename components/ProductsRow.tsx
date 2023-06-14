@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     },
     button: {
         margin: 5,
-        backgroundColor: 'orange',
+        backgroundColor: '#617A55',
         borderRadius: 5,
         textAlign: 'center',
         justifyContent: 'center',
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 20,
         fontWeight: 'bold',
+        color: 'white'
     },
     largeBtn: {
         fontSize: 20,

@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     button: {
         margin: 5,
         width: '30%',
-        backgroundColor: '#ddd',
+        backgroundColor: '#D5CEA3',
         borderRadius: 5,
         textAlign: 'center',
         justifyContent: 'center',
@@ -77,10 +77,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     confirmBtn: {
-        backgroundColor: 'green',
     },
     cancelBtn: {
-        backgroundColor: 'red',
     },
 });
 export default NumberKeyboard;

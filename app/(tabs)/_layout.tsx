@@ -1,6 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import { Pressable, useColorScheme, Text } from 'react-native';
+import tw from 'twrnc';
 
 import Colors from '../../constants/Colors';
 
@@ -21,7 +22,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        tabBarActiveBackgroundColor: '#B31312'
+        tabBarActiveBackgroundColor: ''
       }}
     >
       <Tabs.Screen
@@ -29,15 +30,9 @@ export default function TabLayout() {
         options={{
           title: 'Cajero',
           headerTintColor: "#111111",
-          /* tabBarIcon: ({ color }) => <TabBarIcon name="code" color={"#111111"} />, */
+          tabBarIcon: ({ color }) => <TabBarIcon name="cart-arrow-down" color={"#777777"} />,
           tabBarLabel: ({ color, children }) => (
-            <Text style={{
-              color: color,
-              fontSize: 20,
-            }}
-            >
-              {children}
-            </Text>
+            <></>
           ),
           headerRight: () => (
             <Link href="/modal" asChild>
@@ -60,15 +55,9 @@ export default function TabLayout() {
         name="two"
         options={{
           title: 'Órdenes',
-          /* tabBarIcon: ({ color }) => <TabBarIcon name="code" color={"#111111"} />, */
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={"#111111"} />,
           tabBarLabel: ({ color, children }) => (
-            <Text style={{
-              color: color,
-              fontSize: 20,
-            }}
-            >
-              {children}
-            </Text>
+            <></>
           ),
           headerRight: () => (
             <Link href="/modal" asChild>
