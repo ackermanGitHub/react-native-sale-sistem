@@ -3,6 +3,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
+import * as NavigationBar from 'expo-navigation-bar';
 import { useColorScheme } from 'react-native';
 
 export {
@@ -20,6 +21,9 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
+
+  NavigationBar.setBackgroundColorAsync("white");
+  NavigationBar.setButtonStyleAsync("dark");
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
