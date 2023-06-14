@@ -49,7 +49,7 @@ export default function TabLayout() {
                     name="info-circle"
                     size={30}
                     /* color={Colors[colorScheme ?? 'light'].text} */
-                    color={"#111111"}
+                    color={"#777777"}
                     style={tw.style('mr-4', {
                       'opacity-50': pressed
                     })}
@@ -64,7 +64,7 @@ export default function TabLayout() {
         name="two"
         options={{
           title: 'Órdenes',
-          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={"#111111"} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={"#777777"} />,
           tabBarLabel: ({ color, children }) => (
             <></>
           ),
@@ -76,7 +76,7 @@ export default function TabLayout() {
                     name="info-circle"
                     size={30}
                     /* color={Colors[colorScheme ?? 'light'].text} */
-                    color={"#111111"}
+                    color={"#777777"}
                     style={tw.style('mr-4', {
                       'opacity-50': pressed
                     })}
