@@ -1,6 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme, Text } from 'react-native';
+import { Pressable, useColorScheme } from 'react-native';
+import tw from 'twrnc';
 
 import Colors from '../../constants/Colors';
 
@@ -21,7 +22,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        tabBarActiveBackgroundColor: ''
+        tabBarActiveBackgroundColor: '',
       }}
     >
       <Tabs.Screen
@@ -42,7 +43,9 @@ export default function TabLayout() {
                     size={30}
                     /* color={Colors[colorScheme ?? 'light'].text} */
                     color={"#111111"}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    style={tw.style('mr-4', {
+                      'opacity-50': pressed
+                    })}
                   />
                 )}
               </Pressable>
@@ -67,7 +70,9 @@ export default function TabLayout() {
                     size={30}
                     /* color={Colors[colorScheme ?? 'light'].text} */
                     color={"#111111"}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    style={tw.style('mr-4', {
+                      'opacity-50': pressed
+                    })}
                   />
                 )}
               </Pressable>
