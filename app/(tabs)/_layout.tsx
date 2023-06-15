@@ -18,6 +18,7 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const isLoggedIn = true;
 
   return (
     <Tabs
@@ -42,21 +43,38 @@ export default function TabLayout() {
             <></>
           ),
           headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={30}
-                    /* color={Colors[colorScheme ?? 'light'].text} */
-                    color={"#777777"}
-                    style={tw.style('mr-4', {
-                      'opacity-50': pressed
-                    })}
-                  />
-                )}
-              </Pressable>
-            </Link>
+            <View style={tw`flex-row gap-4 items-center justify-center bg-transparent`}>
+              <Link href="/modal" asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <FontAwesome
+                      name="info-circle"
+                      size={30}
+                      /* color={Colors[colorScheme ?? 'light'].text} */
+                      color={"#777777"}
+                      style={tw.style('mr-4', {
+                        'opacity-50': pressed
+                      })}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+              <Link href={isLoggedIn ? "/profile" : '/sign-in'} asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <FontAwesome
+                      name="user-circle"
+                      size={30}
+                      /* color={Colors[colorScheme ?? 'light'].text} */
+                      color={"#777777"}
+                      style={tw.style('mr-4', {
+                        'opacity-50': pressed
+                      })}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+            </View>
           ),
         }}
       />
@@ -69,21 +87,38 @@ export default function TabLayout() {
             <></>
           ),
           headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={30}
-                    /* color={Colors[colorScheme ?? 'light'].text} */
-                    color={"#777777"}
-                    style={tw.style('mr-4', {
-                      'opacity-50': pressed
-                    })}
-                  />
-                )}
-              </Pressable>
-            </Link>
+            <View style={tw`flex-row gap-4 items-center justify-center bg-transparent`}>
+              <Link href="/modal" asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <FontAwesome
+                      name="info-circle"
+                      size={30}
+                      /* color={Colors[colorScheme ?? 'light'].text} */
+                      color={"#777777"}
+                      style={tw.style('mr-4', {
+                        'opacity-50': pressed
+                      })}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+              <Link href={isLoggedIn ? "/profile" : '/sign-in'} asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <FontAwesome
+                      name="user-circle"
+                      size={30}
+                      /* color={Colors[colorScheme ?? 'light'].text} */
+                      color={"#777777"}
+                      style={tw.style('mr-4', {
+                        'opacity-50': pressed
+                      })}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+            </View>
           ),
         }}
 
