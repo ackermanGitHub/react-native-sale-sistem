@@ -22,7 +22,7 @@ export default function SignIn() {
         // Handle sign in logic here
     }
     return (
-        <View style={tw`flex-1 justify-center bg-white items-center`}>
+        <View style={tw`flex-1 justify-center items-center`}>
             <View style={tw`w-4/5 mb-4`}>
                 <TextInput
                     style={tw`h-12 px-4 border rounded`}
