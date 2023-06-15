@@ -4,13 +4,13 @@
     "slug": "playground",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/popeye-the-sailor-man-icon.png",
+    "icon": "./assets/images/popeye-the-sailor-man-1.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#E5E5CB"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -18,8 +18,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/popeye-the-sailor-man-adaptative-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/popeye-the-sailor-man-adaptative-1.png",
+        "backgroundColor": "#E5E5CB"
       }
     },
     "web": {
