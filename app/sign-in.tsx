@@ -1,25 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { View, TextInput, Pressable, Text } from 'react-native'
-import { StatusBar } from 'expo-status-bar';;
+import React, { useState } from 'react';
+import { View, TextInput, Pressable, Text } from 'react-native';
 import tw from 'twrnc';
-import { Link, Stack } from 'expo-router';
+import { useSignIn } from "@clerk/clerk-expo";
+import { Link, Stack, useRouter } from 'expo-router';
 
 export default function SignIn() {
+    const { signIn, setActive, isLoaded } = useSignIn();
+    const router = useRouter();
 
-    useEffect(() => {
-        NavigationBar.setBackgroundColorAsync("white");
-
-        return () => {
-            NavigationBar.setBackgroundColorAsync("#E5E5CB");
-
-        }
-
-    }, [])
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const handleSignIn = () => {
-        // Handle sign in logic here
+
+    const handleSignIn = async () => {
+        if (!isLoaded) {
+            return;
+        }
+
+        try {
+            const completeSignIn = await signIn.create({
+                identifier: email.trim(),
+                password,
+            });
+            // This is an important step,
+            // This indicates the user is signed in
+            await setActive({ session: completeSignIn.createdSessionId });
+            router.push('/profile')
+        } catch (err: any) {
+            console.error(JSON.stringify(err, null, 2));
+        }
     }
+
+
     return (
         <View style={tw`flex-1 justify-center items-center bg-[#E5E5CB]`}>
             <Stack.Screen options={{
@@ -31,7 +42,8 @@ export default function SignIn() {
             <View style={tw`w-4/5 mb-4`}>
                 <TextInput
                     style={tw`h-12 px-4 border rounded`}
-                    placeholder="Email"
+                    placeholder="Email..."
+                    autoCapitalize="none"
                     onChangeText={setEmail}
                     value={email}
                 />
@@ -39,7 +51,7 @@ export default function SignIn() {
             <View style={tw`w-4/5 mb-4`}>
                 <TextInput
                     style={tw`h-12 px-4 border rounded`}
-                    placeholder="Password"
+                    placeholder="Password..."
                     secureTextEntry={true}
                     onChangeText={setPassword}
                     value={password}
@@ -48,7 +60,9 @@ export default function SignIn() {
             <Pressable onPress={handleSignIn} style={tw`w-4/5 bg-blue-500 rounded h-12 justify-center items-center`}>
                 <Text style={tw`text-white`}>Sign In</Text>
             </Pressable>
-            <StatusBar style={'dark'} backgroundColor='white' />
+            <Link style={tw`my-2`} href="/sign-up">
+                <Text style={tw`text-[#2e78b7] text-xs`}>Don't have an account?, Sign Up</Text>
+            </Link>
         </View>
     );
 }

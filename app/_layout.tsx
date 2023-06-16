@@ -6,7 +6,10 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useCallback, useEffect, useState } from 'react';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useColorScheme } from 'react-native';
+import { ClerkProvider } from "@clerk/clerk-expo";
 
+
+const CLERK_PUBLISHABLE_KEY = "pk_test_ZGFybGluZy1taW5ub3ctNTQuY2xlcmsuYWNjb3VudHMuZGV2JA";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -80,12 +83,40 @@ function RootLayoutNav() {
 
   return (
     <>
-      <ThemeProvider value={colorScheme === 'light' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-        </Stack>
-      </ThemeProvider>
+      <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+        <ThemeProvider value={colorScheme === 'light' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+          </Stack>
+        </ThemeProvider>
+      </ClerkProvider>
     </>
   );
 }
+
+
+/* 
+
+CREATE TABLE product (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  price NUMERIC(10, 2) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+ CREATE TABLE store (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  city VARCHAR(255) NOT NULL,
+  state VARCHAR(255) NOT NULL,
+  zipcode VARCHAR(10) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  CONSTRAINT fk_product
+    FOREIGN KEY (id)
+    REFERENCES product (id)
+    ON DELETE CASCADE
+);
+
+*/

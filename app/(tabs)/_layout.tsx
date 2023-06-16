@@ -1,6 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import { Pressable, useColorScheme } from 'react-native';
+import { useUser } from "@clerk/clerk-expo";
 import tw from 'twrnc';
 
 import Colors from '../../constants/Colors';
@@ -18,7 +19,7 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const isLoggedIn = true;
+  const { isSignedIn } = useUser()
 
   return (
     <Tabs
@@ -57,7 +58,7 @@ export default function TabLayout() {
                   )}
                 </Pressable>
               </Link>
-              <Link href={isLoggedIn ? "/profile" : '/sign-in'} asChild>
+              {isSignedIn && <Link href={"/profile"} asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <FontAwesome
@@ -71,7 +72,22 @@ export default function TabLayout() {
                     />
                   )}
                 </Pressable>
-              </Link>
+              </Link>}
+              {!isSignedIn && <Link href={'/sign-in'} asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <FontAwesome
+                      name="sign-in"
+                      size={30}
+                      /* color={Colors[colorScheme ?? 'light'].text} */
+                      color={"#777777"}
+                      style={tw.style('mr-4', {
+                        'opacity-50': pressed
+                      })}
+                    />
+                  )}
+                </Pressable>
+              </Link>}
             </View>
           ),
         }}
@@ -101,7 +117,7 @@ export default function TabLayout() {
                   )}
                 </Pressable>
               </Link>
-              <Link href={isLoggedIn ? "/profile" : '/sign-in'} asChild>
+              {isSignedIn && <Link href={"/profile"} asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <FontAwesome
@@ -115,7 +131,22 @@ export default function TabLayout() {
                     />
                   )}
                 </Pressable>
-              </Link>
+              </Link>}
+              {!isSignedIn && <Link href={'/sign-in'} asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <FontAwesome
+                      name="sign-in"
+                      size={30}
+                      /* color={Colors[colorScheme ?? 'light'].text} */
+                      color={"#777777"}
+                      style={tw.style('mr-4', {
+                        'opacity-50': pressed
+                      })}
+                    />
+                  )}
+                </Pressable>
+              </Link>}
             </View>
           ),
         }}
