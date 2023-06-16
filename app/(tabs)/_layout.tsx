@@ -26,10 +26,8 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         tabBarActiveBackgroundColor: '#E5E5CB',
         tabBarInactiveBackgroundColor: '#E5E5CB',
-        headerBackground: () => {
-          return (
-            <View style={tw`w-full h-full bg-[#E5E5CB]`}></View>
-          )
+        headerStyle: {
+          backgroundColor: '#E5E5CB'
         }
       }}
     >

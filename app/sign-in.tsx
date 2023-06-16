@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, TextInput, Pressable, Text } from 'react-native'
 import { StatusBar } from 'expo-status-bar';;
 import tw from 'twrnc';
-import * as NavigationBar from 'expo-navigation-bar';
-import { Link, Tabs, Navigator } from 'expo-router';
+import { Link, Stack } from 'expo-router';
 
 export default function SignIn() {
 
@@ -22,7 +21,13 @@ export default function SignIn() {
         // Handle sign in logic here
     }
     return (
-        <View style={tw`flex-1 justify-center items-center`}>
+        <View style={tw`flex-1 justify-center items-center bg-[#E5E5CB]`}>
+            <Stack.Screen options={{
+                title: 'Sign In',
+                headerStyle: {
+                    backgroundColor: '#E5E5CB',
+                }
+            }} />
             <View style={tw`w-4/5 mb-4`}>
                 <TextInput
                     style={tw`h-12 px-4 border rounded`}
