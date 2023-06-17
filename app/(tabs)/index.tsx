@@ -1,10 +1,10 @@
 import { View } from '../../components/Themed';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import NumberKeyboard from '../../components/NumbersKeyboard';
 import ProductsRow from '../../components/ProductsRow';
 import OrderScreen from '../../components/OrderScreen';
 import tw from 'twrnc';
+
 
 export default function TabOneScreen() {
 
@@ -18,7 +18,7 @@ export default function TabOneScreen() {
   };
 
   useEffect(() => {
-    const ws = new WebSocket("ws://192.168.231.191:3333", 'ordersSender');
+    const ws = new WebSocket("ws://192.168.1.191:3333", 'ordersSender');
     setWs(ws);
 
     ws.addEventListener("open", (event) => {
@@ -91,9 +91,9 @@ export default function TabOneScreen() {
 
 
   return (
-    <View nativeID='Tab-One-Container' style={tw`w-full h-full bg-[#E5E5CB] justify-center items-center`}>
+    <View nativeID='Tab-One-Container' style={tw`w-full h-full justify-center items-center`}>
 
-      <View nativeID='cashierContainer' style={tw`w-full h-full bg-[#E5E5CB] justify-center items-center`}>
+      <View nativeID='cashierContainer' style={tw`w-full h-full justify-center items-center py-4`}>
 
         <OrderScreen order={joinStringOrder(order).join('+')} />
 
@@ -103,7 +103,6 @@ export default function TabOneScreen() {
 
       </View>
 
-      <StatusBar style={'dark'} backgroundColor='#E5E5CB' />
     </View>
   );
 }

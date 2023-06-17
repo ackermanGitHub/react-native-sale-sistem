@@ -4,10 +4,10 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback, useEffect, useState } from 'react';
-import * as NavigationBar from 'expo-navigation-bar';
 import { useColorScheme } from 'react-native';
 import { ClerkProvider } from "@clerk/clerk-expo";
 
+import tw, { useDeviceContext } from 'twrnc';
 
 const CLERK_PUBLISHABLE_KEY = "pk_test_ZGFybGluZy1taW5ub3ctNTQuY2xlcmsuYWNjb3VudHMuZGV2JA";
 
@@ -30,9 +30,6 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
   const [appIsReady, setAppIsReady] = useState(false);
-
-  NavigationBar.setBackgroundColorAsync("#E5E5CB");
-  NavigationBar.setButtonStyleAsync("dark");
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -80,14 +77,15 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  useDeviceContext(tw);
 
   return (
     <>
       <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
-        <ThemeProvider value={colorScheme === 'light' ? DarkTheme : DefaultTheme}>
-          <Stack>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack screenOptions={{ animation: 'fade' }}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
           </Stack>
         </ThemeProvider>
       </ClerkProvider>
@@ -97,6 +95,12 @@ function RootLayoutNav() {
 
 
 /* 
+
+background: #E5E5CB
+
+Product buttons: #617A55
+
+Numbers buttons: #D5CEA3
 
 CREATE TABLE product (
   id SERIAL PRIMARY KEY,

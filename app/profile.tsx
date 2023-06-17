@@ -1,17 +1,39 @@
-import { Stack } from 'expo-router';
-import { View } from '../components/Themed';
+import { Stack, Link } from 'expo-router';
+import { View, Text } from '../components/Themed';
+import { useColorScheme } from 'react-native';
 import tw from 'twrnc';
+import { useUser } from "@clerk/clerk-expo";
 
 export default function ModalScreen() {
 
+    const { user, isLoaded, isSignedIn } = useUser();
+    const colorScheme = useColorScheme();
+
+    if (!isLoaded || !isSignedIn) {
+        return (
+            <View style={tw`h-full w-full justify-center items-center`}>
+                <Stack.Screen options={{
+                    title: 'Profile',
+                }} />
+                <Text style={tw`text-xl font-bold`}>User is not signed in</Text>
+
+                <Link href="/(tabs)" style={tw`mt-4 py-4`}>
+                    <Text style={tw`text-sm text-[#2e78b7]`}>Go to home screen!</Text>
+                </Link>
+
+            </View>
+        );
+    }
+
     return (
-        <View style={tw`h-full bg-[#E5E5CB] w-full`}>
+        <View style={tw`h-full w-full justify-center items-center`}>
             <Stack.Screen options={{
                 title: 'Profile',
-                headerStyle: {
-                    backgroundColor: '#E5E5CB',
-                }
             }} />
+            <Text>
+                Email: {user.primaryEmailAddress?.emailAddress}
+            </Text>
+
         </View>
     );
 }

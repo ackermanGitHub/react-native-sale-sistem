@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
+import { Text, View } from '../components/Themed';
+import { useColorScheme } from 'react-native';
 
 const OrderList = () => {
     const [orders, setOrders] = useState<string[]>([]);
     const [ws, setWs] = useState<WebSocket | null>(null);
+
+    const colorScheme = useColorScheme();
 
     const handleWebSocketMessage = (event: MessageEvent) => {
         console.log(event.data)
         setOrders((prevOrders) => [...prevOrders, event.data]);
     };
     useEffect(() => {
-        const ws = new WebSocket("ws://192.168.231.191:3333", 'ordersReciever');
+        const ws = new WebSocket("ws://192.168.1.191:3333", 'ordersReciever');
         setWs(ws);
 
         ws.addEventListener("open", (event) => {
@@ -42,7 +46,7 @@ const OrderList = () => {
         <View style={tw`self-center bg-[#777777] h-[1px] w-full`} />
     );
     return (
-        <View style={tw`flex-1 bg-[#fff] rounded-md shadow-lg items-center justify-center overflow-scroll`}>
+        <View style={tw`bg-[#fff] dark:bg-gray-900 w-4/5 h-4/5 rounded-md shadow-lg items-center justify-center overflow-scroll`}>
             <FlatList
                 data={orders}
                 renderItem={renderItem}

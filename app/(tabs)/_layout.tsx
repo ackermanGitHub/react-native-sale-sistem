@@ -25,32 +25,39 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        tabBarActiveBackgroundColor: '#E5E5CB',
-        tabBarInactiveBackgroundColor: '#E5E5CB',
-        headerStyle: {
-          backgroundColor: '#E5E5CB'
-        }
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Cajero',
-          headerTintColor: "#111111",
-          tabBarIcon: ({ color }) => <TabBarIcon name="cart-arrow-down" color={"#777777"} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="cart-arrow-down" color={color} />,
           tabBarLabel: ({ color, children }) => (
             <></>
           ),
           headerRight: () => (
             <View style={tw`flex-row gap-4 items-center justify-center bg-transparent`}>
+              <Link href="/no-page" asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <FontAwesome
+                      name="bug"
+                      size={30}
+                      color={Colors[colorScheme ?? 'light'].text}
+                      style={tw.style('mr-4', {
+                        'opacity-50': pressed
+                      })}
+                    />
+                  )}
+                </Pressable>
+              </Link>
               <Link href="/modal" asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <FontAwesome
                       name="info-circle"
                       size={30}
-                      /* color={Colors[colorScheme ?? 'light'].text} */
-                      color={"#777777"}
+                      color={Colors[colorScheme ?? 'light'].text}
                       style={tw.style('mr-4', {
                         'opacity-50': pressed
                       })}
@@ -64,8 +71,7 @@ export default function TabLayout() {
                     <FontAwesome
                       name="user-circle"
                       size={30}
-                      /* color={Colors[colorScheme ?? 'light'].text} */
-                      color={"#777777"}
+                      color={Colors[colorScheme ?? 'light'].text}
                       style={tw.style('mr-4', {
                         'opacity-50': pressed
                       })}
@@ -79,8 +85,7 @@ export default function TabLayout() {
                     <FontAwesome
                       name="sign-in"
                       size={30}
-                      /* color={Colors[colorScheme ?? 'light'].text} */
-                      color={"#777777"}
+                      color={Colors[colorScheme ?? 'light'].text}
                       style={tw.style('mr-4', {
                         'opacity-50': pressed
                       })}
@@ -96,20 +101,33 @@ export default function TabLayout() {
         name="two"
         options={{
           title: 'Órdenes',
-          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={"#777777"} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
           tabBarLabel: ({ color, children }) => (
             <></>
           ),
           headerRight: () => (
             <View style={tw`flex-row gap-4 items-center justify-center bg-transparent`}>
+              <Link href="/no-page" asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <FontAwesome
+                      name="bug"
+                      size={30}
+                      color={Colors[colorScheme ?? 'light'].text}
+                      style={tw.style('mr-4', {
+                        'opacity-50': pressed
+                      })}
+                    />
+                  )}
+                </Pressable>
+              </Link>
               <Link href="/modal" asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <FontAwesome
                       name="info-circle"
                       size={30}
-                      /* color={Colors[colorScheme ?? 'light'].text} */
-                      color={"#777777"}
+                      color={Colors[colorScheme ?? 'light'].text}
                       style={tw.style('mr-4', {
                         'opacity-50': pressed
                       })}
@@ -123,8 +141,7 @@ export default function TabLayout() {
                     <FontAwesome
                       name="user-circle"
                       size={30}
-                      /* color={Colors[colorScheme ?? 'light'].text} */
-                      color={"#777777"}
+                      color={Colors[colorScheme ?? 'light'].text}
                       style={tw.style('mr-4', {
                         'opacity-50': pressed
                       })}
@@ -138,8 +155,7 @@ export default function TabLayout() {
                     <FontAwesome
                       name="sign-in"
                       size={30}
-                      /* color={Colors[colorScheme ?? 'light'].text} */
-                      color={"#777777"}
+                      color={Colors[colorScheme ?? 'light'].text}
                       style={tw.style('mr-4', {
                         'opacity-50': pressed
                       })}
