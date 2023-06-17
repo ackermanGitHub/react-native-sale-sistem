@@ -8,8 +8,8 @@ import { useColorScheme } from 'react-native';
 import { ClerkProvider } from "@clerk/clerk-expo";
 
 import tw, { useDeviceContext } from 'twrnc';
-
-const CLERK_PUBLISHABLE_KEY = "pk_test_ZGFybGluZy1taW5ub3ctNTQuY2xlcmsuYWNjb3VudHMuZGV2JA";
+import { View } from '../components/Themed';
+const CLERK_PUBLISHABLE_KEY = 'pk_test_Z2VuZXJvdXMtbG9ic3Rlci0yMS5jbGVyay5hY2NvdW50cy5kZXYk'
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -21,7 +21,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: '/',
 };
 
 export default function RootLayout() {
@@ -80,16 +80,16 @@ function RootLayoutNav() {
   useDeviceContext(tw);
 
   return (
-    <>
+    <View style={tw`w-full h-full`}>
       <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack screenOptions={{ animation: 'fade' }}>
+          <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
           </Stack>
         </ThemeProvider>
       </ClerkProvider>
-    </>
+    </View>
   );
 }
 
