@@ -116,13 +116,15 @@ export default function SignUp() {
                 <View>
                     <View>
                         <TextInput
+                            style={tw`h-12 px-4 border rounded border-gray-300 dark:text-white dark:bg-gray-800 dark:border-gray-700`}
+                            placeholderTextColor={colorScheme === 'dark' ? "white" : "gray"}
                             value={code}
                             placeholder="Code..."
                             onChangeText={(code) => setCode(code)}
                         />
                     </View>
-                    <TouchableOpacity onPress={handleVerifyEmail}>
-                        <Text>Verify Email</Text>
+                    <TouchableOpacity style={tw`w-4/5 max-w-[240px] bg-blue-500 dark:bg-slate-700 rounded h-12 justify-center items-center`} onPress={handleVerifyEmail}>
+                        <Text style={tw`text-white`}>Verify Email</Text>
                     </TouchableOpacity>
                 </View>
             )}
