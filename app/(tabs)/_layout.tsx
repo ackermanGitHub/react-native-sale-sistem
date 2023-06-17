@@ -37,7 +37,7 @@ export default function TabLayout() {
           ),
           headerRight: () => (
             <View style={tw`flex-row gap-4 items-center justify-center bg-transparent`}>
-              <Link href="/no-page" asChild>
+              <Link href="/" asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <FontAwesome
@@ -107,7 +107,7 @@ export default function TabLayout() {
           ),
           headerRight: () => (
             <View style={tw`flex-row gap-4 items-center justify-center bg-transparent`}>
-              <Link href="/no-page" asChild>
+              <Link href="/" asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <FontAwesome
