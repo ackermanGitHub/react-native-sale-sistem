@@ -14,7 +14,7 @@ export default function ModalScreen() {
       <Stack.Screen options={{
         title: 'Modal',
       }} />
-      <View style={tw`w-3/4 h-3/4 relative bg-white rounded-lg shadow-lg justify-center items-center`}>
+      <View style={tw`w-3/4 h-3/4 relative rounded-lg shadow-lg justify-center items-center`}>
         <Pressable style={tw`absolute top-5 right-5`} onPress={() => {
           router.back()
         }}>
