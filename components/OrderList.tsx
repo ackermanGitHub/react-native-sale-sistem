@@ -15,7 +15,7 @@ const OrderList = () => {
         setOrders((prevOrders) => [...prevOrders, event.data]);
     };
     useEffect(() => {
-        const ws = new WebSocket("ws://192.168.1.191:3333", 'ordersReciever');
+        const ws = new WebSocket("ws://192.168.202.191:3333", 'ordersReciever');
         setWs(ws);
 
         ws.addEventListener("open", (event) => {
@@ -38,7 +38,7 @@ const OrderList = () => {
         };
     }, []);
     const renderItem = ({ item }: { item: string }) => (
-        <View style={tw`p-4 border-b-gray-400`}>
+        <View style={tw`p-4 border-b-gray-400 bg-transparent`}>
             <Text style={tw`text-base`}>{item}</Text>
         </View>
     );
@@ -46,7 +46,7 @@ const OrderList = () => {
         <View style={tw`self-center bg-[#777777] h-[1px] w-full`} />
     );
     return (
-        <View style={tw`bg-[#fff] dark:bg-gray-900 w-4/5 h-4/5 rounded-md shadow-lg items-center justify-center overflow-scroll`}>
+        <View style={tw`bg-[#fff] dark:bg-gray-900 w-4/5 h-4/5 rounded-md shadow-lg items-center overflow-scroll`}>
             <FlatList
                 data={orders}
                 renderItem={renderItem}
