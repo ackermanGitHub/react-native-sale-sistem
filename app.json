@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#E5E5CB"
+      "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -19,7 +19,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/popeye-the-sailor-man-adaptative-1.png",
-        "backgroundColor": "#E5E5CB"
+        "backgroundColor": "#ffffff"
       }
     },
     "web": {
