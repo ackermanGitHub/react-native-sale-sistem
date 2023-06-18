@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { Accelerometer } from 'expo-sensors';
+import { TouchableOpacity } from 'react-native';
+import { View, Text } from './Themed';
+import { Accelerometer, AccelerometerMeasurement } from 'expo-sensors';
 import tw from 'twrnc';
 
-type typeData = { x: number, y: number, z: number }
-
 export default function AccelerometerComponent() {
-    const [{ x, y, z }, setData] = useState<typeData>({
+    const [{ x, y, z }, setData] = useState<AccelerometerMeasurement>({
         x: 0,
         y: 0,
         z: 0,
@@ -36,10 +35,10 @@ export default function AccelerometerComponent() {
 
     return (
         <View style={tw`w-full h-full justify-center`}>
-            <Text style={tw`text-center`}>Accelerometer: (in gs where 1g = 9.81 m/s^2)</Text>
-            <Text style={tw`text-center`}>x: {x}</Text>
-            <Text style={tw`text-center`}>y: {y}</Text>
-            <Text style={tw`text-center`}>z: {z}</Text>
+            <Text style={tw`text-left`}>Accelerometer: (in gs where 1g = 9.81 m/s^2)</Text>
+            <Text style={tw`text-left`}>x: {x}</Text>
+            <Text style={tw`text-left`}>y: {y}</Text>
+            <Text style={tw`text-left`}>z: {z}</Text>
             <View style={tw`flex-row items-center mt-4`}>
                 <TouchableOpacity onPress={subscription ? _unsubscribe : _subscribe} style={tw`items-center justify-center bg-[#eee] p-3`}>
                     <Text>{subscription ? 'On' : 'Off'}</Text>

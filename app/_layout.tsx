@@ -96,6 +96,21 @@ function RootLayoutNav() {
 
 /* 
 
+set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.67.191
+
+"ios": {
+      "bundleIdentifier": "com.cubastore.store",
+"buildNumber": "1.0.0",
+  "supportsTablet": true
+    },
+"android": {
+  "package": "com.cubastore.store",
+  "versionCode": 1,
+    "adaptiveIcon": {
+    "foregroundImage": "./assets/images/popeye-the-sailor-man-adaptative-1.png",
+      "backgroundColor": "#ffffff"
+  }
+
 background: #E5E5CB
 
 Product buttons: #617A55
@@ -122,5 +137,36 @@ CREATE TABLE product (
     REFERENCES product (id)
     ON DELETE CASCADE
 );
+
+{
+  "cli": {
+    "version": ">= 3.13.3"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "preview3": {
+      "developmentClient": true
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  }
+}
+
+expo start --android
 
 */

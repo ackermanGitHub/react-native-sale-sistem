@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, Pressable, useColorScheme } from 'react-native';
+import { TextInput, Pressable, useColorScheme, ActivityIndicator } from 'react-native';
 import { View, Text } from '../components/Themed';
 import tw from 'twrnc';
 import { useSignIn } from "@clerk/clerk-expo";
@@ -12,14 +12,16 @@ export default function SignIn() {
     const router = useRouter();
     const colorScheme = useColorScheme();
 
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoadind, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSignIn = async () => {
         if (!isLoaded) {
             return;
         }
+        setIsLoading(true);
 
         try {
             const completeSignIn = await signIn.create({
@@ -29,10 +31,12 @@ export default function SignIn() {
             // This is an important step,
             // This indicates the user is signed in
             await setActive({ session: completeSignIn.createdSessionId });
-            router.replace('/profile')
+            router.setParams()
         } catch (err: any) {
+            setError(err.message);
             console.error(JSON.stringify(err, null, 2));
         }
+        setIsLoading(false);
     }
 
     return (
@@ -41,6 +45,9 @@ export default function SignIn() {
                 title: 'Sign In',
             }} />
             <View style={tw`w-4/5 mb-4 max-w-[320px]`}>
+                <Text style={tw`text-red-500 text-xs`}>
+                    {error && error}
+                </Text>
                 <TextInput
                     style={tw`h-12 px-4 border rounded border-gray-300 dark:text-white dark:bg-gray-800 dark:border-gray-700`}
                     placeholder="Email..."
@@ -60,13 +67,16 @@ export default function SignIn() {
                     value={password}
                 />
             </View>
-            <Pressable onPress={handleSignIn} style={tw`w-4/5 max-w-[240px] bg-blue-500 dark:bg-slate-700 rounded h-12 justify-center items-center`}>
+            <Pressable onPress={handleSignIn} style={tw`w-4/5 max-w-[240px] bg-blue-500 dark:bg-slate-700 rounded h-12 justify-center items-center active:scale-50`}>
                 <Text style={tw`text-white`}>Sign In</Text>
             </Pressable>
             <SignWithOauth action='sign-in' />
             <Pressable style={tw`my-2`} onPress={() => router.replace('/sign-up')}>
                 <Text style={tw`text-[#2e78b7] text-xs`}>Don't have an account? Sign Up</Text>
             </Pressable>
+            {isLoadind &&
+                <ActivityIndicator style={tw`my-8`} size={'small'} animating color={colorScheme === 'dark' ? 'white' : 'black'} />
+            }
         </View>
     );
 }
