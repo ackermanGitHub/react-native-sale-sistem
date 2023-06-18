@@ -10,7 +10,9 @@ export default function AccelerometerComponent() {
         y: 0,
         z: 0,
     });
-    const [subscription, setSubscription] = useState(null);
+    const [subscription, setSubscription] = useState<any>();
+
+    Accelerometer
 
     const _slow = () => Accelerometer.setUpdateInterval(1000);
     const _fast = () => Accelerometer.setUpdateInterval(16);
