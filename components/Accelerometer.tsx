@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
+import tw from 'twrnc';
 
 type typeData = { x: number, y: number, z: number }
 
@@ -19,7 +20,7 @@ export default function AccelerometerComponent() {
 
     const _subscribe = () => {
         setSubscription(
-            Accelerometer.addListener(setData)
+            Accelerometer.addListener((newData) => { setData(newData) })
         );
     };
 
@@ -34,50 +35,22 @@ export default function AccelerometerComponent() {
     }, []);
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Accelerometer: (in gs where 1g = 9.81 m/s^2)</Text>
-            <Text style={styles.text}>x: {x}</Text>
-            <Text style={styles.text}>y: {y}</Text>
-            <Text style={styles.text}>z: {z}</Text>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={subscription ? _unsubscribe : _subscribe} style={styles.button}>
+        <View style={tw`w-full h-full justify-center`}>
+            <Text style={tw`text-center`}>Accelerometer: (in gs where 1g = 9.81 m/s^2)</Text>
+            <Text style={tw`text-center`}>x: {x}</Text>
+            <Text style={tw`text-center`}>y: {y}</Text>
+            <Text style={tw`text-center`}>z: {z}</Text>
+            <View style={tw`flex-row items-center mt-4`}>
+                <TouchableOpacity onPress={subscription ? _unsubscribe : _subscribe} style={tw`items-center justify-center bg-[#eee] p-3`}>
                     <Text>{subscription ? 'On' : 'Off'}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={_slow} style={[styles.button, styles.middleButton]}>
+                <TouchableOpacity onPress={_slow} style={tw`items-center justify-center bg-[#eee] p-3`}>
                     <Text>Slow</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={_fast} style={styles.button}>
+                <TouchableOpacity onPress={_fast} style={tw`items-center justify-center bg-[#eee] p-3`}>
                     <Text>Fast</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingHorizontal: 20,
-    },
-    text: {
-        textAlign: 'center',
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        alignItems: 'stretch',
-        marginTop: 15,
-    },
-    button: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#eee',
-        padding: 10,
-    },
-    middleButton: {
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderColor: '#ccc',
-    },
-});
