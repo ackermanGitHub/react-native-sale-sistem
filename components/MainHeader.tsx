@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import tw from 'twrnc';
 import { ActivityIndicator, useColorScheme, View as NativeView } from 'react-native';
 
-const CreateStoreModal: React.FC<{ isVisible: boolean, children: React.ReactNode, onClose: () => void }> = ({ isVisible, children, onClose }) => {
+const MainHeader: React.FC<{ isVisible: boolean, children: React.ReactNode, onClose: () => void }> = ({ isVisible, children, onClose }) => {
     const colorScheme = useColorScheme();
 
     return (
@@ -26,4 +26,4 @@ const CreateStoreModal: React.FC<{ isVisible: boolean, children: React.ReactNode
         </Modal>
     );
 }
-export default CreateStoreModal;
+export default MainHeader;

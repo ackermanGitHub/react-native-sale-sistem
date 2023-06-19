@@ -5,7 +5,7 @@ import tw from 'twrnc';
 import { z } from 'zod';
 import { useUser } from "@clerk/clerk-expo";
 import CreateStoreModal from '../components/CreateStore';
-import SignIn from './sign-in';
+import SignIn from './(auth)/sign-in';
 import { ActivityIndicator, Pressable, useColorScheme } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Colors from '../constants/Colors';
@@ -61,7 +61,7 @@ export default function HomeScreen() {
         )
     }
 
-    if (!isSignedIn) {
+    if (!isSignedIn && false) {
         return (
             <>
                 <SignIn />
@@ -76,11 +76,11 @@ export default function HomeScreen() {
                 headerBackButtonMenuEnabled: false,
                 headerRight: () => (
                     <View style={tw`flex-row gap-4 items-center justify-center bg-transparent`}>
-                        <Link href="/" asChild>
+                        {/* <Link href="/accelerometer" asChild>
                             <Pressable>
                                 {({ pressed }) => (
                                     <FontAwesome
-                                        name="connectdevelop"
+                                        name="compass"
                                         size={30}
                                         color={Colors[colorScheme ?? 'light'].text}
                                         style={tw.style('mr-4', {
@@ -89,35 +89,7 @@ export default function HomeScreen() {
                                     />
                                 )}
                             </Pressable>
-                        </Link>
-                        <Link href="/" asChild>
-                            <Pressable>
-                                {({ pressed }) => (
-                                    <FontAwesome
-                                        name="shopping-basket"
-                                        size={30}
-                                        color={Colors[colorScheme ?? 'light'].text}
-                                        style={tw.style('mr-4', {
-                                            'opacity-50': pressed
-                                        })}
-                                    />
-                                )}
-                            </Pressable>
-                        </Link>
-                        <Pressable onPress={() => {
-                            setIsModalVisible(true);
-                        }}>
-                            {({ pressed }) => (
-                                <FontAwesome
-                                    name="map"
-                                    size={30}
-                                    color={Colors[colorScheme ?? 'light'].text}
-                                    style={tw.style('mr-4', {
-                                        'opacity-50': pressed
-                                    })}
-                                />
-                            )}
-                        </Pressable>
+                        </Link> */}
                         <Link href="/map" asChild>
                             <Pressable>
                                 {({ pressed }) => (
@@ -132,11 +104,25 @@ export default function HomeScreen() {
                                 )}
                             </Pressable>
                         </Link>
-                        {isSignedIn && <Link href={"/profile"} asChild>
+                        <Pressable onPress={() => {
+                            setIsModalVisible(true);
+                        }}>
+                            {({ pressed }) => (
+                                <FontAwesome
+                                    name="arrow-up"
+                                    size={30}
+                                    color={Colors[colorScheme ?? 'light'].text}
+                                    style={tw.style('mr-4', {
+                                        'opacity-50': pressed
+                                    })}
+                                />
+                            )}
+                        </Pressable>
+                        <Link href="/(casher)/" asChild>
                             <Pressable>
                                 {({ pressed }) => (
                                     <FontAwesome
-                                        name="apple"
+                                        name="money"
                                         size={30}
                                         color={Colors[colorScheme ?? 'light'].text}
                                         style={tw.style('mr-4', {
@@ -145,21 +131,21 @@ export default function HomeScreen() {
                                     />
                                 )}
                             </Pressable>
-                        </Link>}
-                        {!isSignedIn && <Link href={'/sign-in'} asChild>
-                            <Pressable>
+                        </Link>
+                        <Link href={isSignedIn ? '/profile' : '/sign-in'} asChild>
+                            <Pressable >
                                 {({ pressed }) => (
                                     <FontAwesome
-                                        name="sign-in"
+                                        name={isSignedIn ? 'user-circle' : 'sign-in'}
                                         size={30}
                                         color={Colors[colorScheme ?? 'light'].text}
                                         style={tw.style('mr-4', {
-                                            'opacity-50': pressed
+                                            'opacity-50': pressed,
                                         })}
                                     />
                                 )}
                             </Pressable>
-                        </Link>}
+                        </Link>
                     </View>
                 ),
             }} />

@@ -84,7 +84,7 @@ function RootLayoutNav() {
       <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(casher)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
           </Stack>
         </ThemeProvider>

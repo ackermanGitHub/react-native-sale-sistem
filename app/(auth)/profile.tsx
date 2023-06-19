@@ -1,5 +1,5 @@
 import { Stack, Link } from 'expo-router';
-import { View, Text } from '../components/Themed';
+import { View, Text } from '../../components/Themed';
 import { useColorScheme } from 'react-native';
 import tw from 'twrnc';
 import { useUser } from "@clerk/clerk-expo";
@@ -17,7 +17,7 @@ export default function ModalScreen() {
                 }} />
                 <Text style={tw`text-xl font-bold`}>User is not signed in</Text>
 
-                <Link href="/(tabs)" style={tw`mt-4 py-4`}>
+                <Link href="/(casher)" style={tw`mt-4 py-4`}>
                     <Text style={tw`text-sm text-[#2e78b7]`}>Go to home screen!</Text>
                 </Link>
 
