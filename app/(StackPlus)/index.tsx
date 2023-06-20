@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from '../../components/Themed';
-import tw from 'twrnc';
+import tw from '../../components/utils/tailwind';
 
 export default function StackPlus() {
     return (

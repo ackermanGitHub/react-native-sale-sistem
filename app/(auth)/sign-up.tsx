@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, Pressable, TouchableOpacity, useColorScheme } from 'react-native';
 import { View, Text } from '../../components/Themed';
-import tw from 'twrnc';
+import tw from '../../components/utils/tailwind';
 import { useSignUp } from "@clerk/clerk-expo";
 import { Stack, useRouter } from 'expo-router';
 import SignWithOauth from '../../components/SignWithOauth';

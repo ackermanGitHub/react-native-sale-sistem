@@ -1,7 +1,7 @@
 import { Stack, Link } from 'expo-router';
 import { View, Text } from '../../components/Themed';
 import { useColorScheme } from 'react-native';
-import tw from 'twrnc';
+import tw from '../../components/utils/tailwind';
 import { useUser } from "@clerk/clerk-expo";
 
 export default function ModalScreen() {

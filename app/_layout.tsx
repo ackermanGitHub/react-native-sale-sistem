@@ -6,8 +6,10 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useCallback, useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import { ClerkProvider } from "@clerk/clerk-expo";
+import * as NavigationBar from 'expo-navigation-bar';
 
-import tw, { useDeviceContext } from 'twrnc';
+import { useDeviceContext } from 'twrnc';
+import tw from '../components/utils/tailwind';
 import { View } from '../components/Themed';
 const CLERK_PUBLISHABLE_KEY = 'pk_test_Z2VuZXJvdXMtbG9ic3Rlci0yMS5jbGVyay5hY2NvdW50cy5kZXYk'
 
@@ -25,6 +27,7 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
+  useDeviceContext(tw);
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
@@ -77,7 +80,11 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  useDeviceContext(tw);
+
+  useEffect(() => {
+    NavigationBar.setBackgroundColorAsync(colorScheme === 'dark' ? 'black' : 'white');
+    NavigationBar.setButtonStyleAsync(colorScheme === 'dark' ? 'light' : 'dark')
+  }, [colorScheme])
 
   return (
     <View style={tw`w-full h-full`}>
@@ -85,7 +92,9 @@ function RootLayoutNav() {
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack>
             <Stack.Screen name="(casher)" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
+            <Stack.Screen name="(toggles)/deleteStoreModal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
+            <Stack.Screen name="(toggles)/drawer" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
+            <Stack.Screen name="(toggles)/modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
           </Stack>
         </ThemeProvider>
       </ClerkProvider>

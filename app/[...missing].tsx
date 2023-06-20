@@ -1,5 +1,5 @@
 import { Link, Stack } from 'expo-router';
-import tw from 'twrnc';
+import tw from '../components/utils/tailwind';
 
 import { Text, View } from '../components/Themed';
 

@@ -15,7 +15,7 @@ const OrderList = () => {
         setOrders((prevOrders) => [...prevOrders, event.data]);
     };
     useEffect(() => {
-        const ws = new WebSocket("ws://192.168.64.191:3333", 'ordersReciever');
+        const ws = new WebSocket("ws://192.168.80.191:3333", 'ordersReciever');
         setWs(ws);
 
         ws.addEventListener("open", (event) => {

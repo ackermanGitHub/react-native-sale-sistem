@@ -1,29 +1,122 @@
-import { Modal, Pressable, TouchableWithoutFeedback } from 'react-native';
-import { View, Text } from './Themed';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import React, { useState } from 'react'
+import { Link, Stack } from 'expo-router';
+import { View } from '../components/Themed';
+import React, { useState, useEffect } from 'react';
 import tw from 'twrnc';
-import { ActivityIndicator, useColorScheme, View as NativeView } from 'react-native';
+import { z } from 'zod';
+import { useUser } from "@clerk/clerk-expo";
+import { ModalContainer } from './ModalContainer';
+import { ActivityIndicator, Pressable, useColorScheme } from 'react-native';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Colors from '../constants/Colors';
 
-const MainHeader: React.FC<{ isVisible: boolean, children: React.ReactNode, onClose: () => void }> = ({ isVisible, children, onClose }) => {
+const store = z.object({
+    id: z.number(),
+    name: z.string().length(255),
+    address: z.string().length(255),
+    city: z.string().length(255),
+    state: z.string().length(255),
+    zipcode: z.string().length(10),
+    created_at: z.date(),
+});
+
+interface MainHeaderProps {
+    withModal?: boolean;
+    modalTitle?: string;
+    modalText?: string;
+    modalCallback?: () => void;
+    modalType?: string;
+}
+
+export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, modalTitle, modalText, modalCallback, modalType }) => {
+    const [stores, setStores] = useState<z.infer<typeof store>[]>([])
+    const { isLoaded, isSignedIn, user } = useUser();
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const colorScheme = useColorScheme();
 
     return (
-        <Modal animationType="slide" transparent={true} visible={isVisible}>
-            <Pressable onPress={onClose} style={tw`h-full w-full flex relative bg-transparent`}>
-                <TouchableWithoutFeedback onPress={() => { }}>
-                    <View style={tw`h-1/4 w-full shadow-2xl rounded-t-xl absolute bottom-0`}>
-                        <View style={tw`h-[16%] rounded-t-md px-5 flex-row justify-between items-center`}>
-                            <Text style={tw`text-sm`}>Choose a sticker</Text>
-                            <Pressable onPress={onClose}>
-                                <MaterialIcons name="close" color={colorScheme === 'dark' ? 'white' : 'black'} style={tw`text-sm`} size={22} />
+        <View style={tw`w-full justify-center items-center`}>
+            <Stack.Screen options={{
+                title: 'Home',
+                headerBackButtonMenuEnabled: false,
+                headerRight: () => (
+                    <View style={tw`flex-row gap-4 items-center justify-center bg-transparent`}>
+                        {/* <Link href="/accelerometer" asChild>
+                            <Pressable>
+                                {({ pressed }) => (
+                                    <FontAwesome
+                                        name="compass"
+                                        size={30}
+                                        color={Colors[colorScheme ?? 'light'].text}
+                                        style={tw.style('mr-4', {
+                                            'opacity-50': pressed
+                                        })}
+                                    />
+                                )}
                             </Pressable>
-                        </View>
-                        {children}
+                        </Link> */}
+                        <Link href="/map" asChild>
+                            <Pressable>
+                                {({ pressed }) => (
+                                    <FontAwesome
+                                        name="map"
+                                        size={30}
+                                        color={Colors[colorScheme ?? 'light'].text}
+                                        style={tw.style('mr-4', {
+                                            'opacity-50': pressed
+                                        })}
+                                    />
+                                )}
+                            </Pressable>
+                        </Link>
+                        <Pressable onPress={() => {
+                            setIsModalVisible(true);
+                        }}>
+                            {({ pressed }) => (
+                                <FontAwesome
+                                    name="arrow-up"
+                                    size={30}
+                                    color={Colors[colorScheme ?? 'light'].text}
+                                    style={tw.style('mr-4', {
+                                        'opacity-50': pressed
+                                    })}
+                                />
+                            )}
+                        </Pressable>
+                        <Link href="/(casher)/" asChild>
+                            <Pressable>
+                                {({ pressed }) => (
+                                    <FontAwesome
+                                        name="money"
+                                        size={30}
+                                        color={Colors[colorScheme ?? 'light'].text}
+                                        style={tw.style('mr-4', {
+                                            'opacity-50': pressed
+                                        })}
+                                    />
+                                )}
+                            </Pressable>
+                        </Link>
+                        <Link href={isSignedIn ? '/profile' : '/sign-in'} asChild>
+                            <Pressable >
+                                {({ pressed }) => (
+                                    <FontAwesome
+                                        name={isSignedIn ? 'user-circle' : 'sign-in'}
+                                        size={30}
+                                        color={Colors[colorScheme ?? 'light'].text}
+                                        style={tw.style('mr-4', {
+                                            'opacity-50': pressed,
+                                        })}
+                                    />
+                                )}
+                            </Pressable>
+                        </Link>
                     </View>
-                </TouchableWithoutFeedback>
-            </Pressable>
-        </Modal>
+                ),
+            }} />
+
+            {withModal && <ModalContainer title={modalTitle} text={modalText} callback={modalCallback} type={modalType} isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} >
+            </ModalContainer>}
+
+        </View>
     );
 }
-export default MainHeader;

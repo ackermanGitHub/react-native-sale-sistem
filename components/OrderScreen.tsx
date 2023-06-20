@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { ScrollView } from 'react-native';
-import tw from 'twrnc';
+import tw from './utils/tailwind';
 import { useColorScheme } from 'react-native';
 import { Text, View } from '../components/Themed';
 

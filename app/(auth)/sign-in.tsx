@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { TextInput, Pressable, useColorScheme, ActivityIndicator } from 'react-native';
 import { View, Text } from '../../components/Themed';
-import tw from 'twrnc';
+import tw from '../../components/utils/tailwind';
 import { useSignIn } from "@clerk/clerk-expo";
 import { Stack, useRouter } from 'expo-router';
-import SignWithOauth from '../../components/SignWithOauth';
+// import SignWithOauth from '../../components/SignWithOauth';
 
 
 export default function SignIn() {
@@ -70,7 +70,7 @@ export default function SignIn() {
             <Pressable onPress={handleSignIn} style={tw`w-4/5 max-w-[240px] bg-blue-500 dark:bg-slate-700 rounded h-12 justify-center items-center active:scale-50`}>
                 <Text style={tw`text-white`}>Sign In</Text>
             </Pressable>
-            <SignWithOauth action='sign-in' />
+            {/* <SignWithOauth action='sign-in' /> */}
             <Pressable style={tw`my-2`} onPress={() => router.replace('/sign-up')}>
                 <Text style={tw`text-[#2e78b7] text-xs`}>Don't have an account? Sign Up</Text>
             </Pressable>

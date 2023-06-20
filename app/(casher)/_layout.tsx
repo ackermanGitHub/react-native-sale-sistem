@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import { Pressable, useColorScheme } from 'react-native';
 import { useUser } from "@clerk/clerk-expo";
-import tw from 'twrnc';
+import tw from '../../components/utils/tailwind';
 
 import Colors from '../../constants/Colors';
 import { View } from '../../components/Themed';

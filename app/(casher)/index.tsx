@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import NumberKeyboard from '../../components/NumbersKeyboard';
 import ProductsRow from '../../components/ProductsRow';
 import OrderScreen from '../../components/OrderScreen';
-import tw from 'twrnc';
+import tw from '../../components/utils/tailwind';
 
 
 export default function TabOneScreen() {
@@ -18,7 +18,7 @@ export default function TabOneScreen() {
   };
 
   useEffect(() => {
-    const ws = new WebSocket("ws://192.168.64.191:3333", 'ordersSender');
+    const ws = new WebSocket("ws://192.168.80.191:3333", 'ordersSender');
     setWs(ws);
 
     ws.addEventListener("open", (event) => {

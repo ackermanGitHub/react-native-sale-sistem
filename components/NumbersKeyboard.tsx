@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import tw from 'twrnc';
+import tw from './utils/tailwind';
 import { useColorScheme } from 'react-native';
 import { Text, View } from '../components/Themed';
 
