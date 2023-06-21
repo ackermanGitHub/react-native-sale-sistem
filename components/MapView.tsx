@@ -3,12 +3,17 @@ import tw from 'twrnc';
 import { useEffect, useState } from 'react';
 import GoogleMap, { Marker } from 'react-native-maps';
 
+type MarkerType = {
+    cordinates: {
+        latitude: number,
+        longitude: number,
+    }
+    title: string,
+    description: string,
+}
+
 const MapView = () => {
-    const [region, setRegion] = useState({
-        latitude: 37.774929,
-        longitude: -122.419418,
-    })
-    const [markers, setMarkers] = useState()
+    const [markers, setMarkers] = useState<MarkerType[]>([])
     const [ws, setWs] = useState<WebSocket | null>(null);
 
     const handleWebSocketMessage = (event: MessageEvent) => {
@@ -38,32 +43,26 @@ const MapView = () => {
         };
     }, []);
 
-    useEffect(() => {
-        const marker = new Marker({
-            title: 'Your driver',
-            coordinate: region
-        });
-    })
-
     return (
         <View style={tw`h-full w-full`}>
             <GoogleMap
                 tintColor='red'
-                initialRegion={{
-                    ...region,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
-                }}
                 style={tw`h-full w-full`}
+                onLongPress={(e) => {
+                    console.log(e)
+                }}
             >
-                <Marker
-                    coordinate={{
-                        latitude: 37.774929,
-                        longitude: -122.419418,
-                    }}
-                    title='SF Marker'
-                    description='Default Marker'
-                />
+                {
+                    markers.map((marker) => {
+                        return (
+                            <Marker
+                                coordinate={marker.cordinates}
+                                title={marker.title}
+                                description={marker.description}
+                            />
+                        )
+                    })
+                }
             </GoogleMap>
         </View>
     );
