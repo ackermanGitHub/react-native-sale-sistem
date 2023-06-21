@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, TouchableOpacity } from 'react-native';
-import tw from 'twrnc';
+import { FlatList } from 'react-native';
+import tw from './utils/tailwind';
 import { Text, View } from '../components/Themed';
 import { useColorScheme } from 'react-native';
 
