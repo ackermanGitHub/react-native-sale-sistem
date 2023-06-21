@@ -4,7 +4,7 @@ import tw from '../../components/utils/tailwind';
 import { FontAwesome } from '@expo/vector-icons';
 import { Pressable, useColorScheme } from 'react-native';
 import Colors from '../../constants/Colors';
-import ModalContainer from './modal';
+import { DialogComponent } from '../../components/Dialog';
 import { useRouter } from 'expo-router';
 
 export default function DeleteStoreModal() {
@@ -14,7 +14,9 @@ export default function DeleteStoreModal() {
 
     return (
         <>
-            <ModalContainer />
+            <DialogComponent title='Are you shure you want to delete this store?' onClose={() => {
+                router.back()
+            }} />
             {/* <View style={tw`w-full h-full bg-transparent justify-center items-center`}>
                     <Pressable onPress={() => router.back()} style={tw`h-full w-full flex justify-center items-center relative bg-transparent`}>
                     </Pressable>

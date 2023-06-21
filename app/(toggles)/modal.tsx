@@ -5,14 +5,14 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Pressable, useColorScheme } from 'react-native';
 import Colors from '../../constants/Colors';
 
-export default function ModalContainer() {
+export default function DialogRoute() {
 
   const colorScheme = useColorScheme();
 
   return (
     <View style={tw`w-full h-full bg-transparent  justify-center items-center`}>
       <Stack.Screen options={{
-        title: 'Modal',
+        title: 'Dialog',
       }} />
       <View style={tw`w-4/5 h-3/4 relative rounded-lg shadow-lg border-slate-300 dark:border-slate-700 dark:shadow-slate-300 border-2 border-solid justify-center items-center`}>
         <Pressable style={tw`absolute top-5 right-5`} onPress={() => {

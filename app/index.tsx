@@ -1,4 +1,4 @@
-import { Link, Stack } from 'expo-router';
+import { Link, Stack, router } from 'expo-router';
 import { Text, View } from '../components/Themed';
 import React, { useState, useEffect } from 'react';
 import tw from '../components/utils/tailwind';
@@ -25,7 +25,7 @@ export default function HomeScreen() {
 
         if (isSignedIn) {
             try {
-                fetch(`http://192.168.80.191:3333/stores?user_id=${user.id}`, { signal: abortController.signal })
+                fetch(`http://192.168.67.191:3333/stores?user_id=${user.id}`, { signal: abortController.signal })
                     .then(response => response.json())
                     .then(data => {
                         setStores(data)
@@ -66,8 +66,31 @@ export default function HomeScreen() {
 
     return (
         <View style={tw`w-full h-full justify-center items-center`}>
-            <MainHeader modalTitle='MainHeader' withModal />
-            <StoresDashboard setStores={setStores} stores={stores} />
+            <MainHeader modalTitle='MainHeader' withModal withMap />
+
+
+            {
+                (!stores || stores.length === 0) && isSignedIn && isLoaded && (
+                    <View style={tw.style(`w-full h-full flex flex-col justify-center items-center`)}>
+                        <ActivityIndicator size={'large'} animating color={colorScheme === 'dark' ? 'white' : 'black'} />
+                    </View>
+                )
+            }
+
+            {
+                !isSignedIn && (
+                    <View style={tw.style(`w-full h-full flex flex-col justify-center items-center gap-10`)}>
+                        <Text style={tw.style(`mx-auto flex flex-row justify-center items-center`)}>
+                            Sign In to see your stores
+                        </Text>
+                        <Pressable onPress={() => router.push('/sign-in')} style={tw`w-4/5 max-w-[240px] bg-blue-500 dark:bg-slate-700 rounded h-12 justify-center items-center active:scale-50`}>
+                            <Text style={tw`text-white`}>Sign In</Text>
+                        </Pressable>
+                    </View>
+                )
+            }
+
+            {isSignedIn && (stores && stores.length > 0) && <StoresDashboard setStores={setStores} stores={stores} />}
         </View>
     );
 }

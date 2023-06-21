@@ -31,7 +31,7 @@ export default function SignIn() {
             // This is an important step,
             // This indicates the user is signed in
             await setActive({ session: completeSignIn.createdSessionId });
-            router.replace('/');
+            router.back();
         } catch (err: any) {
             setError(err.message);
             console.error(JSON.stringify(err, null, 2));

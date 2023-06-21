@@ -21,13 +21,15 @@ const store = z.object({
 
 interface MainHeaderProps {
     withModal?: boolean;
+    withMap?: boolean;
+    stackTitle?: string;
     modalTitle?: string;
     modalText?: string;
     modalCallback?: () => void;
     modalType?: string;
 }
 
-export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, modalTitle, modalText, modalCallback, modalType }) => {
+export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withMap = false, stackTitle, modalTitle, modalText, modalCallback, modalType }) => {
     const [stores, setStores] = useState<z.infer<typeof store>[]>([])
     const { isLoaded, isSignedIn, user } = useUser();
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -36,7 +38,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, modal
     return (
         <View style={tw`w-full justify-center items-center`}>
             <Stack.Screen options={{
-                title: 'Home',
+                title: stackTitle || 'Home',
                 headerBackButtonMenuEnabled: false,
                 headerRight: () => (
                     <View style={tw`flex-row gap-4 items-center justify-center bg-transparent`}>
@@ -54,7 +56,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, modal
                                 )}
                             </Pressable>
                         </Link> */}
-                        <Link href="/map" asChild>
+                        {withMap && <Link href="/map" asChild>
                             <Pressable>
                                 {({ pressed }) => (
                                     <FontAwesome
@@ -67,7 +69,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, modal
                                     />
                                 )}
                             </Pressable>
-                        </Link>
+                        </Link>}
                         <Pressable onPress={() => {
                             setIsModalVisible(true);
                         }}>
@@ -82,7 +84,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, modal
                                 />
                             )}
                         </Pressable>
-                        <Link href="/(casher)/" asChild>
+                        {/* <Link href="/(casher)/" asChild>
                             <Pressable>
                                 {({ pressed }) => (
                                     <FontAwesome
@@ -95,7 +97,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, modal
                                     />
                                 )}
                             </Pressable>
-                        </Link>
+                        </Link> */}
                         <Link href={isSignedIn ? '/profile' : '/sign-in'} asChild>
                             <Pressable >
                                 {({ pressed }) => (

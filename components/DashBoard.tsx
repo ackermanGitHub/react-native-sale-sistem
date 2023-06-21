@@ -31,6 +31,10 @@ interface StoresDashboardProps {
 export const StoresDashboard: React.FC<StoresDashboardProps> = ({ stores, children, setStores }) => {
     const colorScheme = useColorScheme();
     const [isVisible, setIsVisible] = useState(false);
+
+    const [deleteStoreModal, setDeleteStoreModal] = useState(false);
+    const [deleteStoreId, setDeleteStoreId] = useState(0);
+
     const { isLoaded, isSignedIn, user } = useUser();
 
     const router = useRouter();
@@ -45,7 +49,7 @@ export const StoresDashboard: React.FC<StoresDashboardProps> = ({ stores, childr
     const addStore = async () => {
         if (isSignedIn) {
             setIsLoading(true)
-            fetch('http://192.168.80.191:3333/store', {
+            fetch('http://192.168.67.191:3333/store', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,6 +76,26 @@ export const StoresDashboard: React.FC<StoresDashboardProps> = ({ stores, childr
         }
     }
 
+    const deleteStore = async (store_id: number) => {
+        if (isSignedIn) {
+            setStores && setStores(stores.filter((store) => store.id === store_id ? false : true))
+            setDeleteStoreModal(false)
+            fetch('http://192.168.67.191:3333/store', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    store_id
+                }),
+            })
+                .then(() => {
+                })
+                .catch(error => console.error(error))
+                .finally(() => { })
+        }
+    }
+
     return (
         <View style={tw`h-full w-full flex relative bg-transparent`}>
             <View style={tw.style(`w-16 h-16 z-20 shadow-lg border-slate-300 dark:border-slate-700 border-2 border-solid dark:shadow-slate-300 rounded-full absolute bottom-10 right-10 justify-center items-center`)}>
@@ -83,11 +107,8 @@ export const StoresDashboard: React.FC<StoresDashboardProps> = ({ stores, childr
                     </Pressable>
                 </View>
             </View>
-
             <View style={tw`w-full m-0 h-full flex flex-row justify-center items-start content-center flex-wrap`}>
                 <ScrollView >
-
-
                     {
                         stores.map((store) => {
                             return (
@@ -98,35 +119,22 @@ export const StoresDashboard: React.FC<StoresDashboardProps> = ({ stores, childr
 
                                         {({ pressed }) => (
                                             <>
-                                                <View style={tw`w-full h-[80%] flex flex-row justify-between items-center`}>
+                                                <View style={tw`w-full h-[70%] flex flex-row justify-between items-center`}>
                                                     <Text style={tw`text-xs`} >{store.name}</Text>
                                                 </View>
-                                                <View style={tw`w-full h-[20%] flex flex-row justify-between items-center`}>
+                                                <View style={tw`w-full h-[30%] flex flex-row justify-between items-center`}>
                                                     <View></View>
-                                                    <View style={tw`h-full flex flex-row justify-between items-center`}>
+                                                    <View style={tw`h-full w-full flex flex-row justify-end items-center`}>
 
-                                                        <Pressable style={tw`h-[20%] p-6 z-20`} onPress={() => {
-                                                            router.push('/deleteStoreModal')
+                                                        <Pressable onPress={() => {
+                                                            setDeleteStoreModal(true)
+                                                            setDeleteStoreId(store.id)
                                                         }}>
                                                             {({ pressed }) => (
                                                                 <FontAwesome
-                                                                    name="trash"
+                                                                    name="trash-o"
                                                                     size={30}
-                                                                    color={colorScheme === 'dark' ? "#B31312" : "#CA3E47"}
-                                                                    style={tw.style('mr-4', {
-                                                                        'opacity-50': pressed
-                                                                    })}
-                                                                />
-                                                            )}
-                                                        </Pressable>
-                                                        <Pressable style={tw`h-[20%] p-6 z-20`} onPress={() => {
-                                                            router.push('/deleteStoreModal')
-                                                        }}>
-                                                            {({ pressed }) => (
-                                                                <FontAwesome
-                                                                    name="trash"
-                                                                    size={30}
-                                                                    color={colorScheme === 'dark' ? "#B31312" : "#CA3E47"}
+                                                                    color={Colors[colorScheme ?? 'light'].text}
                                                                     style={tw.style('mr-4', {
                                                                         'opacity-50': pressed
                                                                     })}
@@ -157,15 +165,15 @@ export const StoresDashboard: React.FC<StoresDashboardProps> = ({ stores, childr
                 <Pressable onPress={() => setIsVisible(false)} style={tw`h-full w-full flex justify-center items-center relative bg-transparent`}>
                     <TouchableWithoutFeedback onPress={() => { }}>
                         <View style={tw`h-1/3 w-full shadow-2xl rounded-t-xl justify-center items-center absolute bottom-0`}>
-                            <View style={tw`h-[16%] w-full rounded-t-md px-5 flex-row justify-between items-center`}>
+                            <View style={tw`w-full rounded-t-md px-5 flex-row justify-between items-center`}>
                                 <Text style={tw`text-sm`}>Add Store</Text>
                                 <Pressable onPress={() => setIsVisible(false)}>
                                     <MaterialIcons name="close" color={colorScheme === 'dark' ? 'white' : 'black'} style={tw`text-sm`} size={22} />
                                 </Pressable>
                             </View>
                             {children}
-                            <View style={tw`w-full h-[84%] justify-center items-center`}>
-                                <View style={tw`w-4/5 mb-4 max-w-[320px]`}>
+                            <View style={tw`w-full justify-center items-center`}>
+                                <View style={tw`w-4/5 bg-transparent mb-4 max-w-[320px]`}>
                                     <Text style={tw`text-red-500 text-xs`}>
                                         {error && error}
                                     </Text>
@@ -196,8 +204,43 @@ export const StoresDashboard: React.FC<StoresDashboardProps> = ({ stores, childr
                                 </Pressable> */}
                                 {isLoadind ?
                                     <ActivityIndicator style={tw`my-8`} size={'small'} animating color={colorScheme === 'dark' ? 'white' : 'black'} />
-                                    : <View style={tw`my-10`} />
+                                    : <View style={tw`my-12`} />
                                 }
+                            </View>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </Pressable>
+            </Modal>
+
+
+            <Modal animationType="fade" transparent visible={deleteStoreModal}>
+                <Pressable onPress={() => {
+                    setDeleteStoreModal(false)
+                }} style={tw`h-full w-full flex relative bg-transparent`}>
+                    <TouchableWithoutFeedback onPress={() => { }}>
+                        <View style={tw`h-1/4 w-3/4 m-auto shadow-2xl border-slate-300 dark:border-slate-700 border-2 border-solid dark:shadow-slate-300 rounded-xl overflow-hidden`}>
+                            <View style={tw`h-full px-5 flex-col justify-between items-center`}>
+                                <View style={tw`w-full h-[70%] px-5 flex-col justify-center items-center`}>
+
+                                    <Text style={tw`text-sm`}>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>
+                                </View>
+                                <View style={tw`w-full h-[30%] px-5 flex-row justify-between items-center`}>
+
+                                    <View style={tw` px-5 flex-col justify-between items-center`}>
+
+                                    </View>
+                                    <View style={tw`px-5 flex-row justify-between items-center`} >
+
+                                        <Pressable onPress={() => {
+                                            deleteStore(deleteStoreId);
+                                        }} style={tw`mr-5 min-w-[80px] max-w-[140px] bg-blue-500 dark:bg-slate-700 rounded h-10 justify-center items-center`}>
+                                            <Text style={tw`text-white`}>Ok</Text>
+                                        </Pressable>
+                                        <Pressable onPress={() => setDeleteStoreModal(false)} style={tw`min-w-[80px] max-w-[140px] bg-blue-500 dark:bg-slate-700 rounded h-10 justify-center items-center`}>
+                                            <Text style={tw`text-white`}>Cancelar</Text>
+                                        </Pressable>
+                                    </View>
+                                </View>
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
