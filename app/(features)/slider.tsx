@@ -11,6 +11,7 @@ import {
 import Constants from 'expo-constants';
 import { AntDesign } from '@expo/vector-icons';
 import tw from '../../components/utils/tailwind';
+import { Stack } from 'expo-router';
 const { width } = Dimensions.get('window');
 
 
@@ -253,6 +254,11 @@ export default function SliderAnimation() {
     return (
         <View style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 100 }}>
             {/* <StatusBar hidden /> */}
+            <Stack.Screen options={{
+                title: 'Slider',
+                header: () => <></>,
+                navigationBarHidden: true
+            }} />
             <Circle
                 index={index}
                 onPress={onPress}
