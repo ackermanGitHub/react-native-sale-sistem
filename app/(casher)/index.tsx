@@ -18,7 +18,7 @@ export default function TabOneScreen() {
   };
 
   useEffect(() => {
-    const ws = new WebSocket("ws://192.168.67.191:3333", 'ordersSender');
+    const ws = new WebSocket("ws://192.168.7.191:3333", 'ordersSender');
     setWs(ws);
 
     ws.addEventListener("open", (event) => {
