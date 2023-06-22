@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-    StatusBar,
     Dimensions,
     TouchableOpacity,
     Animated,
@@ -12,6 +11,7 @@ import Constants from 'expo-constants';
 import { AntDesign } from '@expo/vector-icons';
 import tw from '../../components/utils/tailwind';
 import { Stack } from 'expo-router';
+import { StatusBar, setStatusBarStyle } from 'expo-status-bar'
 const { width } = Dimensions.get('window');
 
 
@@ -189,31 +189,37 @@ const colors = [
         initialBgColor: 'goldenrod',
         bgColor: 'red',
         nextBgColor: '#222',
+        statusBarTheme: 'dark-content'
     },
     {
-        initialBgColor: 'goldenrod',
+        initialBgColor: 'red',
         bgColor: '#222',
         nextBgColor: 'yellowgreen',
+        statusBarTheme: 'light-content'
     },
     {
         initialBgColor: '#222',
         bgColor: 'yellowgreen',
         nextBgColor: 'midnightblue',
+        statusBarTheme: 'dark-content'
     },
     {
         initialBgColor: 'yellowgreen',
         bgColor: 'midnightblue',
         nextBgColor: 'turquoise',
+        statusBarTheme: 'light-content'
     },
     {
         initialBgColor: 'midnightblue',
         bgColor: 'turquoise',
         nextBgColor: 'goldenrod',
+        statusBarTheme: 'dark-content'
     },
     {
         initialBgColor: 'turquoise',
         bgColor: 'goldenrod',
-        nextBgColor: '#222',
+        nextBgColor: 'red',
+        statusBarTheme: 'dark-content'
     },
 ];
 
@@ -253,7 +259,6 @@ export default function SliderAnimation() {
 
     return (
         <View style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 100 }}>
-            {/* <StatusBar hidden /> */}
             <Stack.Screen options={{
                 title: 'Slider',
                 header: () => <></>,
