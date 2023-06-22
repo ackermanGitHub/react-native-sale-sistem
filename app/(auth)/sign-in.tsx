@@ -41,7 +41,7 @@ export default function SignIn() {
     }
 
     return (
-        <View style={tw`flex-1 justify-center items-center`}>
+        <View style={tw`w-full h-full justify-center items-center`}>
             <Stack.Screen options={{
                 title: 'Sign In',
             }} />

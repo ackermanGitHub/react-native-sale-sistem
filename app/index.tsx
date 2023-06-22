@@ -67,7 +67,7 @@ export default function HomeScreen() {
 
     return (
         <View style={tw`w-full h-full justify-center items-center`}>
-            <MainHeader modalTitle='MainHeader' withModal withMap />
+            <MainHeader modalTitle='MainHeader' withModal withMap withSlider />
 
 
             {
@@ -80,14 +80,18 @@ export default function HomeScreen() {
 
             {
                 !isSignedIn && (
-                    <View style={tw.style(`w-full h-full flex flex-col justify-center items-center gap-10`)}>
-                        <Text style={tw.style(`mx-auto flex flex-row justify-center items-center`)}>
-                            Sign In to see your stores
-                        </Text>
-                        <AnimatedButton onPress={() => router.push('/sign-in')} style={tw`w-[180px] max-w-[240px] bg-blue-500 dark:bg-slate-700 rounded h-12 justify-center items-center`} >
-                            <Text style={tw`text-white`}>Sign In</Text>
-                        </AnimatedButton>
-                    </View>
+                    <>
+                        <SignIn />
+                        {/* <View style={tw.style(`w-full h-full flex flex-col justify-center items-center gap-10`)}>
+                            <Text style={tw.style(`mx-auto flex flex-row justify-center items-center`)}>
+                                Sign In to see your stores
+                            </Text>
+                        
+                            <AnimatedButton onPress={() => router.push('/sign-in')} style={tw`w-[180px] max-w-[240px] bg-blue-500 dark:bg-slate-700 rounded h-12 justify-center items-center`} >
+                                <Text style={tw`text-white`}>Sign In</Text>
+                            </AnimatedButton>
+                        </View> */}
+                    </>
                 )
             }
 

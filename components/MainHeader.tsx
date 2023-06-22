@@ -8,6 +8,7 @@ import { ModalContainer } from './ModalContainer';
 import { ActivityIndicator, Pressable, useColorScheme } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Colors from '../constants/Colors';
+import { StatusBar } from 'expo-status-bar'
 
 const store = z.object({
     id: z.number(),
@@ -22,6 +23,7 @@ const store = z.object({
 interface MainHeaderProps {
     withModal?: boolean;
     withMap?: boolean;
+    withSlider?: boolean;
     stackTitle?: string;
     modalTitle?: string;
     modalText?: string;
@@ -29,7 +31,7 @@ interface MainHeaderProps {
     modalType?: string;
 }
 
-export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withMap = false, stackTitle, modalTitle, modalText, modalCallback, modalType }) => {
+export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withMap = false, withSlider = false, stackTitle, modalTitle, modalText, modalCallback, modalType }) => {
     const [stores, setStores] = useState<z.infer<typeof store>[]>([])
     const { isLoaded, isSignedIn, user } = useUser();
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -42,11 +44,11 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withM
                 headerBackButtonMenuEnabled: false,
                 headerRight: () => (
                     <View style={tw`flex-row gap-4 items-center justify-center bg-transparent`}>
-                        {/* <Link href="/accelerometer" asChild>
+                        {withSlider && <Link href="/(features)/slider" asChild>
                             <Pressable>
                                 {({ pressed }) => (
                                     <FontAwesome
-                                        name="compass"
+                                        name="automobile"
                                         size={30}
                                         color={Colors[colorScheme ?? 'light'].text}
                                         style={tw.style('mr-4', {
@@ -55,7 +57,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withM
                                     />
                                 )}
                             </Pressable>
-                        </Link> */}
+                        </Link>}
                         {withMap && <Link href="/map" asChild>
                             <Pressable>
                                 {({ pressed }) => (
@@ -119,6 +121,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withM
             {withModal && <ModalContainer title={modalTitle} text={modalText} callback={modalCallback} type={modalType} isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} >
             </ModalContainer>}
 
+            <StatusBar style='auto' />
         </View>
     );
 }
