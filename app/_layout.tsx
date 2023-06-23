@@ -93,7 +93,6 @@ function RootLayoutNav() {
           <Stack>
             <Stack.Screen name="(casher)" options={{ headerShown: false }} />
             <Stack.Screen name="(toggles)/deleteStoreModal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
-            <Stack.Screen name="(toggles)/drawer" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
             <Stack.Screen name="(toggles)/modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
           </Stack>
         </ThemeProvider>
@@ -105,7 +104,7 @@ function RootLayoutNav() {
 
 /* 
 
-set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.7.191
+set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.1.103
 
 "ios": {
       "bundleIdentifier": "com.cubastore.store",

@@ -14,7 +14,6 @@ export default function MapViewRoute() {
                 header: () => <></>,
                 navigationBarHidden: true
             }} />
-            <StatusBar style='auto' />
             <MapView />
         </View>
     );

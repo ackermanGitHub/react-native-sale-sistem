@@ -5,8 +5,12 @@ import GoogleMap, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 import { nightMap } from '../constants/MapStyles';
-import { Pressable, TextInput, TouchableOpacity, useColorScheme, Animated } from 'react-native';
+import { Pressable, TextInput, TouchableOpacity, useColorScheme, Animated, StatusBar } from 'react-native';
 import { set } from 'zod';
+// @ts-ignore 
+import ClientMarker from '../assets/images/clientMarker.png'
+// @ts-ignore 
+import TaxiMarker from '../assets/images/taxiMarker.png'
 
 type MarkerType = {
     cordinates: {
@@ -17,17 +21,17 @@ type MarkerType = {
     description: string,
 }
 
-const MapView = () => {
+const MapView = ({ role = 'taxi' }) => {
     const [markers, setMarkers] = useState<MarkerType[]>([])
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [location, setLocation] = useState<Location.LocationObject | null>(null);
     const colorScheme = useColorScheme()
     const [mapPressed, setMapPressed] = useState(false);
+    const [textInputRef, setTextInputRef] = useState<TextInput | null>(null);
 
     const fadeAnim = useRef(new Animated.Value(1)).current;
 
     const fadeIn = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 300,
@@ -36,19 +40,19 @@ const MapView = () => {
     };
 
     const fadeOut = () => {
-        // Will change fadeAnim value to 0 in 3 seconds
         Animated.timing(fadeAnim, {
             toValue: 0,
             duration: 300,
             useNativeDriver: true,
         }).start();
+        textInputRef && textInputRef.blur();
     };
 
     const handleWebSocketMessage = (event: MessageEvent) => {
-        console.log(event.data)
+        console.log(JSON.parse(event.data))
     };
     useEffect(() => {
-        const ws = new WebSocket("ws://192.168.7.191:3333", 'map-client');
+        const ws = new WebSocket("ws://192.168.1.103:3333", 'map-client');
         setWs(ws);
 
         ws.addEventListener("open", (event) => {
@@ -80,6 +84,7 @@ const MapView = () => {
                 {
                     accuracy: Location.Accuracy.High,
                     distanceInterval: 10,
+                    timeInterval: 5000,
                 },
                 location => {
                     setLocation(location);
@@ -109,7 +114,15 @@ const MapView = () => {
         <View style={tw`h-full w-full`}>
             <Pressable style={tw`w-full h-full flex-row justify-evenly items-center self-center`} onPressIn={fadeOut} onPressOut={fadeIn}>
                 <GoogleMap
+                    showsCompass={false}
                     style={tw`h-full w-full`}
+                    showsUserLocation
+                    showsPointsOfInterest
+                    showsMyLocationButton
+                    showsBuildings
+                    showsTraffic
+                    showsIndoors
+                    showsScale
                     customMapStyle={colorScheme === 'dark' ? nightMap : undefined}
                     initialRegion={{
                         latitude: 23.1146548,
@@ -132,6 +145,8 @@ const MapView = () => {
                     {
                         location &&
                         <Marker
+                            rotation={role === 'taxi' ? location?.coords.heading || undefined : undefined}
+                            image={role === 'client' ? ClientMarker : TaxiMarker}
                             coordinate={location?.coords}
                             title={'Current Position'}
                         />
@@ -141,16 +156,27 @@ const MapView = () => {
             </Pressable>
 
             <Animated.View
-
                 style={[
-                    tw`w-[85%] bg-slate-100 dark:bg-slate-700 absolute z-20 top-12 h-14 flex-row justify-evenly items-center self-center rounded-lg shadow-lg dark:shadow-slate-600`,
+                    tw`w-[85%] bg-slate-100 dark:bg-slate-800 absolute z-20 top-12 h-14 flex-row justify-evenly items-center self-center rounded-lg shadow-lg dark:shadow-slate-600`,
                     {
                         opacity: fadeAnim,
                     },
                 ]}
             >
+                <TextInput ref={setTextInputRef} placeholder='A Donde Vamos?' placeholderTextColor={colorScheme === 'dark' ? 'white' : 'black'} style={tw`w-full h-full p-4 text-black dark:text-white`} />
+            </Animated.View>
+            <Animated.View
+                style={[
+                    tw`w-16 h-16 bg-slate-100 dark:bg-slate-800 absolute z-20 bottom-24 right-24 flex-row justify-evenly items-center self-center rounded-full shadow-lg dark:shadow-slate-600`,
+                    {
+                        opacity: fadeAnim,
+                    },
+                ]}
+            >
+                <Text style={tw`w-full h-full p-4`} >+</Text>
             </Animated.View>
 
+            <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
         </View>
     );
 }
