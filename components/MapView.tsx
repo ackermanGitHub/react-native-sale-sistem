@@ -5,7 +5,7 @@ import GoogleMap, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 import { nightMap } from '../constants/MapStyles';
-import { Pressable, TextInput, TouchableOpacity, useColorScheme, Animated, StatusBar } from 'react-native';
+import { Pressable, TextInput, TouchableOpacity, useColorScheme, Animated, StatusBar, StyleSheet } from 'react-native';
 import { set } from 'zod';
 // @ts-ignore 
 import ClientMarker from '../assets/images/clientMarker.png'
@@ -71,7 +71,7 @@ const MapView = ({ role = 'taxi' }) => {
 
         let foregroundSubscrition: Location.LocationSubscription;
 
-        (async () => {
+        /* (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             await Location.enableNetworkProviderAsync()
 
@@ -99,7 +99,7 @@ const MapView = ({ role = 'taxi' }) => {
             let location = await Location.getCurrentPositionAsync({});
 
             setLocation(location);
-        })();
+        })(); */
 
         return () => {
             if (ws.readyState === WebSocket.OPEN) {
@@ -115,18 +115,18 @@ const MapView = ({ role = 'taxi' }) => {
             <Pressable style={tw`w-full h-full flex-row justify-evenly items-center self-center`} onPressIn={fadeOut} onPressOut={fadeIn}>
                 <GoogleMap
                     showsCompass={false}
-                    style={tw`h-full w-full`}
+                    style={StyleSheet.absoluteFill}
+
                     showsUserLocation
-                    showsPointsOfInterest
                     showsMyLocationButton
-                    showsBuildings
-                    showsTraffic
-                    showsIndoors
-                    showsScale
+
+                    followsUserLocation
+                    userLocationPriority='high'
+
                     customMapStyle={colorScheme === 'dark' ? nightMap : undefined}
                     initialRegion={{
-                        latitude: 23.1146548,
-                        longitude: -82.4000881,
+                        latitude: 23.118644,
+                        longitude: -82.3806211,
                         latitudeDelta: 0.0322,
                         longitudeDelta: 0.0221,
                     }}
@@ -143,13 +143,13 @@ const MapView = ({ role = 'taxi' }) => {
                         })
                     }
                     {
-                        location &&
-                        <Marker
-                            rotation={role === 'taxi' ? location?.coords.heading || undefined : undefined}
-                            image={role === 'client' ? ClientMarker : TaxiMarker}
-                            coordinate={location?.coords}
-                            title={'Current Position'}
-                        />
+                        /*  location &&
+                         <Marker
+                             rotation={role === 'taxi' ? location?.coords.heading || undefined : undefined}
+                             image={role === 'client' ? ClientMarker : TaxiMarker}
+                             coordinate={location?.coords}
+                             title={'Current Position'}
+                         /> */
 
                     }
                 </GoogleMap>
@@ -173,7 +173,7 @@ const MapView = ({ role = 'taxi' }) => {
                     },
                 ]}
             >
-                <Text style={tw`w-full h-full p-4`} >+</Text>
+                <Text style={tw`w-full h-full p-4 justify-center items-center`} >+</Text>
             </Animated.View>
 
             <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />

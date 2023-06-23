@@ -58,7 +58,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withM
                                 )}
                             </Pressable>
                         </Link>}
-                        {withMap && <Link href="/map" asChild>
+                        {withMap && <Link href="/map/demo" asChild>
                             <Pressable>
                                 {({ pressed }) => (
                                     <FontAwesome
