@@ -10,7 +10,6 @@ import * as NavigationBar from 'expo-navigation-bar';
 
 import { useDeviceContext } from 'twrnc';
 import tw from '../components/utils/tailwind';
-import { View } from '../components/Themed';
 const CLERK_PUBLISHABLE_KEY = 'pk_test_Z2VuZXJvdXMtbG9ic3Rlci0yMS5jbGVyay5hY2NvdW50cy5kZXYk'
 
 // Keep the splash screen visible while we fetch resources
@@ -87,24 +86,21 @@ function RootLayoutNav() {
   }, [colorScheme])
 
   return (
-    <View style={tw`w-full h-full`}>
-      <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack>
-            <Stack.Screen name="(casher)" options={{ headerShown: false }} />
-            <Stack.Screen name="(toggles)/deleteStoreModal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
-            <Stack.Screen name="(toggles)/modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
-          </Stack>
-        </ThemeProvider>
-      </ClerkProvider>
-    </View>
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(casher)" options={{ headerShown: false }} />
+          <Stack.Screen name="(toggles)/deleteStoreModal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
+          <Stack.Screen name="(toggles)/modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
+    </ClerkProvider>
   );
 }
 
-
 /* 
 
-set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.1.103
+set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.191.191
 
 "ios": {
       "bundleIdentifier": "com.cubastore.store",

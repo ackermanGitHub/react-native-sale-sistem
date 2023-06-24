@@ -11,14 +11,12 @@ import {
     Text,
     ToastAndroid,
     View,
+    Animated
 } from 'react-native';
-import Geolocation, { GeoPosition } from 'react-native-geolocation-service';
 
 import * as Location from 'expo-location';
-// import VIForegroundService from '@voximplant/react-native-foreground-service';
-// import * as TaskManager from 'expo-task-manager';
-
 import MapView from '../../../components/MapViewDemo';
+
 
 export default function App() {
     const [forceLocation, setForceLocation] = useState(true);
@@ -163,6 +161,21 @@ export default function App() {
         } */
 
         setObserving(true);
+
+        Location.watchHeadingAsync((heading) => {
+            setLocation((prevLocation) => {
+                if (!prevLocation) {
+                    return null
+                }
+                return {
+                    ...prevLocation,
+                    coords: {
+                        ...prevLocation?.coords,
+                        heading: heading.trueHeading,
+                    },
+                }
+            })
+        })
 
         Location.watchPositionAsync({
             accuracy: Location.Accuracy.BestForNavigation,

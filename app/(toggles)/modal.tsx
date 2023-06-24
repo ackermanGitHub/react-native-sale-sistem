@@ -1,4 +1,4 @@
-import { Stack, router } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { View, Text } from '../../components/Themed';
 import tw from '../../components/utils/tailwind';
 import { FontAwesome } from '@expo/vector-icons';
@@ -6,7 +6,7 @@ import { Pressable, useColorScheme } from 'react-native';
 import Colors from '../../constants/Colors';
 
 export default function DialogRoute() {
-
+  const router = useRouter()
   const colorScheme = useColorScheme();
 
   return (

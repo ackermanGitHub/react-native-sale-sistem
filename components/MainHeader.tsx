@@ -24,6 +24,7 @@ interface MainHeaderProps {
     withModal?: boolean;
     withMap?: boolean;
     withSlider?: boolean;
+    withFeatures?: boolean;
     stackTitle?: string;
     modalTitle?: string;
     modalText?: string;
@@ -31,7 +32,7 @@ interface MainHeaderProps {
     modalType?: string;
 }
 
-export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withMap = false, withSlider = false, stackTitle, modalTitle, modalText, modalCallback, modalType }) => {
+export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withMap = false, withSlider = false, withFeatures = false, stackTitle, modalTitle, modalText, modalCallback, modalType }) => {
     const [stores, setStores] = useState<z.infer<typeof store>[]>([])
     const { isLoaded, isSignedIn, user } = useUser();
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -58,7 +59,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withM
                                 )}
                             </Pressable>
                         </Link>}
-                        {withMap && <Link href="/map/demo" asChild>
+                        {withMap && <Link href="/map" asChild>
                             <Pressable>
                                 {({ pressed }) => (
                                     <FontAwesome
@@ -72,7 +73,21 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withM
                                 )}
                             </Pressable>
                         </Link>}
-                        <Pressable onPress={() => {
+                        {withFeatures && <Link href="/stackplus" asChild>
+                            <Pressable>
+                                {({ pressed }) => (
+                                    <FontAwesome
+                                        name="code"
+                                        size={30}
+                                        color={Colors[colorScheme ?? 'light'].text}
+                                        style={tw.style('mr-4', {
+                                            'opacity-50': pressed
+                                        })}
+                                    />
+                                )}
+                            </Pressable>
+                        </Link>}
+                        {withModal && <Pressable onPress={() => {
                             setIsModalVisible(true);
                         }}>
                             {({ pressed }) => (
@@ -85,21 +100,7 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withM
                                     })}
                                 />
                             )}
-                        </Pressable>
-                        {/* <Link href="/(casher)/" asChild>
-                            <Pressable>
-                                {({ pressed }) => (
-                                    <FontAwesome
-                                        name="money"
-                                        size={30}
-                                        color={Colors[colorScheme ?? 'light'].text}
-                                        style={tw.style('mr-4', {
-                                            'opacity-50': pressed
-                                        })}
-                                    />
-                                )}
-                            </Pressable>
-                        </Link> */}
+                        </Pressable>}
                         <Link href={isSignedIn ? '/profile' : '/sign-in'} asChild>
                             <Pressable >
                                 {({ pressed }) => (

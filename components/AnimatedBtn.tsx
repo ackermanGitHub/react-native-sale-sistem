@@ -18,9 +18,10 @@ const AnimatedAntDesign = Animated.createAnimatedComponent(AntDesign);
 
 type AnimatedButtonProps = {
     onPress?: () => void;
+    callback?: () => void;
 } & Animated.AnimatedProps<ViewProps>;
 
-export const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onPress, style, children, ...otherProps }) => {
+export const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onPress, style, children, callback, ...otherProps }) => {
 
     const animatedValue = React.useRef(new Animated.Value(1)).current;
 
@@ -42,7 +43,7 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onPress, style, 
 
     return (
 
-        <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>
+        <Pressable onPress={callback} onPressIn={handlePressIn} onPressOut={handlePressOut}>
             <Animated.View
                 {...otherProps}
                 style={[

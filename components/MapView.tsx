@@ -3,10 +3,8 @@ import tw from './utils/tailwind';
 import { useEffect, useRef, useState } from 'react';
 import GoogleMap, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import * as TaskManager from 'expo-task-manager';
 import { nightMap } from '../constants/MapStyles';
-import { Pressable, TextInput, TouchableOpacity, useColorScheme, Animated, StatusBar, StyleSheet } from 'react-native';
-import { set } from 'zod';
+import { Pressable, TextInput, useColorScheme, Animated, StatusBar, StyleSheet } from 'react-native';
 // @ts-ignore 
 import ClientMarker from '../assets/images/clientMarker.png'
 // @ts-ignore 
@@ -52,7 +50,7 @@ const MapView = ({ role = 'taxi' }) => {
         console.log(JSON.parse(event.data))
     };
     useEffect(() => {
-        const ws = new WebSocket("ws://192.168.1.103:3333", 'map-client');
+        const ws = new WebSocket("ws://192.168.191.191:3333", 'map-client');
         setWs(ws);
 
         ws.addEventListener("open", (event) => {
@@ -69,9 +67,11 @@ const MapView = ({ role = 'taxi' }) => {
             console.log('%c (map-client) WebSocket error', 'background: red; color: black;', error);
         });
 
-        let foregroundSubscrition: Location.LocationSubscription;
+        let PositionSubscrition: Location.LocationSubscription;
 
-        /* (async () => {
+        let HeadingSuscription: Location.LocationSubscription;
+
+        (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             await Location.enableNetworkProviderAsync()
 
@@ -80,14 +80,26 @@ const MapView = ({ role = 'taxi' }) => {
                 return;
             }
 
-            foregroundSubscrition = await Location.watchPositionAsync(
+            PositionSubscrition = await Location.watchPositionAsync(
                 {
-                    accuracy: Location.Accuracy.High,
+                    accuracy: Location.Accuracy.BestForNavigation,
                     distanceInterval: 10,
                     timeInterval: 5000,
                 },
                 location => {
-                    setLocation(location);
+                    setLocation((prevLocation) => {
+                        if (!prevLocation) {
+                            return null
+                        }
+                        return {
+                            ...prevLocation,
+                            coords: {
+                                ...prevLocation?.coords,
+                                latitude: location.coords.latitude,
+                                longitude: location.coords.longitude,
+                            },
+                        }
+                    });
 
                     if (ws.readyState === WebSocket.OPEN) {
                         ws.send(JSON.stringify(location));
@@ -96,17 +108,35 @@ const MapView = ({ role = 'taxi' }) => {
 
             )
 
+            HeadingSuscription = await Location.watchHeadingAsync((heading) => {
+               /* Here goes an estadistics algorithm */ https://www.notion.so/Greatest-Idea-of-all-Time-81d8a584da8945d4a52183c91ea218aa?pvs=4
+                // https://notion-api.splitbee.io/v1/page/81d8a584da8945d4a52183c91ea218aa
+                setLocation((prevLocation) => {
+                    if (!prevLocation) {
+                        return null
+                    }
+                    return {
+                        ...prevLocation,
+                        coords: {
+                            ...prevLocation?.coords,
+                            heading: heading.trueHeading,
+                        },
+                    }
+                })
+            })
+
             let location = await Location.getCurrentPositionAsync({});
 
             setLocation(location);
-        })(); */
+        })();
 
         return () => {
             if (ws.readyState === WebSocket.OPEN) {
                 ws.close();
             }
             ws.removeEventListener("message", handleWebSocketMessage);
-            foregroundSubscrition.remove()
+            PositionSubscrition.remove()
+            HeadingSuscription.remove()
         };
     }, []);
 
@@ -116,12 +146,6 @@ const MapView = ({ role = 'taxi' }) => {
                 <GoogleMap
                     showsCompass={false}
                     style={StyleSheet.absoluteFill}
-
-                    showsUserLocation
-                    showsMyLocationButton
-
-                    followsUserLocation
-                    userLocationPriority='high'
 
                     customMapStyle={colorScheme === 'dark' ? nightMap : undefined}
                     initialRegion={{
@@ -143,18 +167,16 @@ const MapView = ({ role = 'taxi' }) => {
                         })
                     }
                     {
-                        /*  location &&
-                         <Marker
-                             rotation={role === 'taxi' ? location?.coords.heading || undefined : undefined}
-                             image={role === 'client' ? ClientMarker : TaxiMarker}
-                             coordinate={location?.coords}
-                             title={'Current Position'}
-                         /> */
-
+                        location &&
+                        <Marker
+                            rotation={role === 'taxi' ? location?.coords.heading || undefined : undefined}
+                            image={role === 'client' ? ClientMarker : TaxiMarker}
+                            coordinate={location?.coords}
+                            title={'Current Position'}
+                        />
                     }
                 </GoogleMap>
             </Pressable>
-
             <Animated.View
                 style={[
                     tw`w-[85%] bg-slate-100 dark:bg-slate-800 absolute z-20 top-12 h-14 flex-row justify-evenly items-center self-center rounded-lg shadow-lg dark:shadow-slate-600`,
@@ -173,9 +195,8 @@ const MapView = ({ role = 'taxi' }) => {
                     },
                 ]}
             >
-                <Text style={tw`w-full h-full p-4 justify-center items-center`} >+</Text>
+                <Text style={tw`w-full h-full p-4 justify-center items-center text-center text-lg`} >➕</Text>
             </Animated.View>
-
             <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
         </View>
     );
