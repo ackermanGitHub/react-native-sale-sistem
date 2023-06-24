@@ -1,5 +1,5 @@
 import { Stack, Link } from 'expo-router';
-import { View, Text } from '../../components/Themed';
+import { View, Text } from '../../components/theme/Themed';
 import { useColorScheme } from 'react-native';
 import tw from '../../components/utils/tailwind';
 import { useUser } from "@clerk/clerk-expo";

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { TextInput, Pressable, useColorScheme, ActivityIndicator } from 'react-native';
-import { View, Text } from '../../components/Themed';
+import { View, Text } from '../../components/theme/Themed';
 import tw from '../../components/utils/tailwind';
 import { useSignIn } from "@clerk/clerk-expo";
 import { Stack, useRouter } from 'expo-router';
-import { AnimatedButton } from '../../components/AnimatedBtn';
+import { AnimatedButton } from '../../components/theme/AnimatedBtn';
 // import SignWithOauth from '../../components/SignWithOauth';
 
 

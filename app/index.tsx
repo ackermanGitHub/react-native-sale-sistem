@@ -1,16 +1,16 @@
 import { Stack } from 'expo-router';
-import { View } from '../components/Themed';
+import { View } from '../components/theme/Themed';
 import React, { useState, useEffect } from 'react';
 import tw from '../components/utils/tailwind';
 import { z } from 'zod';
 import { useUser } from "@clerk/clerk-expo";
 import SignIn from './(auth)/sign-in';
 import { ActivityIndicator, Button, Pressable, useColorScheme } from 'react-native';
-import { MainHeader } from '../components/MainHeader';
-import { StoresDashboard, store } from '../components/DashBoard';
-import HomeMap from '../components/HomeMap';
+import { MainHeader } from '../components/headers/MainHeader';
+import { StoresDashboard, store } from '../components/shop/DashBoard';
+import HomeMap from '../components/mapping/HomeMap';
 
-import { AnimatedButton } from '../components/AnimatedBtn';
+import { AnimatedButton } from '../components/theme/AnimatedBtn';
 
 const mapFirst = true
 const mandatorySignIn = false
@@ -27,7 +27,7 @@ export default function HomeRoute() {
 
         if (isSignedIn) {
             try {
-                fetch(`http://192.168.113.191:3333/stores?user_id=${user.id}`, { signal: abortController.signal })
+                fetch(`http://192.168.1.103:3333/stores?user_id=${user.id}`, { signal: abortController.signal })
                     .then(response => response.json())
                     .then(data => {
                         setStores(data)

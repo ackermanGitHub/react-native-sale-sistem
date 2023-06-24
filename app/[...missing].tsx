@@ -2,7 +2,7 @@ import { Link, Stack } from 'expo-router';
 import tw from '../components/utils/tailwind';
 import { usePathname } from 'expo-router';
 
-import { Text, View } from '../components/Themed';
+import { Text, View } from '../components/theme/Themed';
 
 export default function NotFoundScreen() {
   const pathname = usePathname();
