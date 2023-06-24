@@ -122,7 +122,6 @@ export const MainHeader: React.FC<MainHeaderProps> = ({ withModal = false, withM
             {withModal && <ModalContainer title={modalTitle} text={modalText} callback={modalCallback} type={modalType} isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} >
             </ModalContainer>}
 
-            <StatusBar style='auto' />
         </View>
     );
 }

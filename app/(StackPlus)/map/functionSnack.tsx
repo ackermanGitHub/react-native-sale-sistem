@@ -1,17 +1,19 @@
-import React, { Component, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     StyleSheet,
-    Text,
-    View,
     Animated,
     Image,
     Dimensions,
     TouchableOpacity,
+    useColorScheme,
 } from "react-native";
-// import MapStyle from "./mapstyle.json";
+import { nightMap } from '../../../constants/MapStyles';
 
 import MapView, { Marker } from 'react-native-maps';
 import tw from '../../../components/utils/tailwind';
+
+
+import { View, Text } from '../../../components/Themed';
 
 
 const WonderWoman = { uri: "http://i.imgur.com/sNam9iJ.jpg" };
@@ -36,8 +38,8 @@ interface MarkerData {
 const initialMarkers: MarkerData[] = [
     {
         coordinate: {
-            latitude: 45.524548,
-            longitude: -122.6749817,
+            latitude: 23.1218644,
+            longitude: -82.32806211,
         },
         title: "Best Place",
         description: "This is the best place in Portland",
@@ -45,8 +47,8 @@ const initialMarkers: MarkerData[] = [
     },
     {
         coordinate: {
-            latitude: 45.524698,
-            longitude: -122.6655507,
+            latitude: 23.1118644,
+            longitude: -82.31806211,
         },
         title: "Second Best Place",
         description: "This is the second best place in Portland",
@@ -54,8 +56,8 @@ const initialMarkers: MarkerData[] = [
     },
     {
         coordinate: {
-            latitude: 45.5230786,
-            longitude: -122.6701034,
+            latitude: 23.1318644,
+            longitude: -82.33806211,
         },
         title: "Third Best Place",
         description: "This is the third best place in Portland",
@@ -63,8 +65,8 @@ const initialMarkers: MarkerData[] = [
     },
     {
         coordinate: {
-            latitude: 45.521016,
-            longitude: -122.6561917,
+            latitude: 23.1148644,
+            longitude: -82.34806211,
         },
         title: "Fourth Best Place",
         description: "This is the fourth best place in Portland",
@@ -72,16 +74,18 @@ const initialMarkers: MarkerData[] = [
     },
 ];
 
-const MapScreen = () => {
+const FunctionalSnack = () => {
     const mapRef = useRef<MapView>(null);
     const [markers, setMarkers] = useState<MarkerData[]>(initialMarkers);
     const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number | null>(null);
     const [region, setRegion] = useState({
-        latitude: 45.52220671242907,
-        longitude: -122.6653281029795,
-        latitudeDelta: 0.04864195044303443,
-        longitudeDelta: 0.040142817690068,
+        latitude: 23.118644,
+        longitude: -82.3806211,
+        latitudeDelta: 0.0322,
+        longitudeDelta: 0.0221,
     });
+
+    const colorScheme = useColorScheme();
 
     useEffect(() => {
         if (selectedMarkerIndex !== null && mapRef.current) {
@@ -119,13 +123,13 @@ const MapScreen = () => {
         return (
             <TouchableOpacity
                 key={index}
-                style={styles.card}
+                style={tw`shadow-md rounded-xl bg-[#eef0f2] dark:bg-zinc-900 absolute bottom-0 left-0 right-0 dark:shadow-slate-800 p-4 mb-8 mx-5 items-center flex-row`}
                 onPress={() => handleMarkerPress(index)}
             >
-                <View style={styles.cardImage}>
+                <View style={[styles.cardImage, { backgroundColor: 'transparent' }]}>
                     <Image source={marker.image} style={styles.cardItemImage} />
                 </View>
-                <View style={styles.cardDetails}>
+                <View style={[styles.cardDetails, { backgroundColor: 'transparent' }]}>
                     <Text style={styles.cardTitle}>{marker.title}</Text>
                     <Text style={styles.cardDescription}>{marker.description}</Text>
                 </View>
@@ -134,32 +138,27 @@ const MapScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={tw.style("bg-transparent w-full h-full")}>
             <MapView
-                style={styles.map}
+                style={tw.style("w-full h-full")}
                 initialRegion={region}
                 ref={mapRef}
+                customMapStyle={colorScheme === 'dark' ? nightMap : undefined}
             >
                 {markers.map(renderMarker)}
             </MapView>
-            <View style={styles.cardContainer}>
+            <>
                 {selectedMarkerIndex !== null ? (
                     renderCard(markers[selectedMarkerIndex], selectedMarkerIndex)
                 ) : (
                     markers.map(renderCard)
                 )}
-            </View>
+            </>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        ...tw.style("flex-1"),
-    },
-    map: {
-        ...tw.style("flex-1"),
-    },
     markerWrap: {
         alignItems: "center",
         justifyContent: "center",
@@ -167,21 +166,8 @@ const styles = StyleSheet.create({
     marker: {
         width: 50,
         height: 50,
-    },
-    cardContainer: {
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        padding: 20,
-    },
-    card: {
+        padding: 15,
         backgroundColor: "#FFF",
-        borderRadius: 10,
-        padding: 10,
-        flexDirection: "row",
-        alignItems: "center",
-        marginBottom: 10,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -189,7 +175,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
-        elevation: 3,
+        borderRadius: 10,
     },
     cardImage: {
         width: CARD_WIDTH,
@@ -214,4 +200,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MapScreen;
+export default FunctionalSnack;

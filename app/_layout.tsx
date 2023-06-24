@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback, useEffect, useState } from 'react';
-import { useColorScheme } from 'react-native';
+import { StatusBar, useColorScheme } from 'react-native';
 import { ClerkProvider } from "@clerk/clerk-expo";
 import * as NavigationBar from 'expo-navigation-bar';
 
@@ -81,8 +81,8 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    NavigationBar.setBackgroundColorAsync(colorScheme === 'dark' ? 'black' : 'white');
-    NavigationBar.setButtonStyleAsync(colorScheme === 'dark' ? 'light' : 'dark')
+    NavigationBar.setBackgroundColorAsync(colorScheme === 'dark' ? '#18181B' : '#eef0f2');
+    NavigationBar.setButtonStyleAsync(colorScheme === 'dark' ? 'light' : 'dark');
   }, [colorScheme])
 
   return (
@@ -90,9 +90,11 @@ function RootLayoutNav() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(casher)" options={{ headerShown: false }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(toggles)/deleteStoreModal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
           <Stack.Screen name="(toggles)/modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
         </Stack>
+        <StatusBar barStyle='default' />
       </ThemeProvider>
     </ClerkProvider>
   );
@@ -100,7 +102,7 @@ function RootLayoutNav() {
 
 /* 
 
-set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.191.191
+set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.113.191
 
 "ios": {
       "bundleIdentifier": "com.cubastore.store",

@@ -8,10 +8,14 @@ import SignIn from './(auth)/sign-in';
 import { ActivityIndicator, Button, Pressable, useColorScheme } from 'react-native';
 import { MainHeader } from '../components/MainHeader';
 import { StoresDashboard, store } from '../components/DashBoard';
+import HomeMap from '../components/HomeMap';
 
 import { AnimatedButton } from '../components/AnimatedBtn';
 
-export default function HomeScreen() {
+const mapFirst = true
+const mandatorySignIn = false
+
+export default function HomeRoute() {
     const [stores, setStores] = useState<z.infer<typeof store>[]>([])
     const { isLoaded, isSignedIn, user } = useUser();
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -23,7 +27,7 @@ export default function HomeScreen() {
 
         if (isSignedIn) {
             try {
-                fetch(`http://192.168.191.191:3333/stores?user_id=${user.id}`, { signal: abortController.signal })
+                fetch(`http://192.168.113.191:3333/stores?user_id=${user.id}`, { signal: abortController.signal })
                     .then(response => response.json())
                     .then(data => {
                         setStores(data)
@@ -54,12 +58,16 @@ export default function HomeScreen() {
         )
     }
 
-    if (!isSignedIn && false) {
+    if (!isSignedIn && mandatorySignIn) {
         return (
             <>
                 <SignIn />
             </>
         )
+    }
+
+    if (mapFirst) {
+        return <HomeMap />
     }
 
     return (
