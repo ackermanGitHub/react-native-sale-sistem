@@ -1,6 +1,6 @@
 import React from 'react';
 import LocationComponent from '../../../components/mapping/Location';
-import { MainHeader } from '../../../components/headers/MainHeader';
+import { MainHeader } from '../../../components/layout/MainHeader';
 import { View } from '../../../components/theme/Themed';
 import tw from '../../../components/utils/tailwind';
 

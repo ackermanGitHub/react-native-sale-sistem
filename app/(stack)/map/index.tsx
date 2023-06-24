@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from '../../../components/theme/Themed';
 import tw from '../../../components/utils/tailwind';
 import MapView from '../../../components/mapping/MapView';
-import { MainHeader } from '../../../components/headers/MainHeader';
+import { MainHeader } from '../../../components/layout/MainHeader';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 

@@ -1,9 +1,9 @@
 import { Stack, useRouter } from 'expo-router';
-import { View, Text } from './Themed';
-import tw from '../utils/tailwind';
+import { View, Text } from '../components/theme/Themed';
+import tw from '../components/utils/tailwind';
 import { FontAwesome } from '@expo/vector-icons';
 import { Pressable, useColorScheme } from 'react-native';
-import Colors from '../../constants/Colors';
+import Colors from '../constants/Colors';
 
 export default function DialogComponent() {
   const router = useRouter()

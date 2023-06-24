@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { useUser } from "@clerk/clerk-expo";
 import SignIn from './(auth)/sign-in';
 import { ActivityIndicator, Button, Pressable, useColorScheme } from 'react-native';
-import { MainHeader } from '../components/headers/MainHeader';
+import { MainHeader } from '../components/layout/MainHeader';
 import { StoresDashboard, store } from '../components/shop/DashBoard';
 import HomeMap from '../components/mapping/HomeMap';
 
