@@ -1,25 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { MarkerData } from '../constants/Markers';
+import { MarkerData, initialMarkers } from '../constants/Markers';
 import * as Location from 'expo-location';
 
 const useMapConnetcion = () => {
-    const [markers, setMarkers] = useState<MarkerData[]>([]);
-    const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number | null>(null);
+    const [markers, setMarkers] = useState<MarkerData[]>(initialMarkers);
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [location, setLocation] = useState<Location.LocationObject | null>(null);
-    const [region, setRegion] = useState({
-        latitude: 23.118644,
-        longitude: -82.3806211,
-        latitudeDelta: 0.0322,
-        longitudeDelta: 0.0221,
-    });
 
     const handleWebSocketMessage = (event: MessageEvent) => {
         console.log(JSON.parse(event.data))
     };
 
     useEffect(() => {
-        const ws = new WebSocket("ws://192.168.1.103:3333", 'map-client');
+        const ws = new WebSocket("ws://192.168.115.191:3333", 'map-client');
         setWs(ws);
 
         ws.addEventListener("open", (event) => {
@@ -110,7 +103,13 @@ const useMapConnetcion = () => {
     }, []);
 
     return {
-
+        markers,
+        setMarkers,
+        ws,
+        setWs,
+        location,
+        setLocation,
+        handleWebSocketMessage
     }
 }
 

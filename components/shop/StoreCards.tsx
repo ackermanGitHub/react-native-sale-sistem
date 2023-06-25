@@ -41,7 +41,7 @@ export const StoresCards: React.FC<StoresCardsProps> = ({ stores, children }) =>
     const addStore = async () => {
         if (isSignedIn) {
             setIsLoading(true)
-            fetch('http://192.168.1.103:3333/store', {
+            fetch('http://192.168.115.191:3333/store', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

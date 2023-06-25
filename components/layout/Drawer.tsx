@@ -3,7 +3,7 @@ import { Button } from 'react-native';
 import { View } from '../theme/Themed';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import FunctionalSnack from '../../app/(stack)/map/snack';
+import MapViewSnackComponent from '../../app/(stack)/map/snack';
 
 function NotificationsScreen({ navigation }) {
     return (
@@ -21,7 +21,7 @@ export default function LeftDrawer() {
             <Drawer.Navigator initialRouteName="Home">
                 <Drawer.Screen options={{
                     header: () => <View></View>
-                }} name="Map" component={FunctionalSnack} />
+                }} name="Map" component={MapViewSnackComponent} />
                 <Drawer.Screen name="Notifications" component={NotificationsScreen} />
             </Drawer.Navigator>
         </NavigationContainer>

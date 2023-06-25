@@ -2,9 +2,9 @@ import React from 'react';
 import { View } from '../../../components/theme/Themed';
 import tw from '../../../components/utils/tailwind';
 import { Stack } from 'expo-router';
-import MapViewSnack from '../../../components/mapping/MapViewSnack';
+import MapViewSnackComponent from '../../../components/mapping/MapViewSnack';
 
-export default function MapViewRoute() {
+export default function MapViewSnackRoute() {
     return (
         <View style={tw`w-full h-full `} >
             <Stack.Screen options={{
@@ -12,7 +12,7 @@ export default function MapViewRoute() {
                 header: () => <></>,
                 navigationBarHidden: true
             }} />
-            <MapViewSnack role='taxi' />
+            <MapViewSnackComponent role='taxi' />
         </View>
     );
 }
