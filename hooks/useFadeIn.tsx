@@ -1,16 +1,16 @@
 import React, { useRef } from 'react'
 import { Animated } from 'react-native';
 
-const useFadeIn = () => {
+const useFadeIn = ({ defaultValue = false }) => {
 
-    const [isVisible, setIsVisible] = React.useState(false);
+    const [isVisible, setIsVisible] = React.useState(defaultValue);
     const fadeAnim = useRef(new Animated.Value(1)).current;
 
     const fadeIn = () => {
         setIsVisible(true);
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 300,
+            duration: 60,
             useNativeDriver: true,
         }).start();
     };
@@ -19,7 +19,7 @@ const useFadeIn = () => {
         setIsVisible(false);
         Animated.timing(fadeAnim, {
             toValue: 0,
-            duration: 300,
+            duration: 50,
             useNativeDriver: true,
         }).start();
     };
@@ -27,12 +27,12 @@ const useFadeIn = () => {
     const fadeInOut = () => {
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 500,
+            duration: 50,
             useNativeDriver: false,
         }).start(() => {
             Animated.timing(fadeAnim, {
                 toValue: 0,
-                duration: 500,
+                duration: 50,
                 useNativeDriver: false,
             }).start();
         });

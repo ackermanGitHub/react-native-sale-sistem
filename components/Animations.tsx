@@ -10,7 +10,7 @@ const PressableWithEffect = () => {
     const colorScheme = useColorScheme()
 
     const { animatedValue, handlePressIn, handlePressOut } = usePressIn()
-    const { fadeAnim, fadeIn, fadeOut, isVisible } = useFadeIn()
+    const { fadeAnim, fadeIn, fadeOut, isVisible } = useFadeIn({ defaultValue: true })
 
     return (
         <Pressable

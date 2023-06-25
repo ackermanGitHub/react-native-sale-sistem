@@ -101,7 +101,7 @@ function RootLayoutNav() {
 
 /* 
 
-set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.115.191
+set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.9.191
 
 "ios": {
       "bundleIdentifier": "com.cubastore.store",

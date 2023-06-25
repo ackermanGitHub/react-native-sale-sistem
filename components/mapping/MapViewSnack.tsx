@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
     Image,
     Dimensions,
     useColorScheme,
@@ -12,6 +11,8 @@ import { nightMap } from '../../constants/MapStyles';
 import MapView, { Marker } from 'react-native-maps';
 import tw from '../../components/utils/tailwind';
 
+import Animated, { EasingNode } from 'react-native-reanimated';
+
 // @ts-ignore 
 import ClientMarkerPNG from '../../assets/images/clientMarker.png'
 // @ts-ignore 
@@ -22,13 +23,10 @@ import { MarkerData } from '../../constants/Markers';
 
 import { View, Text } from '../../components/theme/Themed';
 import useMapConnection from '../../hooks/useMapConnetcion';
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
-import useFadeIn from '../../hooks/useFadeIn';
-import usePressIn from '../../hooks/usePressIn';
-import PressableWithEffect from '../Animations';
 
-
+import { useRouter } from 'expo-router';
 
 const region = {
     latitude: 23.118644,
@@ -49,16 +47,70 @@ type UserRole = 'taxi' | 'client'
 
 const MapViewSnack = ({ role = 'taxi' }: { role: UserRole }) => {
 
+    const { markers, setMarkers, ws, setWs, location, setLocation } = useMapConnection();
     const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number | null>(null);
+    const [pinned, setPinned] = useState(false);
 
     const inputRef = useRef<TextInput>(null);
     const mapRef = useRef<MapView>(null);
 
     const colorScheme = useColorScheme();
 
-    const { markers, setMarkers, ws, setWs, location, setLocation } = useMapConnection();
-    const { animatedValue, handlePressIn, handlePressOut } = usePressIn()
-    const { fadeAnim, fadeIn, fadeOut } = useFadeIn()
+    const fadeAnim = useRef(new Animated.Value(1)).current;
+
+    const router = useRouter()
+
+    const fadeIn = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 300,
+            easing: EasingNode.linear,
+        }).start();
+    };
+
+    const fadeOut = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 300,
+            easing: EasingNode.linear,
+        }).start();
+    };
+
+    const menuBtnAnim = React.useRef(new Animated.Value(1)).current;
+
+    const PressInMenu = () => {
+        Animated.timing(menuBtnAnim, {
+            toValue: 0.85,
+            duration: 75,
+            easing: EasingNode.linear,
+        }).start();
+    };
+
+    const PressOutMenu = () => {
+        Animated.timing(menuBtnAnim, {
+            toValue: 1,
+            duration: 50,
+            easing: EasingNode.linear,
+        }).start();
+    };
+
+    const pinBtnAnim = React.useRef(new Animated.Value(1)).current;
+
+    const PressInPin = () => {
+        Animated.timing(pinBtnAnim, {
+            toValue: 0.85,
+            duration: 75,
+            easing: EasingNode.linear,
+        }).start();
+    };
+
+    const PressOutPin = () => {
+        Animated.timing(pinBtnAnim, {
+            toValue: 1,
+            duration: 50,
+            easing: EasingNode.linear,
+        }).start();
+    };
 
     useEffect(() => {
         if (selectedMarkerIndex !== null && mapRef.current) {
@@ -81,8 +133,12 @@ const MapViewSnack = ({ role = 'taxi' }: { role: UserRole }) => {
                 onPress={() => {
                     inputRef && inputRef.current.blur()
                 }}
-                onTouchStart={fadeOut}
-                onTouchEnd={fadeIn}
+                onTouchStart={() => {
+                    fadeOut()
+                }}
+                onTouchEnd={() => {
+                    fadeIn()
+                }}
                 style={tw.style("w-full h-full")}
                 initialRegion={region}
                 ref={mapRef}
@@ -129,14 +185,16 @@ const MapViewSnack = ({ role = 'taxi' }: { role: UserRole }) => {
                         },
                     ]}
                 >
-                    <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>
+                    <Pressable onPressIn={PressInMenu} onPressOut={PressOutMenu} onPress={() => {
+                        router.push('/stack')
+                    }}>
                         {({ pressed }) =>
 
                             <Animated.View
                                 style={[
                                     tw`w-11/12 h-full mx-2 bg-slate-100 dark:bg-slate-800 justify-center items-center rounded-xl shadow-sm`,
                                     {
-                                        transform: [{ scale: animatedValue }],
+                                        transform: [{ scale: menuBtnAnim }],
                                         opacity: fadeAnim,
                                     },
                                 ]}
@@ -162,39 +220,13 @@ const MapViewSnack = ({ role = 'taxi' }: { role: UserRole }) => {
                 </Animated.View>
             </View>
             <>
-                {selectedMarkerIndex !== null ? (
+                {selectedMarkerIndex &&
                     <Animated.View
                         key={selectedMarkerIndex}
                         style={[
                             tw`shadow-md rounded-xl bg-[#eef0f2] dark:bg-zinc-900 absolute bottom-0 left-0 right-0 dark:shadow-slate-800 p-4 mb-8 mx-5 items-center flex-row`,
                             {
-                                opacity: fadeAnim,
-                            },
-                        ]}
-                    >
-                        <View style={[{
-                            width: CARD_WIDTH,
-                            height: CARD_HEIGHT,
-                            marginRight: 10,
-                        }, { backgroundColor: 'transparent' }]}>
-                            <Image source={markers[selectedMarkerIndex].image} style={{
-                                width: "100%",
-                                height: "100%",
-                                borderRadius: 10,
-                            }} />
-                        </View>
-                        <View style={[tw`flex-1 bg-transparent`]}>
-                            <Text style={tw`text-lg font-bold mb-2`}>{markers[selectedMarkerIndex].title}</Text>
-                            <Text style={tw`text-right`}>{markers[selectedMarkerIndex].description}</Text>
-                        </View>
-                    </Animated.View>
-                ) : (
-                    <Animated.View
-                        key={selectedMarkerIndex}
-                        style={[
-                            tw`shadow-md rounded-xl bg-[#eef0f2] dark:bg-zinc-900 absolute bottom-0 left-0 right-0 dark:shadow-slate-800 p-4 mb-8 mx-5 items-center flex-row`,
-                            {
-                                opacity: fadeAnim,
+                                opacity: pinned ? 1 : fadeAnim,
                             },
                         ]}
                     >
@@ -213,30 +245,57 @@ const MapViewSnack = ({ role = 'taxi' }: { role: UserRole }) => {
                             <Text style={tw`text-lg font-bold mb-2`}>{markers[0].title}</Text>
                             <Text style={tw`text-right`}>{markers[0].description}</Text>
                         </View>
-                        <PressableWithEffect />
-                        {/* <Pressable style={[
-                            tw`justify-center items-center p-2 absolute top-5 right-5`,
-                        ]} onPressIn={handlePressIn} onPressOut={handlePressOut}>
-                            {({ pressed }) =>
-                                <Animated.View
-                                    style={[
-                                        tw``,
-                                        {
-                                            transform: [{ scale: animatedValue }],
-                                            opacity: fadeAnim,
-                                        },
-                                    ]}
-                                >
-                                    <AntDesign
-                                        name={colorScheme === 'dark' ? 'pushpin' : 'pushpino'}
-                                        size={30}
-                                        color={Colors[colorScheme ?? 'light'].text}
-                                    />
-                                </Animated.View>
-                            }
-                        </Pressable> */}
+                        <View style={tw`absolute top-5 right-5 w-20 h-8 flex-row gap-2 items-center justify-between bg-transparent`}>
+
+                            <Pressable style={[
+                                tw`justify-center items-center`,
+                            ]} onPressIn={PressInPin} onPressOut={PressOutPin} onPress={() => {
+                                if (pinned) {
+                                    setPinned(false)
+                                } else {
+                                    setPinned(true)
+                                }
+                            }}>
+                                {({ pressed }) =>
+                                    <Animated.View
+                                        style={[
+                                            tw`w-8 h-8 relative`,
+                                            {
+                                                transform: [{ scale: pinBtnAnim }],
+                                            },
+                                        ]}
+                                    >
+                                        <Animated.View
+                                            style={[
+                                                tw`absolute w-full h-full px-3 justify-center items-center`,
+                                                {
+                                                    opacity: pinned ? 0 : 1,
+                                                    transform: [{ rotate: '45deg' }],
+                                                },
+                                            ]}
+                                        >
+                                            <View style={tw`h-full w-[2px] bg-black`} />
+                                        </Animated.View>
+                                        <AntDesign
+                                            name={colorScheme === 'dark' ? 'pushpin' : 'pushpino'}
+                                            size={30}
+                                            color={Colors[colorScheme ?? 'light'].text}
+                                        />
+                                    </Animated.View>
+                                }
+                            </Pressable>
+                            <Pressable onPress={() => {
+                                setSelectedMarkerIndex(null)
+                            }}>
+                                <AntDesign
+                                    name={'close'}
+                                    size={30}
+                                    color={Colors[colorScheme ?? 'light'].text}
+                                />
+                            </Pressable>
+                        </View>
                     </Animated.View>
-                )}
+                }
             </>
         </View>
     );
