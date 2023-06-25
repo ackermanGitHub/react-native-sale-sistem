@@ -4,7 +4,7 @@ import { useColorScheme } from 'react-native';
 import tw from '../../components/utils/tailwind';
 import { useUser } from "@clerk/clerk-expo";
 
-export default function ModalScreen() {
+export default function ProfileRoute() {
 
     const { user, isLoaded, isSignedIn } = useUser();
     const colorScheme = useColorScheme();

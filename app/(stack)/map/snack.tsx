@@ -12,7 +12,7 @@ export default function MapViewSnackRoute() {
                 header: () => <></>,
                 navigationBarHidden: true
             }} />
-            <MapViewSnackComponent role='taxi' />
+            <MapViewSnackComponent />
         </View>
     );
 }

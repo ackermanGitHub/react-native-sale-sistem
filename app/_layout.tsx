@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, NavigationContainer, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -101,7 +101,7 @@ function RootLayoutNav() {
 
 /* 
 
-set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.9.191
+set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.1.102
 
 "ios": {
       "bundleIdentifier": "com.cubastore.store",

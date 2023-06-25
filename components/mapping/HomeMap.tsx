@@ -6,7 +6,7 @@ import MapViewSnack from '../../components/mapping/MapViewSnack';
 export default function MapViewRoute() {
     return (
         <View style={tw`w-full h-full `} >
-            <MapViewSnack role='taxi' />
+            <MapViewSnack />
         </View>
     );
 }

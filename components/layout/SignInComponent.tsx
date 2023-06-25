@@ -8,7 +8,7 @@ import { AnimatedButton } from '../../components/theme/AnimatedBtn';
 // import SignWithOauth from '../../components/SignWithOauth';
 
 
-export default function SignIn() {
+export default function SignInComponent({ navigation, route }) {
     const { signIn, setActive, isLoaded } = useSignIn();
     const router = useRouter();
     const colorScheme = useColorScheme();
@@ -32,8 +32,7 @@ export default function SignIn() {
             // This is an important step,
             // This indicates the user is signed in
             await setActive({ session: completeSignIn.createdSessionId });
-            console.log(router)
-            router.push('/');
+            navigation.navigate('Map');
         } catch (err: any) {
             setError(err.message);
             console.error(JSON.stringify(err, null, 2));
