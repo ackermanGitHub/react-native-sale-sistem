@@ -27,7 +27,7 @@ export default function HomeRoute() {
 
         if (isSignedIn) {
             try {
-                fetch(`http://192.168.1.102:3333/stores?user_id=${user.id}`, { signal: abortController.signal })
+                fetch(`http://192.168.39.191:3333/stores?user_id=${user.id}`, { signal: abortController.signal })
                     .then(response => response.json())
                     .then(data => {
                         setStores(data)
@@ -47,7 +47,7 @@ export default function HomeRoute() {
         };
     }, [isSignedIn])
 
-    if (!isLoaded) {
+    /* if (!isLoaded) {
         return (
             <View style={tw`w-full h-full justify-center items-center`}>
                 <Stack.Screen options={{
@@ -56,7 +56,7 @@ export default function HomeRoute() {
                 <ActivityIndicator size={'large'} animating color={colorScheme === 'dark' ? 'white' : 'black'} />
             </View>
         )
-    }
+    } */
 
     if (!isSignedIn && mandatorySignIn) {
         return (

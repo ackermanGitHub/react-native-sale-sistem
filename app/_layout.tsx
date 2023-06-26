@@ -81,19 +81,21 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    NavigationBar.setBackgroundColorAsync(colorScheme === 'dark' ? '#18181B' : '#eef0f2');
+    NavigationBar.setBackgroundColorAsync(colorScheme === 'dark' ? 'black' : 'white');
     NavigationBar.setButtonStyleAsync(colorScheme === 'dark' ? 'light' : 'dark');
   }, [colorScheme])
 
   return (
     <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
+        <Stack screenOptions={{
+
+        }}>
           <Stack.Screen name="(shop)" options={{ headerShown: false }} />
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
         </Stack>
-        <StatusBar barStyle='default' />
+        <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
       </ThemeProvider>
     </ClerkProvider>
   );
@@ -101,7 +103,7 @@ function RootLayoutNav() {
 
 /* 
 
-set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.1.102
+set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.39.191
 
 "ios": {
       "bundleIdentifier": "com.cubastore.store",

@@ -5,16 +5,13 @@ import {
     useColorScheme,
     TextInput,
     Pressable,
-    Button,
-    ActivityIndicator,
-    useWindowDimensions,
 } from "react-native";
 import { nightMap } from '../../constants/MapStyles';
 
 import MapView, { Marker, } from 'react-native-maps';
 import tw from '../../components/utils/tailwind';
 
-import Animated, { Easing, EasingNode, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { EasingNode } from 'react-native-reanimated';
 
 // @ts-ignore 
 import ClientMarkerPNG from '../../assets/images/clientMarker.png'
@@ -28,12 +25,6 @@ import { View, Text } from '../../components/theme/Themed';
 import useMapConnection from '../../hooks/useMapConnetcion';
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
-
-import { useRouter } from 'expo-router';
-
-import { useUser } from '@clerk/clerk-expo';
-
-import Profile from '../../app/(auth)/profile';
 
 // import MapViewDirections from 'react-native-maps-directions';
 
@@ -55,102 +46,9 @@ const CARD_WIDTH = CARD_HEIGHT - 50;
 type UserRole = 'taxi' | 'client'
 
 
-import { createDrawerNavigator, DrawerNavigationProp } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { AnimatedButton } from '../theme/AnimatedBtn';
-import SignIn from '../../app/(auth)/sign-in';
-import SignInComponent from '../layout/SignInComponent';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 
-function NotificationsScreen({ navigation }: { navigation: DrawerNavigationProp<any> }) {
-    return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        </View>
-    );
-}
-
-const Drawer = createDrawerNavigator();
-
-export default function LeftDrawer() {
-    const dimensions = useWindowDimensions();
-
-    const isLargeScreen = dimensions.width >= 768;
-
-    const { user, isLoaded, isSignedIn } = useUser();
-
-    const colorScheme = useColorScheme();
-
-    const router = useRouter()
-
-    return (
-        <Drawer.Navigator screenOptions={{
-            drawerStyle: {
-                /* backgroundColor: '#c6cbef', */
-                width: 240,
-            },
-            drawerType: isLargeScreen ? 'permanent' : 'back',
-            overlayColor: 'transparent',
-        }} initialRouteName="Map">
-            <Drawer.Screen options={{
-
-                drawerIcon: ({ focused, color, size }) => {
-
-                    if (!isLoaded) {
-                        return (
-                            <View style={tw`h-full w-full flex-row justify-center items-center bg-transparent`}>
-                                <ActivityIndicator size={'large'} animating color={colorScheme === 'dark' ? 'white' : 'black'} />
-                            </View>
-                        )
-                    }
-
-                    if (!isSignedIn) {
-                        return (
-                            <View style={tw`h-full w-full flex-row justify-between items-center bg-transparent px-5`}>
-                                <AnimatedButton onPress={() => router.push('/sign-in')} style={tw`w-[120px] max-w-[180px] bg-blue-500 dark:bg-slate-700 rounded h-10 justify-center items-center`} >
-                                    <Text style={tw`text-white`}>Sign In</Text>
-                                </AnimatedButton>
-                                <AntDesign
-                                    name={'user'}
-                                    size={30}
-                                    color={Colors[colorScheme ?? 'light'].text}
-                                />
-                            </View>
-                        )
-                    }
-
-                    return (
-                        <View style={tw`h-full w-full flex-row justify-between items-center bg-transparent px-5`}>
-                            <Text>{user.firstName + ' ' + user.lastName}</Text>
-                            <Image source={{
-                                uri: user.imageUrl
-                            }} style={tw`w-12 h-12 rounded-full`} />
-                        </View>
-                    )
-                },
-
-            }} name="Sign-In" component={isSignedIn ? Profile : SignInComponent} />
-            <Drawer.Screen options={{
-                header: () => <View></View>,
-                drawerIcon: ({ focused, color, size }) => {
-                    return (
-                        <>
-                        </>
-                    )
-                },
-
-            }} name="Map" component={MapViewSnack} />
-            <Drawer.Screen options={{
-                drawerIcon: ({ focused, color, size }) => {
-                    return (
-                        <>
-                        </>
-                    )
-                },
-            }} name="Notifications" component={NotificationsScreen} />
-        </Drawer.Navigator>
-    );
-}
-
-const MapViewSnack = ({ role = 'client', navigation }: { role?: UserRole, navigation: DrawerNavigationProp<any> }) => {
+const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRole, navigation: DrawerNavigationProp<any> }) => {
 
     const { markers, setMarkers, ws, setWs, location, setLocation } = useMapConnection();
     const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number | null>(null);
@@ -163,9 +61,11 @@ const MapViewSnack = ({ role = 'client', navigation }: { role?: UserRole, naviga
 
     const fadeAnim = useRef(new Animated.Value(1)).current;
 
-    const router = useRouter()
+    const [menuVisible, setMenuVisible] = useState(true);
+    const [showPin, setShowPin] = useState(false);
 
     const fadeIn = () => {
+        setMenuVisible(false)
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 300,
@@ -174,6 +74,7 @@ const MapViewSnack = ({ role = 'client', navigation }: { role?: UserRole, naviga
     };
 
     const fadeOut = () => {
+        setMenuVisible(true)
         Animated.timing(fadeAnim, {
             toValue: 0,
             duration: 300,
@@ -235,14 +136,18 @@ const MapViewSnack = ({ role = 'client', navigation }: { role?: UserRole, naviga
         <View style={tw.style("bg-transparent w-full h-full")}>
 
             <MapView
-                onPress={() => {
+                /* onPress={() => {
                     inputRef && inputRef.current.blur()
-                }}
-                onTouchStart={() => {
-                    fadeOut()
+                }} */
+                onTouchMove={() => {
+                    if (menuVisible) {
+                        fadeOut()
+                        setMenuVisible(false)
+                    }
                 }}
                 onTouchEnd={() => {
                     fadeIn()
+                    setMenuVisible(true)
                 }}
                 style={tw.style("w-full h-full")}
                 initialRegion={region}
@@ -290,7 +195,7 @@ const MapViewSnack = ({ role = 'client', navigation }: { role?: UserRole, naviga
             </MapView>
 
 
-            <View
+            {/* <View
                 style={[
                     tw`w-[95%] absolute z-20 p-2 top-12 h-16 flex-row justify-between items-center self-center bg-transparent`,
                 ]}
@@ -309,7 +214,7 @@ const MapViewSnack = ({ role = 'client', navigation }: { role?: UserRole, naviga
 
                             <Animated.View
                                 style={[
-                                    tw`w-11/12 h-full mx-2 bg-slate-100 dark:bg-slate-800 justify-center items-center rounded-xl shadow-sm`,
+                                    tw`w-11/12 h-full mx-2 bg-slate-100 dark:bg-black justify-center items-center rounded-xl shadow-sm dark:shadow-slate-200`,
                                     {
                                         transform: [{ scale: menuBtnAnim }],
                                         opacity: fadeAnim,
@@ -327,7 +232,7 @@ const MapViewSnack = ({ role = 'client', navigation }: { role?: UserRole, naviga
                 </Animated.View>
                 <Animated.View
                     style={[
-                        tw`w-10/12 h-full mx-5 bg-slate-100 dark:bg-slate-800 rounded-xl shadow-sm`,
+                        tw`w-10/12 h-full mx-5 bg-slate-100 dark:bg-black rounded-xl shadow-sm dark:shadow-slate-200`,
                         {
                             opacity: fadeAnim,
                         },
@@ -335,13 +240,13 @@ const MapViewSnack = ({ role = 'client', navigation }: { role?: UserRole, naviga
                 >
                     <TextInput ref={inputRef} placeholder='A Donde Vamos?' placeholderTextColor={colorScheme === 'dark' ? 'white' : 'black'} style={tw`w-full h-full p-4 bg-transparent`} />
                 </Animated.View>
-            </View>
+            </View> */}
             <>
                 {selectedMarkerIndex &&
                     <Animated.View
                         key={selectedMarkerIndex}
                         style={[
-                            tw`shadow-md rounded-xl bg-[#eef0f2] dark:bg-zinc-900 absolute bottom-0 left-0 right-0 dark:shadow-slate-800 p-4 mb-8 mx-5 items-center flex-row`,
+                            tw`bg-[#eef0f2] dark:bg-black absolute bottom-0 left-0 right-0 p-4 items-center flex-row`,
                             {
                                 opacity: pinned ? 1 : fadeAnim,
                             },
@@ -376,7 +281,7 @@ const MapViewSnack = ({ role = 'client', navigation }: { role?: UserRole, naviga
                                 {({ pressed }) =>
                                     <Animated.View
                                         style={[
-                                            tw`w-8 h-8 relative`,
+                                            tw`w-8 h-8 relative  `,
                                             {
                                                 transform: [{ scale: pinBtnAnim }],
                                             },
@@ -418,3 +323,4 @@ const MapViewSnack = ({ role = 'client', navigation }: { role?: UserRole, naviga
     );
 };
 
+export default MapViewSnackComponent
