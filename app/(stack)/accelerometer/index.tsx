@@ -5,7 +5,7 @@ import AccelerometerComponent from '../../../components/stack/Accelerometer';
 
 export default function AccelerometerRoute() {
     return (
-        <View style={tw`w-full h-full`} >
+        <View style={tw`w-full h-full items-center justify-center`} >
             <AccelerometerComponent />
         </View>
     );

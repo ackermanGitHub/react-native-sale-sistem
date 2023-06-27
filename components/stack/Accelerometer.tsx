@@ -12,8 +12,8 @@ export default function AccelerometerComponent() {
     });
     const [subscription, setSubscription] = useState<any>();
 
-    const _slow = () => Accelerometer.setUpdateInterval(1000);
-    const _fast = () => Accelerometer.setUpdateInterval(16);
+    const _slow = () => Accelerometer.setUpdateInterval(2000);
+    const _fast = () => Accelerometer.setUpdateInterval(1000);
 
     const _subscribe = () => {
         setSubscription(
@@ -32,11 +32,13 @@ export default function AccelerometerComponent() {
     }, []);
 
     return (
-        <View style={tw`w-full h-full justify-center`}>
-            <Text style={tw`text-left`}>Accelerometer: (in gs where 1g = 9.81 m/s^2)</Text>
-            <Text style={tw`text-left`}>x: {x}</Text>
-            <Text style={tw`text-left`}>y: {y}</Text>
-            <Text style={tw`text-left`}>z: {z}</Text>
+        <View style={tw`w-full h-full justify-center items-center`}>
+            <View style={tw`w-1/2`}>
+                <Text style={tw`text-left`}>Accelerometer: (in gs where 1g = 9.81 m/s^2)</Text>
+                <Text style={tw`text-left`}>x: {x}</Text>
+                <Text style={tw`text-left`}>y: {y}</Text>
+                <Text style={tw`text-left`}>z: {z}</Text>
+            </View>
             <View style={tw`flex-row items-center mt-4`}>
                 <TouchableOpacity onPress={subscription ? _unsubscribe : _subscribe} style={tw`items-center justify-center bg-[#eee] p-3`}>
                     <Text>{subscription ? 'On' : 'Off'}</Text>

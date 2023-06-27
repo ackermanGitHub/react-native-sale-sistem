@@ -5,7 +5,7 @@ import tw from '../../components/utils/tailwind';
 import { useSignIn } from "@clerk/clerk-expo";
 import { Stack, useRouter } from 'expo-router';
 import { AnimatedButton } from '../../components/theme/AnimatedBtn';
-// import SignWithOauth from '../../components/SignWithOauth';
+import SignWithOauth from '../auth/SignWithOauth';
 
 
 export default function SignInComponent({ navigation, route }) {
@@ -68,11 +68,11 @@ export default function SignInComponent({ navigation, route }) {
                     value={password}
                 />
             </View>
-            <AnimatedButton onPress={handleSignIn} style={tw`w-[180px] max-w-[240px] bg-blue-500 dark:bg-slate-700 rounded h-12 justify-center items-center`} >
+            <AnimatedButton onPress={handleSignIn} style={tw`w-[180px] max-w-[240px] bg-slate-500 dark:bg-slate-700 rounded h-12 justify-center items-center`} >
                 <Text style={tw`text-white`}>Sign In</Text>
             </AnimatedButton>
-            {/* <SignWithOauth action='sign-in' /> */}
-            <Pressable style={tw`my-2`} onPress={() => router.replace('/sign-up')}>
+            <SignWithOauth action='sign-in' />
+            <Pressable style={tw`my-2`} /* onPress={() => router.replace('/sign-up')} */>
                 <Text style={tw`text-[#2e78b7] text-xs`}>Don't have an account? Sign Up</Text>
             </Pressable>
             {isLoadind &&

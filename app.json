@@ -4,7 +4,7 @@
     "slug": "playground",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/popeye-the-sailor-man-1.png",
+    "icon": "./assets/config/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "plugins": [
@@ -16,9 +16,9 @@
       ]
     ],
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/config/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FCCB6F"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -28,14 +28,14 @@
     "android": {
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/popeye-the-sailor-man-adaptative-1.png",
+        "foregroundImage": "./assets/config/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.julio_lpz.playground"
     },
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/config/icon.png"
     },
     "extra": {
       "eas": {

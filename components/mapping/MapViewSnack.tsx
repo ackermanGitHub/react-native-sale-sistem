@@ -5,13 +5,16 @@ import {
     useColorScheme,
     TextInput,
     Pressable,
+    Animated as RNAnimated
 } from "react-native";
 import { nightMap } from '../../constants/MapStyles';
 
 import MapView, { Marker, } from 'react-native-maps';
 import tw from '../../components/utils/tailwind';
 
-import Animated, { EasingNode } from 'react-native-reanimated';
+import Animated, {
+    EasingNode,
+} from 'react-native-reanimated';
 
 // @ts-ignore 
 import ClientMarkerPNG from '../../assets/images/clientMarker.png'
@@ -48,9 +51,9 @@ type UserRole = 'taxi' | 'client'
 
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 
-const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRole, navigation: DrawerNavigationProp<any> }) => {
+const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRole, navigation?: DrawerNavigationProp<any> }) => {
 
-    const { markers, setMarkers, ws, setWs, location, setLocation } = useMapConnection();
+    const { markers, location, historyLocation } = useMapConnection({});
     const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number | null>(null);
     const [pinned, setPinned] = useState(false);
 
@@ -136,9 +139,6 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
         <View style={tw.style("bg-transparent w-full h-full")}>
 
             <MapView
-                /* onPress={() => {
-                    inputRef && inputRef.current.blur()
-                }} */
                 onTouchMove={() => {
                     if (menuVisible) {
                         fadeOut()
@@ -165,7 +165,7 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                     }}
                     apikey={'9BAA7D15D4394971A8490DADA2387C02'}
                 /> */}
-                {markers.map((marker: MarkerData, index: number) => {
+                {/* {markers.map((marker: MarkerData, index: number) => {
                     return (
                         <Marker
                             draggable
@@ -182,7 +182,7 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                             </Animated.View>
                         </Marker>
                     );
-                })}
+                })} */}
                 {
                     location &&
                     <Marker
@@ -193,54 +193,6 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                     />
                 }
             </MapView>
-
-
-            {/* <View
-                style={[
-                    tw`w-[95%] absolute z-20 p-2 top-12 h-16 flex-row justify-between items-center self-center bg-transparent`,
-                ]}
-            >
-                <Animated.View
-                    style={[
-                        {
-                            opacity: fadeAnim,
-                        },
-                    ]}
-                >
-                    <Pressable onPressIn={PressInMenu} onPressOut={PressOutMenu} onPress={() => {
-                        navigation.openDrawer()
-                    }}>
-                        {({ pressed }) =>
-
-                            <Animated.View
-                                style={[
-                                    tw`w-11/12 h-full mx-2 bg-slate-100 dark:bg-black justify-center items-center rounded-xl shadow-sm dark:shadow-slate-200`,
-                                    {
-                                        transform: [{ scale: menuBtnAnim }],
-                                        opacity: fadeAnim,
-                                    },
-                                ]}
-                            >
-                                <AntDesign
-                                    name={'menu-unfold'}
-                                    size={30}
-                                    color={Colors[colorScheme ?? 'light'].text}
-                                />
-                            </Animated.View>
-                        }
-                    </Pressable>
-                </Animated.View>
-                <Animated.View
-                    style={[
-                        tw`w-10/12 h-full mx-5 bg-slate-100 dark:bg-black rounded-xl shadow-sm dark:shadow-slate-200`,
-                        {
-                            opacity: fadeAnim,
-                        },
-                    ]}
-                >
-                    <TextInput ref={inputRef} placeholder='A Donde Vamos?' placeholderTextColor={colorScheme === 'dark' ? 'white' : 'black'} style={tw`w-full h-full p-4 bg-transparent`} />
-                </Animated.View>
-            </View> */}
             <>
                 {selectedMarkerIndex &&
                     <Animated.View

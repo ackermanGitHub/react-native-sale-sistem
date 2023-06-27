@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from '../../../components/theme/Themed';
 import tw from '../../../components/utils/tailwind';
 import { Stack } from 'expo-router';
+import MapViewSnackComponent from '../../../components/mapping/MapViewSnack';
 
 export default function MapViewSnackRoute() {
     return (
@@ -11,6 +12,7 @@ export default function MapViewSnackRoute() {
                 header: () => <></>,
                 navigationBarHidden: true
             }} />
+            <MapViewSnackComponent role='client' />
         </View>
     );
 }
