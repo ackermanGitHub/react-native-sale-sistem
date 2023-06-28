@@ -48,7 +48,7 @@ export const StoresDashboard: React.FC<StoresDashboardProps> = ({ stores, childr
     const addStore = async () => {
         if (isSignedIn) {
             setIsLoading(true)
-            fetch('http://192.168.194.191:3333/store', {
+            fetch('http://192.168.175.191:3333/store', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export const StoresDashboard: React.FC<StoresDashboardProps> = ({ stores, childr
         if (isSignedIn) {
             setStores && setStores(stores.filter((store) => store.id === store_id ? false : true))
             setDeleteStoreModal(false)
-            fetch('http://192.168.194.191:3333/store', {
+            fetch('http://192.168.175.191:3333/store', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

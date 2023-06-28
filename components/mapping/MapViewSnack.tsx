@@ -5,43 +5,40 @@ import {
     useColorScheme,
     TextInput,
     Pressable,
-    Animated as RNAnimated
+    Animated as RNAnimated,
+    View as RNView,
+    Platform
 } from "react-native";
-import { nightMap } from '../../constants/MapStyles';
-
-import MapView, { Marker, } from 'react-native-maps';
-import tw from '../../components/utils/tailwind';
-
 import Animated, {
     EasingNode,
 } from 'react-native-reanimated';
-
-// @ts-ignore 
-import ClientMarkerPNG from '../../assets/images/clientMarker.png'
-// @ts-ignore 
-import TaxiMarkerPNG from '../../assets/images/taxiMarker.png'
-
-import { MarkerData } from '../../constants/Markers';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 
 
-import { View, Text } from '../../components/theme/Themed';
-import useMapConnection from '../../hooks/useMapConnetcion';
-import { AntDesign } from '@expo/vector-icons';
-import Colors from '../../constants/Colors';
-
+import { nightMap } from '../../constants/MapStyles';
+import MapView, { Circle, Marker, AnimatedRegion, MapMarker, MarkerAnimated, Region } from 'react-native-maps';
 // import MapViewDirections from 'react-native-maps-directions';
+// @ts-ignore 
+// import ClientMarkerPNG from '../../assets/images/clientMarker.png'
+// @ts-ignore 
+// import TaxiMarkerPNG from '../../assets/images/taxiMarker.png'
+// import { MarkerData } from '../../constants/Markers';
+import useMapConnection from '../../hooks/useMapConnetcion';
 
-const region = {
-    latitude: 23.118644,
-    longitude: -82.3806211,
-    latitudeDelta: 0.0322,
-    longitudeDelta: 0.0221,
-}
+
+import tw from '../../components/utils/tailwind';
+import { View, Text } from '../../components/theme/Themed';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import Colors from '../../constants/Colors';
+import { AnimatedButton } from '../theme/AnimatedBtn';
+
+import { useUser } from '@clerk/clerk-expo';
+import useFadeIn from '../../hooks/useFadeIn';
+import usePressIn from '../../hooks/usePressIn';
 
 Image.prefetch("https://i.imgur.com/sNam9iJ.jpg")
 
 const { width, height } = Dimensions.get("window");
-
 
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
@@ -49,77 +46,28 @@ const CARD_WIDTH = CARD_HEIGHT - 50;
 type UserRole = 'taxi' | 'client'
 
 
-import { DrawerNavigationProp } from '@react-navigation/drawer';
-
 const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRole, navigation?: DrawerNavigationProp<any> }) => {
 
-    const { markers, location, historyLocation } = useMapConnection({});
     const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number | null>(null);
+    const [menuVisible, setMenuVisible] = useState(true);
+    const [region, setRegion] = useState<Region>({
+        latitude: 23.118644,
+        longitude: -82.3806211,
+        latitudeDelta: 0.0322,
+        longitudeDelta: 0.0221,
+    });
+    const [showPin, setShowPin] = useState(false);
     const [pinned, setPinned] = useState(false);
 
-    const inputRef = useRef<TextInput>(null);
-    const mapRef = useRef<MapView>(null);
-
+    const { animatedValue: pinBtnAnim, handlePressIn: PressInPin, handlePressOut: PressOutPin } = usePressIn()
+    const { fadeAnim, fadeIn, fadeOut, isVisible } = useFadeIn({ defaultValue: true })
+    const { markers, location, historyLocation } = useMapConnection({});
+    const { user, isLoaded, isSignedIn } = useUser()
     const colorScheme = useColorScheme();
 
-    const fadeAnim = useRef(new Animated.Value(1)).current;
-
-    const [menuVisible, setMenuVisible] = useState(true);
-    const [showPin, setShowPin] = useState(false);
-
-    const fadeIn = () => {
-        setMenuVisible(false)
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 300,
-            easing: EasingNode.linear,
-        }).start();
-    };
-
-    const fadeOut = () => {
-        setMenuVisible(true)
-        Animated.timing(fadeAnim, {
-            toValue: 0,
-            duration: 300,
-            easing: EasingNode.linear,
-        }).start();
-    };
-
-    const menuBtnAnim = React.useRef(new Animated.Value(1)).current;
-
-    const PressInMenu = () => {
-        Animated.timing(menuBtnAnim, {
-            toValue: 0.85,
-            duration: 75,
-            easing: EasingNode.linear,
-        }).start();
-    };
-
-    const PressOutMenu = () => {
-        Animated.timing(menuBtnAnim, {
-            toValue: 1,
-            duration: 50,
-            easing: EasingNode.linear,
-        }).start();
-    };
-
-    const pinBtnAnim = React.useRef(new Animated.Value(1)).current;
-
-    const PressInPin = () => {
-        Animated.timing(pinBtnAnim, {
-            toValue: 0.85,
-            duration: 75,
-            easing: EasingNode.linear,
-        }).start();
-    };
-
-    const PressOutPin = () => {
-        Animated.timing(pinBtnAnim, {
-            toValue: 1,
-            duration: 50,
-            easing: EasingNode.linear,
-        }).start();
-    };
+    const inputRef = useRef<TextInput>(null);
+    const marker = useRef<MapMarker>(null);
+    const mapRef = useRef<MapView>(null);
 
     useEffect(() => {
         if (selectedMarkerIndex !== null && mapRef.current) {
@@ -131,13 +79,20 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
         }
     }, [selectedMarkerIndex]);
 
+    const animateToRegion = (region: Region) => {
+        setRegion(region);
+        mapRef.current.animateToRegion(region)
+    }
     const handleMarkerPress = (index: number) => {
         setSelectedMarkerIndex(index);
     };
+    const onRegionChangeComplete = (region: Region) => {
+        setRegion(region);
+        console.log(region)
+    }
 
     return (
         <View style={tw.style("bg-transparent w-full h-full")}>
-
             <MapView
                 onTouchMove={() => {
                     if (menuVisible) {
@@ -151,49 +106,69 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                 }}
                 style={tw.style("w-full h-full")}
                 initialRegion={region}
+                showsCompass={false}
+                onRegionChangeComplete={onRegionChangeComplete}
                 ref={mapRef}
                 customMapStyle={colorScheme === 'dark' ? nightMap : undefined}
             >
-                {/* <MapViewDirections
-                    origin={{
-                        latitude: 23.118644,
-                        longitude: -82.3806211,
-                    }}
-                    destination={{
-                        latitude: 23.1128644,
-                        longitude: -82.38306211,
-                    }}
-                    apikey={'9BAA7D15D4394971A8490DADA2387C02'}
-                /> */}
-                {/* {markers.map((marker: MarkerData, index: number) => {
-                    return (
-                        <Marker
-                            draggable
-                            key={index}
-                            coordinate={marker.coordinate}
-                            onPress={() => handleMarkerPress(index)}
+                {location &&
+                    <>
+                        <MarkerAnimated
+                            ref={marker}
+                            coordinate={location.coords}
+                            anchor={{ x: 0.5, y: 0.5 }}
                         >
-                            <Animated.View style={tw`items-center justify-center`}>
-                                <Animated.Image
-                                    source={marker.image}
-                                    style={[tw`w-12 h-12 p-4 bg-slate-100 rounded-md`]}
-                                    resizeMode="cover"
-                                />
+                            <Animated.View style={tw`items-center justify-center w-12 h-12`} >
+                                {
+                                    isSignedIn ?
+                                        <>
+                                            <Animated.Image style={tw`w-8 h-8 rounded-full`} source={{
+                                                uri: user.imageUrl
+                                            }} resizeMode="cover" />
+                                        </>
+                                        :
+                                        <>
+                                            <FontAwesome
+                                                name={colorScheme === 'light' ? 'user-circle' : 'user-circle-o'}
+                                                size={30}
+                                                color={Colors[colorScheme ?? 'light'].text}
+                                            />
+                                        </>
+                                }
                             </Animated.View>
-                        </Marker>
-                    );
-                })} */}
-                {
-                    location &&
-                    <Marker
-                        rotation={role === 'taxi' ? location?.coords.heading || undefined : undefined}
-                        image={role === 'client' ? ClientMarkerPNG : TaxiMarkerPNG}
-                        coordinate={location?.coords}
-                        title={'Current Position'}
-                    />
+                        </MarkerAnimated>
+                        {
+                            location && region && region.latitudeDelta < 0.032222222 && (
+                                <Circle
+                                    center={{
+                                        latitude: location.coords.latitude,
+                                        longitude: location.coords.longitude,
+                                    }}
+                                    radius={location.coords.accuracy}
+                                    strokeColor="#111111"
+                                    fillColor="rgba(26, 18, 11, 0.5)"
+                                />
+                            )
+                        }
+                    </>
                 }
+
             </MapView>
             <>
+                <Animated.View
+                    style={[
+                        tw`bg-transparent absolute z-20 bottom-24 right-24 flex-row justify-center items-center text-center self-center rounded-full`,
+                        {
+                            opacity: fadeAnim,
+                        },
+                    ]}
+                >
+                    <AntDesign
+                        name={colorScheme === 'dark' ? 'upcircle' : 'upcircleo'}
+                        size={30}
+                        color={Colors[colorScheme ?? 'light'].text}
+                    />
+                </Animated.View>
                 {selectedMarkerIndex &&
                     <Animated.View
                         key={selectedMarkerIndex}
@@ -248,7 +223,7 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                                                 },
                                             ]}
                                         >
-                                            <View style={tw`h-full w-[2px] bg-black`} />
+                                            <View style={tw`h-full w-[2px] bg-black dark:bg-white`} />
                                         </Animated.View>
                                         <AntDesign
                                             name={colorScheme === 'dark' ? 'pushpin' : 'pushpino'}

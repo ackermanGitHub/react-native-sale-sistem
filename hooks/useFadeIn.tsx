@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Animated } from 'react-native';
+import Animated, { EasingNode } from 'react-native-reanimated';
 
 const useFadeIn = ({ defaultValue = false }) => {
 
@@ -7,20 +7,20 @@ const useFadeIn = ({ defaultValue = false }) => {
     const fadeAnim = useRef(new Animated.Value(1)).current;
 
     const fadeIn = () => {
-        setIsVisible(true);
+        setIsVisible(false)
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 60,
-            useNativeDriver: true,
+            duration: 300,
+            easing: EasingNode.linear,
         }).start();
     };
 
     const fadeOut = () => {
-        setIsVisible(false);
+        setIsVisible(true)
         Animated.timing(fadeAnim, {
             toValue: 0,
-            duration: 50,
-            useNativeDriver: true,
+            duration: 300,
+            easing: EasingNode.linear,
         }).start();
     };
 
@@ -28,12 +28,12 @@ const useFadeIn = ({ defaultValue = false }) => {
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 50,
-            useNativeDriver: false,
+            easing: EasingNode.linear,
         }).start(() => {
             Animated.timing(fadeAnim, {
                 toValue: 0,
                 duration: 50,
-                useNativeDriver: false,
+                easing: EasingNode.linear,
             }).start();
         });
     };

@@ -27,7 +27,7 @@ export default function HomeRoute() {
 
         if (isSignedIn) {
             try {
-                fetch(`http://192.168.194.191:3333/stores?user_id=${user.id}`, { signal: abortController.signal })
+                fetch(`http://192.168.175.191:3333/stores?user_id=${user.id}`, { signal: abortController.signal })
                     .then(response => response.json())
                     .then(data => {
                         setStores(data)

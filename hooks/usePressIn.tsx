@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated } from 'react-native';
+import Animated, { EasingNode } from 'react-native-reanimated';
 
 const usePressIn = () => {
 
@@ -9,7 +9,7 @@ const usePressIn = () => {
         Animated.timing(animatedValue, {
             toValue: 0.85,
             duration: 75,
-            useNativeDriver: true,
+            easing: EasingNode.linear,
         }).start();
     };
 
@@ -17,7 +17,7 @@ const usePressIn = () => {
         Animated.timing(animatedValue, {
             toValue: 1,
             duration: 50,
-            useNativeDriver: true,
+            easing: EasingNode.linear,
         }).start();
     };
 
@@ -25,12 +25,12 @@ const usePressIn = () => {
         Animated.timing(animatedValue, {
             toValue: 0.85,
             duration: 75,
-            useNativeDriver: false,
+            easing: EasingNode.linear,
         }).start(() => {
             Animated.timing(animatedValue, {
                 toValue: 1,
                 duration: 50,
-                useNativeDriver: false,
+                easing: EasingNode.linear,
             }).start();
         });
     };

@@ -50,7 +50,7 @@ const MapView = ({ role = 'taxi' }) => {
         console.log(JSON.parse(event.data))
     };
     useEffect(() => {
-        const ws = new WebSocket("ws://192.168.194.191:3333", 'map-client');
+        const ws = new WebSocket("ws://192.168.175.191:3333", 'map-client');
         setWs(ws);
 
         ws.addEventListener("open", (event) => {
@@ -87,6 +87,7 @@ const MapView = ({ role = 'taxi' }) => {
                     timeInterval: 5000,
                 },
                 location => {
+                    console.log(location)
                     setLocation((prevLocation) => {
                         if (!prevLocation) {
                             return null

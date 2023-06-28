@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { MarkerData, initialMarkers } from '../constants/Markers';
 import * as Location from 'expo-location';
 import { useUser } from '@clerk/clerk-expo';
+import { AnimatedRegion } from 'react-native-maps';
 
 /* 
 CREATE TABLE Location (
@@ -53,7 +54,7 @@ const useMapConnetcion = ({ role = 'client' }: { role?: UserRole }) => {
 
     useEffect(() => {
         const protocol = role === 'client' ? 'map-client' : 'map-worker';
-        const ws = new WebSocket("ws://192.168.194.191:3333", protocol);
+        const ws = new WebSocket("ws://192.168.175.191:3333", protocol);
         setWs(ws);
 
         ws.addEventListener("open", (event) => {
@@ -86,10 +87,10 @@ const useMapConnetcion = ({ role = 'client' }: { role?: UserRole }) => {
             PositionSubscrition = await Location.watchPositionAsync(
                 {
                     accuracy: Location.Accuracy.BestForNavigation,
-                    distanceInterval: 10,
-                    timeInterval: 5000,
+                    timeInterval: 2000,
                 },
                 location => {
+                    console.log("aaaa")
                     setLocation((prevLocation) => {
                         if (!prevLocation) {
                             return null;

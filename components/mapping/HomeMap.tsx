@@ -187,7 +187,7 @@ export default function HomeMapRoute() {
                                 </View>
                             )
                         }} label={'History'} onPress={() => { navigation.navigate('History') }} />
-                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={() => (
+                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0  absolute bottom-2`} icon={() => (
                             <View style={tw`w-full p-0 m-0 flex-row justify-around items-center bg-transparent`}>
                                 <AnimatedButton onPress={() => {
                                 }}  >
