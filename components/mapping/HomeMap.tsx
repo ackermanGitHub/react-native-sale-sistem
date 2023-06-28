@@ -51,6 +51,9 @@ import { StatusBar } from 'expo-status-bar';
 import HistoryScreen from './History';
 import usePressIn from '../../hooks/usePressIn';
 import Animated from 'react-native-reanimated';
+import ConfigScreen from './Config';
+import CustomServiceScreen from './CustomService';
+import PaymentScreen from './Payment';
 
 const Drawer = createDrawerNavigator();
 
@@ -120,7 +123,7 @@ export default function HomeMapRoute() {
             drawerContent={(props) => {
                 const { descriptors, navigation, state } = props;
                 return (
-                    <DrawerContentScrollView {...props}>
+                    <DrawerContentScrollView contentContainerStyle={tw`h-full w-full relative`} {...props}>
                         {/* <DrawerItemList  {...props} /> */}
                         <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
                             if (!isLoaded) {
@@ -212,7 +215,46 @@ export default function HomeMapRoute() {
                                 </View>
                             )
                         }} label={'History'} onPress={() => { navigation.navigate('History') }} />
-                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0  absolute bottom-2`} icon={() => (
+                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
+                            return (
+                                <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
+                                    <FontAwesome
+                                        name='gear'
+                                        size={30}
+                                        color={Colors[colorScheme ?? 'light'].text}
+                                        style={tw`ml-5`}
+                                    />
+                                    <Text style={tw`ml-5`}>Config</Text>
+                                </View>
+                            )
+                        }} label={'Config'} onPress={() => { navigation.navigate('Config') }} />
+                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
+                            return (
+                                <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
+                                    <AntDesign
+                                        name='customerservice'
+                                        size={30}
+                                        color={Colors[colorScheme ?? 'light'].text}
+                                        style={tw`ml-5`}
+                                    />
+                                    <Text style={tw`ml-5`}>Service</Text>
+                                </View>
+                            )
+                        }} label={'Service'} onPress={() => { navigation.navigate('Service') }} />
+                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
+                            return (
+                                <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
+                                    <FontAwesome5
+                                        name='money-check'
+                                        size={24}
+                                        color={Colors[colorScheme ?? 'light'].text}
+                                        style={tw`ml-5`}
+                                    />
+                                    <Text style={tw`ml-5`}>Payment</Text>
+                                </View>
+                            )
+                        }} label={'Service'} onPress={() => { navigation.navigate('Service') }} />
+                        <DrawerItem style={tw`w-full p-0 m-0 absolute bottom-2`} labelStyle={tw`w-full p-0 m-0 h-full`} icon={() => (
                             <View style={tw`w-full p-0 m-0 flex-row justify-around items-center bg-transparent`}>
                                 <AnimatedButton onPress={() => {
                                 }}  >
@@ -334,6 +376,51 @@ export default function HomeMapRoute() {
                     )
                 },
             }} name="History" component={HistoryScreen} />
+            <Drawer.Screen options={{
+                drawerLabel: ({ focused, color }) => {
+                    return (
+                        <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
+                            <FontAwesome
+                                name='gear'
+                                size={30}
+                                color={Colors[colorScheme ?? 'light'].text}
+                                style={tw`ml-5`}
+                            />
+                            <Text style={tw`ml-5`}>Config</Text>
+                        </View>
+                    )
+                },
+            }} name="Config" component={ConfigScreen} />
+            <Drawer.Screen options={{
+                drawerLabel: ({ focused, color }) => {
+                    return (
+                        <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
+                            <FontAwesome
+                                name='gear'
+                                size={30}
+                                color={Colors[colorScheme ?? 'light'].text}
+                                style={tw`ml-5`}
+                            />
+                            <Text style={tw`ml-5`}>Service</Text>
+                        </View>
+                    )
+                },
+            }} name="Service" component={CustomServiceScreen} />
+            <Drawer.Screen options={{
+                drawerLabel: ({ focused, color }) => {
+                    return (
+                        <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
+                            <FontAwesome
+                                name='gear'
+                                size={30}
+                                color={Colors[colorScheme ?? 'light'].text}
+                                style={tw`ml-5`}
+                            />
+                            <Text style={tw`ml-5`}>Service</Text>
+                        </View>
+                    )
+                },
+            }} name="Payment" component={PaymentScreen} />
         </Drawer.Navigator>
     );
 }

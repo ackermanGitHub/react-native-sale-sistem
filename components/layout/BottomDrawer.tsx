@@ -5,9 +5,7 @@ import {
     Pressable,
     StyleSheet,
     Switch,
-    Text,
     useWindowDimensions,
-    View,
 } from "react-native";
 import {
     BottomSheetModal,
@@ -16,6 +14,7 @@ import {
 import { useRef, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import { View, Text } from '../../components/theme/Themed';
 
 export default function BottomSheetModalContainer({ isOpen = true, setIsOpen }: { isOpen: boolean, setIsOpen: (open: boolean) => void }) {
     const [darkmode, setDarkmode] = useState(false);
@@ -36,65 +35,79 @@ export default function BottomSheetModalContainer({ isOpen = true, setIsOpen }: 
 
     return (
         <BottomSheetModalProvider>
-            <BottomSheetModal
-                ref={bottomSheetModalRef}
-                index={1}
-                snapPoints={snapPoints}
-                backgroundStyle={{ borderRadius: 50 }}
-                onDismiss={() => setIsOpen(false)}
+            <View
+                style={[
+                    styles.container,
+                    { backgroundColor: isOpen ? "gray" : "white" },
+                ]}
             >
-                <View style={styles.contentContainer}>
-                    <Text style={[styles.title, { marginBottom: 20 }]}>Dark mode</Text>
-                    <View style={styles.row}>
-                        <Text style={styles.subtitle}>Dark mode</Text>
-                        <Switch
-                            value={darkmode}
-                            onChange={() => setDarkmode(!darkmode)}
+                <Button title="Present Modal" onPress={handlePresentModal} />
+                <StatusBar style="auto" />
+                <BottomSheetModal
+                    ref={bottomSheetModalRef}
+                    index={1}
+                    snapPoints={snapPoints}
+                    backgroundStyle={{ borderRadius: 50 }}
+                    onDismiss={() => setIsOpen(false)}
+                >
+                    <View style={styles.contentContainer}>
+                        <Text style={[styles.title, { marginBottom: 20 }]}>Dark mode</Text>
+                        <View style={styles.row}>
+                            <Text style={styles.subtitle}>Dark mode</Text>
+                            <Switch
+                                value={darkmode}
+                                onChange={() => setDarkmode(!darkmode)}
+                            />
+                        </View>
+                        <View style={styles.row}>
+                            <Text style={styles.subtitle}>Use device settings</Text>
+                            <Switch value={device} onChange={() => setDevice(!device)} />
+                        </View>
+                        <Text style={styles.description}>
+                            Set Dark mode to use the Light or Dark selection located in your
+                            device Display and Brightness settings.
+                        </Text>
+                        <View
+                            style={{
+                                width: width,
+                                borderBottomWidth: StyleSheet.hairlineWidth,
+                                borderBottomColor: "gray",
+                                marginVertical: 30,
+                            }}
                         />
+                        <Text style={[styles.title, { width: "100%" }]}>Theme</Text>
+                        <Pressable style={styles.row} onPress={() => setTheme("dim")}>
+                            <Text style={styles.subtitle}>Dim</Text>
+                            {theme === "dim" ? (
+                                <AntDesign name="checkcircle" size={24} color="#4A98E9" />
+                            ) : (
+                                <Entypo name="circle" size={24} color="#56636F" />
+                            )}
+                        </Pressable>
+                        <Pressable style={styles.row} onPress={() => setTheme("lightsOut")}>
+                            <Text style={styles.subtitle}>Lights out</Text>
+                            {theme === "lightsOut" ? (
+                                <AntDesign name="checkcircle" size={24} color="#4A98E9" />
+                            ) : (
+                                <Entypo name="circle" size={24} color="#56636F" />
+                            )}
+                        </Pressable>
                     </View>
-                    <View style={styles.row}>
-                        <Text style={styles.subtitle}>Use device settings</Text>
-                        <Switch value={device} onChange={() => setDevice(!device)} />
-                    </View>
-                    <Text style={styles.description}>
-                        Set Dark mode to use the Light or Dark selection located in your
-                        device Display and Brightness settings.
-                    </Text>
-                    <View
-                        style={{
-                            width: width,
-                            borderBottomWidth: StyleSheet.hairlineWidth,
-                            borderBottomColor: "gray",
-                            marginVertical: 30,
-                        }}
-                    />
-                    <Text style={[styles.title, { width: "100%" }]}>Theme</Text>
-                    <Pressable style={styles.row} onPress={() => setTheme("dim")}>
-                        <Text style={styles.subtitle}>Dim</Text>
-                        {theme === "dim" ? (
-                            <AntDesign name="checkcircle" size={24} color="#4A98E9" />
-                        ) : (
-                            <Entypo name="circle" size={24} color="#56636F" />
-                        )}
-                    </Pressable>
-                    <Pressable style={styles.row} onPress={() => setTheme("lightsOut")}>
-                        <Text style={styles.subtitle}>Lights out</Text>
-                        {theme === "lightsOut" ? (
-                            <AntDesign name="checkcircle" size={24} color="#4A98E9" />
-                        ) : (
-                            <Entypo name="circle" size={24} color="#56636F" />
-                        )}
-                    </Pressable>
-                </View>
-            </BottomSheetModal>
+                </BottomSheetModal>
+            </View>
         </BottomSheetModalProvider>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "gray",
+        alignItems: "center",
+        justifyContent: "center",
+    },
     contentContainer: {
-        width: "100%",
-        height: "100%",
+        flex: 1,
         alignItems: "center",
         paddingHorizontal: 15,
     },

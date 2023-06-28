@@ -54,7 +54,7 @@ const useMapConnetcion = ({ role = 'client', onLocationLoad }: { role?: UserRole
 
     useEffect(() => {
         const protocol = role === 'client' ? 'map-client' : 'map-worker';
-        const ws = new WebSocket("ws://192.168.119.191:3333", protocol);
+        const ws = new WebSocket("ws://192.168.1.102:3333", protocol);
         setWs(ws);
 
         ws.addEventListener("open", (event) => {
