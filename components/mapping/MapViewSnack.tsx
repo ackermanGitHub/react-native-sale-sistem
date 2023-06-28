@@ -5,18 +5,13 @@ import {
     useColorScheme,
     TextInput,
     Pressable,
-    Animated as RNAnimated,
-    View as RNView,
     Platform
 } from "react-native";
-import Animated, {
-    EasingNode,
-} from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 
-
 import { nightMap } from '../../constants/MapStyles';
-import MapView, { Circle, Marker, AnimatedRegion, MapMarker, MarkerAnimated, Region } from 'react-native-maps';
+import MapView, { Circle, Marker, MapMarker, Region, MarkerAnimated, AnimatedRegion } from 'react-native-maps';
 // import MapViewDirections from 'react-native-maps-directions';
 // @ts-ignore 
 // import ClientMarkerPNG from '../../assets/images/clientMarker.png'
@@ -25,16 +20,17 @@ import MapView, { Circle, Marker, AnimatedRegion, MapMarker, MarkerAnimated, Reg
 // import { MarkerData } from '../../constants/Markers';
 import useMapConnection from '../../hooks/useMapConnetcion';
 
-
 import tw from '../../components/utils/tailwind';
 import { View, Text } from '../../components/theme/Themed';
-import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 import { AnimatedButton } from '../theme/AnimatedBtn';
 
 import { useUser } from '@clerk/clerk-expo';
 import useFadeIn from '../../hooks/useFadeIn';
 import usePressIn from '../../hooks/usePressIn';
+import { ModalContainer } from '../theme/ModalContainer';
+import BottomSheetModalContainer from '../layout/BottomDrawer';
 
 Image.prefetch("https://i.imgur.com/sNam9iJ.jpg")
 
@@ -44,7 +40,6 @@ const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
 type UserRole = 'taxi' | 'client'
-
 
 const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRole, navigation?: DrawerNavigationProp<any> }) => {
 
@@ -58,20 +53,25 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
     });
     const [showPin, setShowPin] = useState(false);
     const [pinned, setPinned] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const userMarkerRef = useRef<MapMarker>(null);
+    const mapViewRef = useRef<MapView>(null);
 
     const { animatedValue: pinBtnAnim, handlePressIn: PressInPin, handlePressOut: PressOutPin } = usePressIn()
+    const { animatedValue: PosBtnAnim, handlePressIn: PressInPos, handlePressOut: PressOutPos } = usePressIn()
     const { fadeAnim, fadeIn, fadeOut, isVisible } = useFadeIn({ defaultValue: true })
-    const { markers, location, historyLocation } = useMapConnection({});
+    const { markers, location, setLocation, historyLocation } = useMapConnection({
+        onLocationLoad: (location) => {
+
+        }
+    });
     const { user, isLoaded, isSignedIn } = useUser()
     const colorScheme = useColorScheme();
 
-    const inputRef = useRef<TextInput>(null);
-    const marker = useRef<MapMarker>(null);
-    const mapRef = useRef<MapView>(null);
-
     useEffect(() => {
-        if (selectedMarkerIndex !== null && mapRef.current) {
-            mapRef.current.animateToRegion({
+        if (selectedMarkerIndex !== null && mapViewRef.current) {
+            mapViewRef.current.animateToRegion({
                 ...markers[selectedMarkerIndex].coordinate,
                 latitudeDelta: 0.009,
                 longitudeDelta: 0.009,
@@ -79,9 +79,13 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
         }
     }, [selectedMarkerIndex]);
 
+    useEffect(() => {
+
+    }, []);
+
     const animateToRegion = (region: Region) => {
         setRegion(region);
-        mapRef.current.animateToRegion(region)
+        mapViewRef.current.animateToRegion(region)
     }
     const handleMarkerPress = (index: number) => {
         setSelectedMarkerIndex(index);
@@ -93,7 +97,7 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
 
     return (
         <View style={tw.style("bg-transparent w-full h-full")}>
-            <MapView
+            <MapView.Animated
                 onTouchMove={() => {
                     if (menuVisible) {
                         fadeOut()
@@ -101,21 +105,24 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                     }
                 }}
                 onTouchEnd={() => {
-                    fadeIn()
-                    setMenuVisible(true)
+                    if (!menuVisible) {
+                        fadeIn()
+                        setMenuVisible(true)
+                    }
                 }}
                 style={tw.style("w-full h-full")}
                 initialRegion={region}
                 showsCompass={false}
                 onRegionChangeComplete={onRegionChangeComplete}
-                ref={mapRef}
+                ref={mapViewRef}
                 customMapStyle={colorScheme === 'dark' ? nightMap : undefined}
             >
                 {location &&
                     <>
                         <MarkerAnimated
-                            ref={marker}
+                            ref={userMarkerRef}
                             coordinate={location.coords}
+                            /* coordinate={currentPosition} */
                             anchor={{ x: 0.5, y: 0.5 }}
                         >
                             <Animated.View style={tw`items-center justify-center w-12 h-12`} >
@@ -136,7 +143,7 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                                         </>
                                 }
                             </Animated.View>
-                        </MarkerAnimated>
+                        </MarkerAnimated  >
                         {
                             location && region && region.latitudeDelta < 0.032222222 && (
                                 <Circle
@@ -146,29 +153,54 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                                     }}
                                     radius={location.coords.accuracy}
                                     strokeColor="#111111"
-                                    fillColor="rgba(26, 18, 11, 0.5)"
+                                    fillColor="rgba(26, 18, 11, 0.3)"
                                 />
                             )
                         }
                     </>
                 }
-
-            </MapView>
+            </MapView.Animated>
             <>
                 <Animated.View
                     style={[
-                        tw`bg-transparent absolute z-20 bottom-24 right-24 flex-row justify-center items-center text-center self-center rounded-full`,
+                        tw`bg-transparent absolute z-20 bottom-24 right-12 flex-row justify-center items-center text-center self-center rounded-full`,
                         {
                             opacity: fadeAnim,
+                            transform: [
+                                {
+                                    scale: PosBtnAnim
+                                }
+                            ]
                         },
                     ]}
                 >
-                    <AntDesign
-                        name={colorScheme === 'dark' ? 'upcircle' : 'upcircleo'}
-                        size={30}
-                        color={Colors[colorScheme ?? 'light'].text}
-                    />
+                    <Pressable
+                        onPressIn={() => {
+                            PressInPos();
+                        }}
+                        onPressOut={() => {
+                            PressOutPos();
+                        }}
+                        onPress={() => {
+                            setIsModalVisible(true);
+                            if (location) {
+                                animateToRegion({
+                                    latitude: location.coords.latitude,
+                                    longitude: location.coords.longitude,
+                                    longitudeDelta: 0.0033333,
+                                    latitudeDelta: 0.0033333,
+                                });
+                            }
+                        }}
+                    >
+                        <MaterialIcons
+                            name={location ? 'my-location' : 'location-searching'}
+                            size={50}
+                            color={Colors[colorScheme ?? 'light'].text}
+                        />
+                    </Pressable>
                 </Animated.View>
+
                 {selectedMarkerIndex &&
                     <Animated.View
                         key={selectedMarkerIndex}
@@ -208,7 +240,7 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                                 {({ pressed }) =>
                                     <Animated.View
                                         style={[
-                                            tw`w-8 h-8 relative  `,
+                                            tw`w-8 h-8 relative`,
                                             {
                                                 transform: [{ scale: pinBtnAnim }],
                                             },
@@ -246,6 +278,7 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                     </Animated.View>
                 }
             </>
+            <BottomSheetModalContainer isOpen={isModalVisible} setIsOpen={setIsModalVisible} />
         </View>
     );
 };

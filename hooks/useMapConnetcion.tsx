@@ -38,7 +38,7 @@ CREATE TABLE Profile (
 
 type UserRole = 'taxi' | 'client'
 
-const useMapConnetcion = ({ role = 'client' }: { role?: UserRole }) => {
+const useMapConnetcion = ({ role = 'client', onLocationLoad }: { role?: UserRole, onLocationLoad?: (location: Location.LocationObject) => void }) => {
     const [historyLocation, setHistoryLocation] = useState<Location.LocationObject[]>([]);
     const [isReady, setIsReady] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -54,7 +54,7 @@ const useMapConnetcion = ({ role = 'client' }: { role?: UserRole }) => {
 
     useEffect(() => {
         const protocol = role === 'client' ? 'map-client' : 'map-worker';
-        const ws = new WebSocket("ws://192.168.175.191:3333", protocol);
+        const ws = new WebSocket("ws://192.168.119.191:3333", protocol);
         setWs(ws);
 
         ws.addEventListener("open", (event) => {
@@ -90,7 +90,6 @@ const useMapConnetcion = ({ role = 'client' }: { role?: UserRole }) => {
                     timeInterval: 2000,
                 },
                 location => {
-                    console.log("aaaa")
                     setLocation((prevLocation) => {
                         if (!prevLocation) {
                             return null;
@@ -104,6 +103,7 @@ const useMapConnetcion = ({ role = 'client' }: { role?: UserRole }) => {
                             },
                         }
                     });
+                    onLocationLoad(location)
                     setHistoryLocation((prevHistoryLocation) => {
                         return [...prevHistoryLocation, location]
                     })

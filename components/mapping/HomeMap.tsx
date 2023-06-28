@@ -49,6 +49,8 @@ import StackRoute from '../../app/(stack)/stack';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import HistoryScreen from './History';
+import usePressIn from '../../hooks/usePressIn';
+import Animated from 'react-native-reanimated';
 
 const Drawer = createDrawerNavigator();
 
@@ -62,6 +64,8 @@ export default function HomeMapRoute() {
     const colorScheme = useColorScheme();
 
     const router = useRouter()
+
+    const { animatedValue: PosBtnAnim, handlePressIn: PressInPos, handlePressOut: PressOutPos } = usePressIn()
 
     return (
         <Drawer.Navigator
@@ -79,16 +83,36 @@ export default function HomeMapRoute() {
                 headerTintColor: colorScheme === 'light' ? 'black' : 'white',
                 header({ navigation }) {
                     return (
-                        <Pressable onPress={() => {
-                            navigation.openDrawer();
-                        }}>
-                            <AntDesign
-                                style={tw`absolute top-9 left-8 p-3`}
-                                name={'menuunfold'}
-                                size={30}
-                                color={Colors[colorScheme ?? 'light'].text}
-                            />
-                        </Pressable>
+                        <Animated.View
+                            style={[
+                                tw`absolute top-11 left-10`,
+                                {
+                                    transform: [
+                                        {
+                                            scale: PosBtnAnim
+                                        }
+                                    ]
+                                },
+                            ]}
+                        >
+                            <Pressable
+                                onPressIn={() => {
+                                    PressInPos();
+                                }}
+                                onPressOut={() => {
+                                    PressOutPos();
+                                }}
+                                onPress={() => {
+                                    navigation.openDrawer();
+                                }}
+                            >
+                                <AntDesign
+                                    name={'menuunfold'}
+                                    size={30}
+                                    color={Colors[colorScheme ?? 'light'].text}
+                                />
+                            </Pressable>
+                        </Animated.View>
                     )
                 },
 
@@ -114,15 +138,16 @@ export default function HomeMapRoute() {
 
                             if (!isSignedIn) {
                                 return (
-                                    <View style={tw`w-full flex-row justify-between items-center bg-transparent px-5 gap-5`}>
+                                    <View style={tw`w-full flex-row justify-start items-center bg-transparent`}>
                                         <FontAwesome
                                             name={colorScheme === 'light' ? 'user-circle' : 'user-circle-o'}
                                             size={30}
                                             color={Colors[colorScheme ?? 'light'].text}
+                                            style={tw`ml-5`}
                                         />
                                         <AnimatedButton onPress={() => {
                                             navigation.navigate('Session')
-                                        }} style={tw`w-[100px] max-w-[150px] bg-slate-500 dark:bg-slate-700 rounded h-8 justify-center items-center`} >
+                                        }} style={tw`w-[60px] max-w-[120px] bg-slate-500 dark:bg-slate-700 rounded h-8 ml-5 justify-center items-center`} >
                                             <Text style={tw`text-white`}>Sign In</Text>
                                         </AnimatedButton>
                                     </View>
@@ -130,10 +155,10 @@ export default function HomeMapRoute() {
                             }
 
                             return (
-                                <View style={tw`w-full flex-row justify-between items-center bg-transparent pl-5`}>
+                                <View style={tw`w-full flex-row justify-between items-center bg-transparent`}>
                                     <Image source={{
                                         uri: user.imageUrl
-                                    }} style={tw`w-8 h-8 rounded-full`} />
+                                    }} style={tw`w-8 h-8 ml-5 rounded-full`} />
                                     <Text>{user.firstName + ' ' + user.lastName}</Text>
                                     <AnimatedButton onPress={() => {
                                         console.log('open modal user settings')

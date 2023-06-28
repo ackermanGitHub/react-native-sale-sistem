@@ -47,6 +47,16 @@ export default function StackRoute() {
                 }} style={tw`w-[150px] max-w-[180px] bg-slate-500 dark:bg-slate-700 rounded h-8 justify-center items-center`} >
                     <Text style={tw`text-white`}>Shop</Text>
                 </AnimatedButton>
+                <AnimatedButton onPress={() => {
+                    router.push('/bottomModal')
+                }} style={tw`w-[150px] max-w-[180px] bg-slate-500 dark:bg-slate-700 rounded h-8 justify-center items-center`} >
+                    <Text style={tw`text-white`}>Bottom Modal</Text>
+                </AnimatedButton>
+                <AnimatedButton onPress={() => {
+                    router.push('/slider')
+                }} style={tw`w-[150px] max-w-[180px] bg-slate-500 dark:bg-slate-700 rounded h-8 justify-center items-center`} >
+                    <Text style={tw`text-white`}>Slider</Text>
+                </AnimatedButton>
             </View>
         </View>
     );
