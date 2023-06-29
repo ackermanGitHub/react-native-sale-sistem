@@ -1,45 +1,40 @@
 import React from 'react'
-import Animated, { EasingNode } from 'react-native-reanimated';
+import {
+    Animated,
+} from 'react-native';
 
 const usePressIn = () => {
 
+    const [isPressed, setIsPressed] = React.useState(false);
     const animatedValue = React.useRef(new Animated.Value(1)).current;
 
     const handlePressIn = () => {
-        Animated.timing(animatedValue, {
-            toValue: 0.85,
-            duration: 75,
-            easing: EasingNode.linear,
-        }).start();
+        setIsPressed((prev) => {
+            Animated.timing(animatedValue, {
+                toValue: 0.85,
+                duration: 75,
+                useNativeDriver: true
+            }).start();
+            return true
+        })
     };
 
     const handlePressOut = () => {
-        Animated.timing(animatedValue, {
-            toValue: 1,
-            duration: 50,
-            easing: EasingNode.linear,
-        }).start();
-    };
-
-    const pressInOut = () => {
-        Animated.timing(animatedValue, {
-            toValue: 0.85,
-            duration: 75,
-            easing: EasingNode.linear,
-        }).start(() => {
+        setIsPressed((prev) => {
             Animated.timing(animatedValue, {
                 toValue: 1,
                 duration: 50,
-                easing: EasingNode.linear,
+                useNativeDriver: true
             }).start();
-        });
+            return false
+        })
     };
 
     return {
         animatedValue,
         handlePressIn,
         handlePressOut,
-        pressInOut
+        isPressed
     }
 }
 

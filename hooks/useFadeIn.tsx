@@ -1,48 +1,43 @@
 import React, { useRef } from 'react'
-import Animated, { EasingNode } from 'react-native-reanimated';
+import {
+    Animated,
+} from 'react-native';
 
 const useFadeIn = ({ defaultValue = false }) => {
 
     const [isVisible, setIsVisible] = React.useState(defaultValue);
-    const fadeAnim = useRef(new Animated.Value(1)).current;
+    const animatedValue = useRef(new Animated.Value(1)).current;
 
     const fadeIn = () => {
-        setIsVisible(false)
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 300,
-            easing: EasingNode.linear,
-        }).start();
+        if (!isVisible) {
+            setIsVisible((prev) => {
+                Animated.timing(animatedValue, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: true
+                }).start();
+                return true
+            })
+        }
     };
 
     const fadeOut = () => {
-        setIsVisible(true)
-        Animated.timing(fadeAnim, {
-            toValue: 0,
-            duration: 300,
-            easing: EasingNode.linear,
-        }).start();
-    };
-
-    const fadeInOut = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 50,
-            easing: EasingNode.linear,
-        }).start(() => {
-            Animated.timing(fadeAnim, {
-                toValue: 0,
-                duration: 50,
-                easing: EasingNode.linear,
-            }).start();
-        });
+        if (isVisible) {
+            setIsVisible((prev) => {
+                Animated.timing(animatedValue, {
+                    toValue: 0,
+                    duration: 300,
+                    useNativeDriver: true
+                }).start();
+                return false
+            })
+        }
     };
 
     return {
-        fadeAnim,
+        animatedValue,
         fadeIn,
         fadeOut,
-        fadeInOut,
         isVisible
     }
 }

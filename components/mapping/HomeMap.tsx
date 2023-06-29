@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
     Image,
     Dimensions,
     useColorScheme,
     ActivityIndicator,
-    useWindowDimensions,
-    Button,
     Pressable,
+    Animated
 } from "react-native";
 import tw from '../../components/utils/tailwind';
 
@@ -22,14 +21,12 @@ import { useUser } from '@clerk/clerk-expo';
 import Profile from '../../app/(auth)/profile';
 
 import {
-    DrawerContent,
     DrawerContentScrollView,
     DrawerItem,
-    DrawerItemList,
-    DrawerView,
 } from '@react-navigation/drawer';
 
-Image.prefetch("https://i.imgur.com/sNam9iJ.jpg")
+// Image.prefetch("https://i.imgur.com/sNam9iJ.jpg")
+Image.prefetch("https://lh3.googleusercontent.com/a/AAcHTtfPgVic8qF8hDw_WPE80JpGOkKASohxkUA8y272Ow=s1000-c")
 
 const { width, height } = Dimensions.get("window");
 
@@ -40,17 +37,14 @@ const CARD_WIDTH = CARD_HEIGHT - 50;
 type UserRole = 'taxi' | 'client'
 
 
-import { createDrawerNavigator, DrawerNavigationProp } from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AnimatedButton } from '../theme/AnimatedBtn';
 import SignInComponent from '../layout/SignInComponent';
 import MapViewSnack from './MapViewSnack';
 import StackRoute from '../../app/(stack)/stack';
 
-import { useNavigation } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
 import HistoryScreen from './History';
 import usePressIn from '../../hooks/usePressIn';
-import Animated from 'react-native-reanimated';
 import ConfigScreen from './Config';
 import CustomServiceScreen from './CustomService';
 import PaymentScreen from './Payment';
@@ -58,9 +52,10 @@ import PaymentScreen from './Payment';
 const Drawer = createDrawerNavigator();
 
 export default function HomeMapRoute() {
-    const dimensions = useWindowDimensions();
 
-    const isLargeScreen = dimensions.width >= 768;
+    const isLargeScreen = width >= 768;
+
+    const isSmallScreen = width <= 350;
 
     const { user, isLoaded, isSignedIn } = useUser();
 
@@ -68,7 +63,7 @@ export default function HomeMapRoute() {
 
     const router = useRouter()
 
-    const { animatedValue: PosBtnAnim, handlePressIn: PressInPos, handlePressOut: PressOutPos } = usePressIn()
+    const { animatedValue: pressMenuAnim, handlePressIn: pressInMenu, handlePressOut: pressOutMenu, isPressed: isMenuPressed } = usePressIn()
 
     return (
         <Drawer.Navigator
@@ -92,7 +87,7 @@ export default function HomeMapRoute() {
                                 {
                                     transform: [
                                         {
-                                            scale: PosBtnAnim
+                                            scale: pressMenuAnim
                                         }
                                     ]
                                 },
@@ -100,14 +95,15 @@ export default function HomeMapRoute() {
                         >
                             <Pressable
                                 onPressIn={() => {
-                                    PressInPos();
+                                    pressInMenu();
                                 }}
                                 onPressOut={() => {
-                                    PressOutPos();
+                                    pressOutMenu();
                                 }}
                                 onPress={() => {
                                     navigation.openDrawer();
                                 }}
+                                style={tw`p-3 rounded-full bg-white dark:bg-black`}
                             >
                                 <AntDesign
                                     name={'menuunfold'}
@@ -158,14 +154,14 @@ export default function HomeMapRoute() {
                             }
 
                             return (
-                                <View style={tw`w-full flex-row justify-between items-center bg-transparent`}>
+                                <View style={tw`w-full justify-around flex-row items-center bg-transparent`}>
                                     <Image source={{
                                         uri: user.imageUrl
-                                    }} style={tw`w-8 h-8 ml-5 rounded-full`} />
+                                    }} style={[tw`w-8 h-8 rounded-full`]} />
                                     <Text>{user.firstName + ' ' + user.lastName}</Text>
                                     <AnimatedButton onPress={() => {
                                         console.log('open modal user settings')
-                                    }}  >
+                                    }}>
                                         <Feather
                                             name='more-vertical'
                                             size={20}
@@ -174,7 +170,6 @@ export default function HomeMapRoute() {
                                     </AnimatedButton>
                                 </View>
                             )
-
                         }} label={'Session'} onPress={() => { }} />
                         <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color, }) => {
                             return (

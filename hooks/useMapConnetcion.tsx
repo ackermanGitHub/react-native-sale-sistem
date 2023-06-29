@@ -103,7 +103,7 @@ const useMapConnetcion = ({ role = 'client', onLocationLoad }: { role?: UserRole
                             },
                         }
                     });
-                    onLocationLoad(location)
+                    onLocationLoad && onLocationLoad(location)
                     setHistoryLocation((prevHistoryLocation) => {
                         return [...prevHistoryLocation, location]
                     })

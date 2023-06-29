@@ -1,4 +1,3 @@
-import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import {
     Button,
@@ -15,6 +14,7 @@ import { useRef, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { View, Text } from '../../components/theme/Themed';
+import React from "react";
 
 export default function BottomSheetModalContainer({ isOpen = true, setIsOpen }: { isOpen: boolean, setIsOpen: (open: boolean) => void }) {
     const [darkmode, setDarkmode] = useState(false);
@@ -22,7 +22,7 @@ export default function BottomSheetModalContainer({ isOpen = true, setIsOpen }: 
     const { width } = useWindowDimensions();
     const [theme, setTheme] = useState("dim");
 
-    const bottomSheetModalRef = useRef(null);
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
     const snapPoints = ["25%", "48%", "75%"];
 

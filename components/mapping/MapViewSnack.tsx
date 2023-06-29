@@ -3,21 +3,19 @@ import {
     Image,
     Dimensions,
     useColorScheme,
-    TextInput,
     Pressable,
-    StyleSheet,
-    Platform,
-    useWindowDimensions,
-    Switch
+    Switch,
+    Animated,
+    StatusBar
 } from "react-native";
-import "react-native-gesture-handler";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 
 import {
     BottomSheetModal,
     BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
+
+import { enableScreens } from "react-native-screens";
 
 import { nightMap } from '../../constants/MapStyles';
 import MapView, { Circle, Marker, MapMarker, Region, MarkerAnimated, AnimatedRegion } from 'react-native-maps';
@@ -26,25 +24,26 @@ import MapView, { Circle, Marker, MapMarker, Region, MarkerAnimated, AnimatedReg
 // import ClientMarkerPNG from '../../assets/images/clientMarker.png'
 // @ts-ignore 
 // import TaxiMarkerPNG from '../../assets/images/taxiMarker.png'
-// import { MarkerData } from '../../constants/Markers';
+import { MarkerData } from '../../constants/Markers';
 import useMapConnection from '../../hooks/useMapConnetcion';
 
 import tw from '../../components/utils/tailwind';
 import { View, Text } from '../../components/theme/Themed';
 import { AntDesign, Entypo, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
-import { AnimatedButton } from '../theme/AnimatedBtn';
 
 import { useUser } from '@clerk/clerk-expo';
 import useFadeIn from '../../hooks/useFadeIn';
 import usePressIn from '../../hooks/usePressIn';
-import { ModalContainer } from '../theme/ModalContainer';
-import BottomSheetModalContainer from '../layout/BottomDrawer';
 
-Image.prefetch("https://i.imgur.com/sNam9iJ.jpg")
+// Image.prefetch("https://i.imgur.com/sNam9iJ.jpg")
+Image.prefetch("https://lh3.googleusercontent.com/a/AAcHTtfPgVic8qF8hDw_WPE80JpGOkKASohxkUA8y272Ow=s1000-c")
+
+// "emailAddress": "julio.sergio2709@gmail.com", "id": "idn_2RJhwToHB8RbifJBZlXZ5jWn8D4"
 
 const { width, height } = Dimensions.get("window");
 
+const snapPoints = ["25%", "48%", "75%"];
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
@@ -52,31 +51,28 @@ type UserRole = 'taxi' | 'client'
 
 const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRole, navigation?: DrawerNavigationProp<any> }) => {
 
+
     const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number | null>(null);
-    const [menuVisible, setMenuVisible] = useState(true);
-    const [region, setRegion] = useState<Region>({
-        latitude: 23.118644,
-        longitude: -82.3806211,
-        latitudeDelta: 0.0322,
-        longitudeDelta: 0.0221,
-    });
-    const [showPin, setShowPin] = useState(false);
-    const [pinned, setPinned] = useState(false);
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [darkmode, setDarkmode] = useState(false);
+    const [device, setDevice] = useState(false);
+    const [theme, setTheme] = useState("dim");
 
     const userMarkerRef = useRef<MapMarker>(null);
     const mapViewRef = useRef<MapView>(null);
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-    const { animatedValue: pinBtnAnim, handlePressIn: PressInPin, handlePressOut: PressOutPin } = usePressIn()
-    const { animatedValue: PosBtnAnim, handlePressIn: PressInPos, handlePressOut: PressOutPos } = usePressIn()
-    const { fadeAnim, fadeIn, fadeOut, isVisible } = useFadeIn({ defaultValue: true })
+    const { user, isLoaded, isSignedIn } = useUser()
+    const colorScheme = useColorScheme();
+
+    const { animatedValue: fadeMenuAnim, fadeIn: fadeInMenu, fadeOut: fadeOutMenu, isVisible: isMenuVisible } = useFadeIn({ defaultValue: true })
+    const { animatedValue: pressNavAnim, handlePressIn: pressInNav, handlePressOut: pressOutNav, isPressed: isNavPressed } = usePressIn()
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
     const { markers, location, setLocation, historyLocation } = useMapConnection({
         onLocationLoad: (location) => {
 
         }
     });
-    const { user, isLoaded, isSignedIn } = useUser()
-    const colorScheme = useColorScheme();
 
     useEffect(() => {
         if (selectedMarkerIndex !== null && mapViewRef.current) {
@@ -89,30 +85,29 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
     }, [selectedMarkerIndex]);
 
     const animateToRegion = (region: Region) => {
-        setRegion(region);
-        mapViewRef.current.animateToRegion(region)
+        mapViewRef.current && mapViewRef.current.animateToRegion(region)
     }
+
     const handleMarkerPress = (index: number) => {
         setSelectedMarkerIndex(index);
+
+        handlePresentModal();
+
+        animateToRegion({
+            latitude: markers[index].coordinate.latitude,
+            longitude: markers[index].coordinate.longitude,
+            longitudeDelta: 0.0033333,
+            latitudeDelta: 0.0033333,
+        });
     };
+
     const onRegionChangeComplete = (region: Region) => {
-        setRegion(region);
         console.log(region)
     }
 
-    const [darkmode, setDarkmode] = useState(false);
-    const [device, setDevice] = useState(false);
-    const [theme, setTheme] = useState("dim");
-
-    const bottomSheetModalRef = useRef(null);
-
-    const snapPoints = ["25%", "48%", "75%"];
-
     function handlePresentModal() {
         bottomSheetModalRef.current?.present();
-        setTimeout(() => {
-            setIsModalVisible(true);
-        }, 100);
+        setIsModalVisible(true);
     }
 
     return (
@@ -120,24 +115,46 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
             <View style={tw.style("bg-transparent w-full h-full")}>
                 <MapView.Animated
                     onTouchMove={() => {
-                        if (menuVisible) {
-                            setMenuVisible(() => false)
-                            fadeOut()
-                        }
+                        fadeOutMenu()
                     }}
                     onTouchEnd={() => {
-                        if (!menuVisible) {
-                            setMenuVisible(() => true)
-                            fadeIn()
-                        }
+                        fadeInMenu()
                     }}
                     style={tw.style("w-full h-full")}
-                    initialRegion={region}
+                    initialRegion={{
+                        latitude: 23.118644,
+                        longitude: -82.3806211,
+                        latitudeDelta: 0.0322,
+                        longitudeDelta: 0.0221,
+                    }}
                     showsCompass={false}
                     onRegionChangeComplete={onRegionChangeComplete}
                     ref={mapViewRef}
                     customMapStyle={colorScheme === 'dark' ? nightMap : undefined}
                 >
+
+
+                    {markers.map((marker: MarkerData, index: number) => {
+                        return (
+                            <Marker
+                                draggable
+                                key={index}
+                                coordinate={marker.coordinate}
+                                onPress={() => handleMarkerPress(index)}
+                            >
+                                <Animated.View style={tw`items-center justify-center`}>
+                                    <Animated.Image
+                                        source={{
+                                            uri: 'https://lh3.googleusercontent.com/a/AAcHTtfPgVic8qF8hDw_WPE80JpGOkKASohxkUA8y272Ow=s1000-c'
+                                        }}
+                                        style={[tw`w-12 h-12 p-4 bg-slate-100 rounded-md`]}
+                                        resizeMode="cover"
+                                    />
+                                </Animated.View>
+                            </Marker>
+                        );
+                    })}
+
                     {location &&
                         <>
                             <MarkerAnimated
@@ -166,13 +183,13 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                                 </Animated.View>
                             </MarkerAnimated  >
                             {
-                                location && region && region.latitudeDelta < 0.032222222 && (
+                                location && (
                                     <Circle
                                         center={{
                                             latitude: location.coords.latitude,
                                             longitude: location.coords.longitude,
                                         }}
-                                        radius={location.coords.accuracy}
+                                        radius={location.coords.accuracy || 0}
                                         strokeColor="#111111"
                                         fillColor="rgba(26, 18, 11, 0.3)"
                                     />
@@ -180,31 +197,30 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                             }
                         </>
                     }
+
                 </MapView.Animated>
                 <>
                     <Animated.View
                         style={[
                             tw`bg-transparent absolute z-20 bottom-24 right-12 flex-row justify-center items-center text-center self-center rounded-full`,
                             {
-                                opacity: fadeAnim,
                                 transform: [
                                     {
-                                        scale: PosBtnAnim
-                                    }
-                                ]
+                                        scale: pressNavAnim
+                                    },
+                                ],
+                                opacity: fadeMenuAnim,
                             },
                         ]}
                     >
                         <Pressable
                             onPressIn={() => {
-                                PressInPos();
+                                pressInNav();
                             }}
                             onPressOut={() => {
-                                PressOutPos();
+                                pressOutNav();
                             }}
                             onPress={() => {
-                                setIsModalVisible(true);
-                                bottomSheetModalRef.current?.present();
                                 if (location) {
                                     animateToRegion({
                                         latitude: location.coords.latitude,
@@ -222,83 +238,6 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                             />
                         </Pressable>
                     </Animated.View>
-
-                    {selectedMarkerIndex &&
-                        <Animated.View
-                            key={selectedMarkerIndex}
-                            style={[
-                                tw`bg-[#eef0f2] dark:bg-black absolute bottom-0 left-0 right-0 p-4 items-center flex-row`,
-                                {
-                                    opacity: pinned ? 1 : fadeAnim,
-                                },
-                            ]}
-                        >
-                            <View style={[{
-                                width: CARD_WIDTH,
-                                height: CARD_HEIGHT,
-                                marginRight: 10,
-                            }, { backgroundColor: 'transparent' }]}>
-                                <Image source={markers[0].image} style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    borderRadius: 10,
-                                }} />
-                            </View>
-                            <View style={[tw`flex-1 bg-transparent`]}>
-                                <Text style={tw`text-lg font-bold mb-2`}>{markers[0].title}</Text>
-                                <Text style={tw`text-right`}>{markers[0].description}</Text>
-                            </View>
-                            <View style={tw`absolute top-5 right-5 w-20 h-8 flex-row gap-2 items-center justify-between bg-transparent`}>
-
-                                <Pressable style={[
-                                    tw`justify-center items-center`,
-                                ]} onPressIn={PressInPin} onPressOut={PressOutPin} onPress={() => {
-                                    if (pinned) {
-                                        setPinned(false)
-                                    } else {
-                                        setPinned(true)
-                                    }
-                                }}>
-                                    {({ pressed }) =>
-                                        <Animated.View
-                                            style={[
-                                                tw`w-8 h-8 relative`,
-                                                {
-                                                    transform: [{ scale: pinBtnAnim }],
-                                                },
-                                            ]}
-                                        >
-                                            <Animated.View
-                                                style={[
-                                                    tw`absolute w-full h-full px-3 justify-center items-center`,
-                                                    {
-                                                        opacity: pinned ? 0 : 1,
-                                                        transform: [{ rotate: '45deg' }],
-                                                    },
-                                                ]}
-                                            >
-                                                <View style={tw`h-full w-[2px] bg-black dark:bg-white`} />
-                                            </Animated.View>
-                                            <AntDesign
-                                                name={colorScheme === 'dark' ? 'pushpin' : 'pushpino'}
-                                                size={30}
-                                                color={Colors[colorScheme ?? 'light'].text}
-                                            />
-                                        </Animated.View>
-                                    }
-                                </Pressable>
-                                <Pressable onPress={() => {
-                                    setSelectedMarkerIndex(null)
-                                }}>
-                                    <AntDesign
-                                        name={'close'}
-                                        size={30}
-                                        color={Colors[colorScheme ?? 'light'].text}
-                                    />
-                                </Pressable>
-                            </View>
-                        </Animated.View>
-                    }
                 </>
 
                 <BottomSheetModal
@@ -308,42 +247,37 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                     backgroundStyle={{ borderRadius: 50 }}
                     onDismiss={() => setIsModalVisible(false)}
                 >
-                    <View style={styles.contentContainer}>
-                        <Text style={[styles.title, { marginBottom: 20 }]}>Dark mode</Text>
-                        <View style={styles.row}>
-                            <Text style={styles.subtitle}>Dark mode</Text>
+                    <View style={tw`w-full h-full p-4`}>
+                        <Text style={tw`text-base font-extrabold mb-5 `}>Dark mode</Text>
+                        <View style={tw`w-full flex-row items-center justify-between my-2`}>
+                            <Text style={tw`text-base font-bold`}>Dark mode</Text>
                             <Switch
                                 value={darkmode}
-                                onChange={() => setDarkmode(!darkmode)}
+                                onChange={() => { setDarkmode(!darkmode) }}
                             />
                         </View>
-                        <View style={styles.row}>
-                            <Text style={styles.subtitle}>Use device settings</Text>
-                            <Switch value={device} onChange={() => setDevice(!device)} />
+                        <View style={tw`w-full flex-row items-center justify-between my-2`}>
+                            <Text style={tw`text-base font-bold`}>Use device settings</Text>
+                            <Switch value={device} onChange={() => { setDevice(!device) }} />
                         </View>
-                        <Text style={styles.description}>
+                        <Text style={tw`text-[#56636F] w-full text-sm`}>
                             Set Dark mode to use the Light or Dark selection located in your
                             device Display and Brightness settings.
                         </Text>
                         <View
-                            style={{
-                                width,
-                                borderBottomWidth: 2,
-                                borderBottomColor: "gray",
-                                marginVertical: 30,
-                            }}
+                            style={tw`w-screen border-b-2 border-solid border-gray-400 my-7`}
                         />
-                        <Text style={[styles.title, { width: "100%" }]}>Theme</Text>
-                        <Pressable style={styles.row} onPress={() => setTheme("dim")}>
-                            <Text style={styles.subtitle}>Dim</Text>
+                        <Text style={tw`text-base font-extrabold mb-5 w-full`}>Theme</Text>
+                        <Pressable style={tw`w-full flex-row items-center justify-between my-2`} onPress={() => setTheme("dim")}>
+                            <Text style={tw`text-base font-bold`}>Dim</Text>
                             {theme === "dim" ? (
                                 <AntDesign name="checkcircle" size={24} color="#4A98E9" />
                             ) : (
                                 <Entypo name="circle" size={24} color="#56636F" />
                             )}
                         </Pressable>
-                        <Pressable style={styles.row} onPress={() => setTheme("lightsOut")}>
-                            <Text style={styles.subtitle}>Lights out</Text>
+                        <Pressable style={tw`w-full flex-row items-center justify-between my-2`} onPress={() => setTheme("lightsOut")}>
+                            <Text style={tw`text-base font-bold`}>Lights out</Text>
                             {theme === "lightsOut" ? (
                                 <AntDesign name="checkcircle" size={24} color="#4A98E9" />
                             ) : (
@@ -353,39 +287,60 @@ const MapViewSnackComponent = ({ role = 'client', navigation }: { role?: UserRol
                     </View>
                 </BottomSheetModal>
             </View>
+            <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
         </BottomSheetModalProvider>
     );
 };
 
-const styles = StyleSheet.create({
-    contentContainer: {
-        flex: 1,
-        alignItems: "center",
-        paddingHorizontal: 15,
-    },
-    row: {
-        width: "100%",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginVertical: 10,
-    },
-    title: {
-        fontWeight: "900",
-        letterSpacing: 0.5,
-        fontSize: 16,
-    },
-    subtitle: {
-        color: "#101318",
-        fontSize: 14,
-        fontWeight: "bold",
-    },
-    description: {
-        color: "#56636F",
-        fontSize: 13,
-        fontWeight: "normal",
-        width: "100%",
-    },
-});
-
 export default MapViewSnackComponent
+
+
+/* 
+
+import * as React from 'react';
+import {
+    StatusBar,
+    Dimensions,
+    TouchableOpacity,
+    StyleSheet,
+    Pressable
+} from 'react-native';
+import Animated from 'react-native-reanimated';
+import Constants from 'expo-constants';
+import { AntDesign } from '@expo/vector-icons';
+import tw from '../utils/tailwind';
+import { View, ViewProps, Text, TextProps } from './Themed';
+import usePressIn from '../../hooks/usePressIn';
+const { width } = Dimensions.get('window');
+
+const AnimatedAntDesign = Animated.createAnimatedComponent(AntDesign);
+
+
+type AnimatedButtonProps = {
+    onPress?: () => void;
+    callback?: () => void;
+} & Animated.AnimateProps<ViewProps>;
+
+export const AnimatedButton: React.FC<AnimatedButtonProps> = ({ onPress, style, children, callback, ...otherProps }) => {
+
+    const { animatedValue, handlePressOut, handlePressIn } = usePressIn()
+
+    return (
+
+        <Pressable onPress={callback} onPressIn={handlePressIn} onPressOut={handlePressOut}>
+            <Animated.View
+                {...otherProps}
+                style={[
+                    style,
+                    {
+                        transform: [{ scale: animatedValue }],
+                    },
+                ]}
+            >
+                {children}
+            </Animated.View>
+        </Pressable>
+    );
+}
+
+*/

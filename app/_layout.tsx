@@ -10,6 +10,7 @@ import * as NavigationBar from 'expo-navigation-bar';
 
 import { useDeviceContext } from 'twrnc';
 import tw from '../components/utils/tailwind';
+import React from 'react';
 const CLERK_PUBLISHABLE_KEY = 'pk_test_Z2VuZXJvdXMtbG9ic3Rlci0yMS5jbGVyay5hY2NvdW50cy5kZXYk'
 
 // Keep the splash screen visible while we fetch resources
@@ -95,7 +96,6 @@ function RootLayoutNav() {
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'transparentModal', animation: 'default', headerShown: false }} />
         </Stack>
-        <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
       </ThemeProvider>
     </ClerkProvider>
   );
