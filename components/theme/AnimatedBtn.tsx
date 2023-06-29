@@ -1,20 +1,9 @@
 import * as React from 'react';
 import {
-    StatusBar,
-    Dimensions,
-    TouchableOpacity,
     Animated,
-    StyleSheet,
-    Pressable
+    Pressable,
+    ViewProps
 } from 'react-native';
-import Constants from 'expo-constants';
-import { AntDesign } from '@expo/vector-icons';
-import tw from '../utils/tailwind';
-import { View, ViewProps, Text, TextProps } from './Themed';
-const { width } = Dimensions.get('window');
-
-const AnimatedAntDesign = Animated.createAnimatedComponent(AntDesign);
-
 
 type AnimatedButtonProps = {
     onPress?: () => void;

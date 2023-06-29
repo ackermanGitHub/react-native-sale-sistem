@@ -9,17 +9,7 @@
     "isolatedModules": false,
     "moduleResolution": "node",
     "baseUrl": "./src",
-    "paths": {
-      "@components/*": ["components/*"],
-      "@redux": ["redux"],
-      "@redux/*": ["redux/*"],
-      "@assets/*": ["assets/*"],
-      "@screens/*": ["screens/*"],
-      "@lib": ["lib"],
-      "@api": ["api"],
-      "@hooks": ["hooks"],
-      "@global": ["global"]
-    },
+    "paths": {},
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,

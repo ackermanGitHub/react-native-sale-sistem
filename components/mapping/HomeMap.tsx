@@ -249,7 +249,7 @@ export default function HomeMapRoute() {
                                 </View>
                             )
                         }} label={'Service'} onPress={() => { navigation.navigate('Service') }} />
-                        <DrawerItem style={tw`w-full p-0 m-0 absolute bottom-2`} labelStyle={tw`w-full p-0 m-0 h-full`} icon={() => (
+                        <DrawerItem style={tw`w-full p-0 m-0 absolute bottom-5`} labelStyle={tw`w-full p-0 m-0 h-full`} icon={() => (
                             <View style={tw`w-full p-0 m-0 flex-row justify-around items-center bg-transparent`}>
                                 <AnimatedButton onPress={() => {
                                 }}  >

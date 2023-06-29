@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MarkerData, initialMarkers } from '../constants/Markers';
 import * as Location from 'expo-location';
 import { useUser } from '@clerk/clerk-expo';
-import { AnimatedRegion } from 'react-native-maps';
 
 /* 
 CREATE TABLE Location (

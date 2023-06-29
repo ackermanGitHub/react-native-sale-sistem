@@ -6,7 +6,7 @@ import {
     Pressable,
     Switch,
     Animated,
-    StatusBar
+    StatusBar,
 } from "react-native";
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 
@@ -15,10 +15,8 @@ import {
     BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 
-import { enableScreens } from "react-native-screens";
-
 import { nightMap } from '../../constants/MapStyles';
-import MapView, { Circle, Marker, MapMarker, Region, MarkerAnimated, AnimatedRegion } from 'react-native-maps';
+import MapView, { Circle, Marker, MapMarker, Region, MarkerAnimated } from 'react-native-maps';
 // import MapViewDirections from 'react-native-maps-directions';
 // @ts-ignore 
 // import ClientMarkerPNG from '../../assets/images/clientMarker.png'
