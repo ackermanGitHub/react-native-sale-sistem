@@ -116,9 +116,7 @@ const useMapConnetcion = ({ role = 'client', onLocationLoad }: { role?: UserRole
 
             )
 
-            HeadingSuscription = await Location.watchHeadingAsync((heading) => {
-               /* Here goes an estadistics algorithm */ https://www.notion.so/Greatest-Idea-of-all-Time-81d8a584da8945d4a52183c91ea218aa?pvs=4
-                // https://notion-api.splitbee.io/v1/page/81d8a584da8945d4a52183c91ea218aa
+            /* HeadingSuscription = await Location.watchHeadingAsync((heading) => {
                 setLocation((prevLocation) => {
                     if (!prevLocation) {
                         return null
@@ -131,7 +129,7 @@ const useMapConnetcion = ({ role = 'client', onLocationLoad }: { role?: UserRole
                         },
                     }
                 })
-            })
+            }) */
 
             let location = await Location.getCurrentPositionAsync({});
 
@@ -144,7 +142,7 @@ const useMapConnetcion = ({ role = 'client', onLocationLoad }: { role?: UserRole
             }
             ws.removeEventListener("message", handleWebSocketMessage);
             PositionSubscrition.remove()
-            HeadingSuscription.remove()
+            // HeadingSuscription.remove()
         };
     }, []);
 

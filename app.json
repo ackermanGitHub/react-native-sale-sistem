@@ -31,8 +31,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/config/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.julio_lpz.playground"
+      }
     },
     "web": {
       "bundler": "metro",

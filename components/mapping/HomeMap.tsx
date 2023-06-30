@@ -68,12 +68,7 @@ export default function HomeMapRoute() {
     return (
         <Drawer.Navigator
             screenOptions={{
-                drawerItemStyle: tw`w-full p-0 m-0`,
                 drawerStyle: [{
-                    borderRightColor: colorScheme === 'dark' ? '#333333' : '#999999',
-                    borderRightWidth: 1,
-                    borderBottomColor: colorScheme === 'dark' ? '#333333' : '#999999',
-                    borderBottomWidth: 1,
                     width: isLargeScreen ? width - (width / 4) : width - (width / 2),
                 }, tw`bg-white dark:bg-black`],
                 drawerType: isLargeScreen ? 'permanent' : 'back',
@@ -121,7 +116,7 @@ export default function HomeMapRoute() {
                 return (
                     <DrawerContentScrollView contentContainerStyle={tw`h-full w-full relative`} {...props}>
                         {/* <DrawerItemList  {...props} /> */}
-                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
+                        <DrawerItem style={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
                             if (!isLoaded) {
                                 return (
                                     <View style={tw`w-full flex-row justify-between items-center bg-transparent px-5 gap-5`}>
@@ -171,7 +166,7 @@ export default function HomeMapRoute() {
                                 </View>
                             )
                         }} label={'Session'} onPress={() => { }} />
-                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color, }) => {
+                        <DrawerItem style={tw`w-full p-0 m-0`} icon={({ focused, color, }) => {
                             return (
                                 <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
                                     <Ionicons
@@ -184,7 +179,7 @@ export default function HomeMapRoute() {
                                 </View>
                             )
                         }} label={'Mapa'} onPress={() => { navigation.navigate('Map') }} />
-                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
+                        <DrawerItem style={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
                             return (
                                 <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
                                     <FontAwesome
@@ -197,7 +192,7 @@ export default function HomeMapRoute() {
                                 </View>
                             )
                         }} label={'Features'} onPress={() => { navigation.navigate('Stack') }} />
-                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
+                        <DrawerItem style={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
                             return (
                                 <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
                                     <MaterialIcons
@@ -210,7 +205,7 @@ export default function HomeMapRoute() {
                                 </View>
                             )
                         }} label={'History'} onPress={() => { navigation.navigate('History') }} />
-                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
+                        <DrawerItem style={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
                             return (
                                 <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
                                     <FontAwesome
@@ -223,7 +218,7 @@ export default function HomeMapRoute() {
                                 </View>
                             )
                         }} label={'Config'} onPress={() => { navigation.navigate('Config') }} />
-                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
+                        <DrawerItem style={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
                             return (
                                 <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
                                     <AntDesign
@@ -236,7 +231,7 @@ export default function HomeMapRoute() {
                                 </View>
                             )
                         }} label={'Service'} onPress={() => { navigation.navigate('Service') }} />
-                        <DrawerItem style={tw`w-full p-0 m-0`} labelStyle={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
+                        <DrawerItem style={tw`w-full p-0 m-0`} icon={({ focused, color }) => {
                             return (
                                 <View style={tw`w-full my-2 flex-row justify-start items-center bg-transparent`}>
                                     <FontAwesome5
