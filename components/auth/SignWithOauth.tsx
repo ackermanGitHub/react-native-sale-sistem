@@ -19,11 +19,7 @@ function SignWithOauth({ action }: { action: 'sign-in' | 'sign-up' }) {
                 await startOAuthFlow();
 
             if (createdSessionId) {
-                if (setActive) {
-                    setActive({ session: createdSessionId });
-                } else {
-                    throw new Error('setActive is not defined')
-                }
+                setActive && setActive({ session: createdSessionId });
             } else {
                 // Use signIn or signUp for next steps such as MFA
             }
